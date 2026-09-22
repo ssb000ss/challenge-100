@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="100 дней">
+<meta name="theme-color" content="#0E1319">
+<title>100 дней</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0F14;--panel:#12181F;--panel2:#1A222B;--line:#242F3B;
+  --text:#EAF0F6;--muted:#7F93A8;--brass:#E0A94B;--brass2:#F0C879;
+  --green:#5FB98A;--red:#D96A54;--amber:#E0A33E;
+  --display:'Oswald',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--ink);color:var(--text);font-family:var(--body);
+  font-size:16px;line-height:1.55;padding-bottom:90px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header{border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#131A22,#0E1319);
+  padding:calc(16px + env(safe-area-inset-top)) 0 0}
+.hdr{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.hdr h1{font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;margin:0;color:var(--brass)}
+.daybig{font-family:var(--display);font-size:40px;font-weight:600;line-height:1;letter-spacing:-.01em}
+.daybig small{font-size:16px;color:var(--muted);font-weight:400;letter-spacing:.02em}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.05em}
+.track{display:flex;gap:1.5px;margin:14px 0 0;height:16px;align-items:flex-end}
+.track i{flex:1;border-radius:1px 1px 0 0;background:#1A222B;height:30%}
+.track i.done{background:var(--green);height:100%}
+.track i.swap{background:var(--amber);height:70%}
+.track i.off{background:var(--muted);height:45%}
+.track i.miss{background:var(--red);height:100%}
+.track i.today{background:var(--brass);height:100%}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:10px 0 0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:13.5px;
+  background:none;border:1px solid transparent;color:var(--muted);padding:9px 13px;
+  border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap}
+.tab[aria-selected=true]{color:var(--ink);background:var(--brass);font-weight:600}
+section{padding-top:20px}
+section[hidden]{display:none}
+h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;
+  font-size:24px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--muted);font-size:15px;margin:0 0 4px}
+.dur{font-family:var(--mono);font-size:12px;color:var(--brass);letter-spacing:.05em}
+.blk{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brass);
+  border-radius:0 10px 10px 0;padding:15px 17px;margin:14px 0}
+.blk.warm{border-left-color:var(--muted)}
+.blk.cool{border-left-color:#4a7fa8}
+.blk h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;
+  font-size:15px;color:var(--brass);margin:0 0 3px;font-weight:500}
+.blk .n{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:10px}
+.it{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.it:last-child{border-bottom:none}
+.it .nm{flex:1}
+.it .nm b{display:block;font-weight:500;font-size:16px}
+.it .nm span{font-family:var(--mono);font-size:15px;color:var(--brass2);font-weight:500;
+  letter-spacing:.02em;display:block;margin-top:2px}
+.it .nm em{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:3px}
+.tick{width:27px;height:27px;border:1.5px solid var(--line);border-radius:5px;flex-shrink:0;
+  background:var(--panel2);cursor:pointer;color:var(--green);font-size:15px;padding:0;margin-top:2px}
+.tick[aria-pressed=true]{border-color:var(--green);background:rgba(95,185,138,.14)}
+.it.ok .nm b,.it.ok .nm span{opacity:.4;text-decoration:line-through}
+.info{background:none;border:none;color:var(--muted);font-family:var(--mono);font-size:11px;
+  cursor:pointer;padding:3px 6px;border:1px solid var(--line);border-radius:4px;flex-shrink:0;margin-top:3px}
+.rules{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line);
+  border-radius:6px;padding:10px;margin:14px 0}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:14.5px;
+  padding:17px 10px;border-radius:9px;border:1.5px solid var(--line);
+  background:var(--panel2);color:var(--text);cursor:pointer;font-weight:500}
+.btn:active{transform:translateY(1px)}
+.btn.p{background:var(--brass);border-color:var(--brass);color:var(--ink);font-weight:600;grid-column:1/-1}
+.btn.a{border-color:var(--amber);color:var(--amber)}
+.btn.m{border-color:var(--muted);color:var(--muted)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;
+  border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:none}
+.kv span:last-child{font-family:var(--mono);color:var(--brass)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.pill{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:4px;flex-shrink:0}
+.pill.done{background:rgba(95,185,138,.15);color:var(--green)}
+.pill.swap{background:rgba(224,163,62,.15);color:var(--amber)}
+.pill.dayoff{background:var(--panel2);color:var(--muted)}
+.pill.missed{background:rgba(217,106,84,.15);color:var(--red)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:15px;margin:11px 0}
+.card h4{font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;
+  font-size:16px;margin:0 0 4px;font-weight:500}
+.card .eq{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:9px}
+.card .cue{font-size:15px;line-height:1.55}
+.card a{color:var(--brass);font-family:var(--mono);font-size:12.5px;display:inline-block;margin-top:10px}
+input,textarea{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:6px;
+  color:var(--text);padding:11px;font-family:var(--body);font-size:16px;margin-top:6px}
+label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.mut{color:var(--muted);font-size:14px}
+.big{font-family:var(--display);font-size:44px;font-weight:600;line-height:1;color:var(--brass)}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
+.stat div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.stat .lb{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.ovl{position:fixed;inset:0;background:rgba(14,19,25,.94);z-index:50;display:flex;
+  align-items:center;justify-content:center;padding:20px}
+.ovl .in{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:20px;max-width:440px;width:100%;max-height:85vh;overflow-y:auto}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="hdr">
+    <h1>100 дней · жим 110</h1>
+    <button id="reload" style="background:none;border:1px solid var(--line);color:var(--muted);
+      font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:5px;cursor:pointer">↻ обновить</button>
+  </div>
+  <div class="daybig" id="dbig">—</div>
+  <div class="meta" id="mt" style="margin-top:6px">загрузка…</div>
+  <div class="track" id="tr"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-t="today">Сегодня</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="hist">История</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="prog">Прогресс</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="rules">Правила</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section id="today"><p class="mut">Загрузка…</p></section>
+  <section id="hist" hidden></section>
+  <section id="prog" hidden></section>
+  <section id="rules" hidden>
+    <h2>Правила</h2>
+    <div class="blk">
+      <h3>Срок</h3>
+      <div class="it"><div class="nm"><b>100 дней подряд</b><em>Задание каждый день без исключений</em></div></div>
+      <div class="it"><div class="nm"><b>3 замены</b><em>День остаётся, содержание меняется на облегчённое</em></div></div>
+      <div class="it"><div class="nm"><b>1 отгул</b><em>Полный ноль, день засчитан</em></div></div>
+      <div class="it"><div class="nm"><b>Заявка в тот же день</b><em>До полуночи. Задним числом не оформляется</em></div></div>
+    </div>
+    <div class="blk">
+      <h3>Каждый день</h3>
+      <div class="it"><div class="nm"><b>Алкоголь — ноль</b><em>Все 100 дней</em></div></div>
+      <div class="it"><div class="nm"><b>Вода</b><em>Недели 1–2: 2 л · 3–4: 2,5 л · с 5-й: 3 л</em></div></div>
+      <div class="it"><div class="nm"><b>Сон</b><em>Не меньше 7 часов</em></div></div>
+    </div>
+    <div class="blk">
+      <h3>Провал</h3>
+      <div class="it"><div class="nm"><b>День не закрыт и статус не заявлен</b><em>Челлендж закрыт. Мечта откладывается, не отменяется</em></div></div>
+    </div>
+    <div class="blk">
+      <h3>Цель</h3>
+      <div class="it"><div class="nm"><b>Вернуть былую форму и кондицию</b><em>Главное. Показатели ниже — мотиваторы</em></div></div>
+      <div class="it"><div class="nm"><b>Жим лёжа 110 кг на раз</b><em>Старт 78 (расчётный). Контрольные дни 28, 56, 84 — на повторы, день 100 — максимум</em></div></div>
+      <div class="it"><div class="nm"><b>Награда</b><em>Мотоцикл</em></div></div>
+    </div>
+  </section>
+</main>
+
+<div id="ovl"></div>
+
+<script>
+"use strict";
+let state=null, days={}, logs={}, moves={}, tab="today", viewDay=null;
+
+/* ---------- хранилище: localStorage ---------- */
+const LS_KEY="challenge100";
+function lsRead(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||{}; }catch(e){ return {}; } }
+function lsWrite(o){ try{ localStorage.setItem(LS_KEY, JSON.stringify(o)); }catch(e){} }
+
+/* ---------- загрузка ---------- */
+async function boot(){
+  const el=document.getElementById("today");
+
+  // программа и движения — из data.json (только чтение, не меняются)
+  let base;
+  try{
+    const r = await fetch("data.json");
+    base = await r.json();
+  }catch(e){
+    el.innerHTML='<p class="mut">Не найден data.json рядом с index.html. Положи оба файла в одну папку.</p>';
+    return;
+  }
+  days  = base.days  || {};
+  moves = base.moves || {};
+
+  // прогресс пользователя — из localStorage (state + logs)
+  const saved = lsRead();
+  state = saved.state || base.state || null;
+  logs  = saved.logs  || base.logs  || {};
+
+  if(!state || !state.started_on)
+    state = {started_on:"2026-09-21", swaps_left:3, dayoff_left:1, status:"active", bench_max:78};
+  if(typeof state.swaps_left!=="number")  state.swaps_left=3;
+  if(typeof state.dayoff_left!=="number") state.dayoff_left=1;
+
+  render();
+}
+
+// put(path,data): path вида "state/main" или "logs/5"
+async function put(path, data){
+  const [coll,id]=path.split("/");
+  if(coll==="state"){ state=data; }
+  else if(coll==="logs"){ logs[id]=data; }
+  const cur=lsRead();
+  cur.state=state; cur.logs=logs;
+  lsWrite(cur);
+}
+
+/* ---------- вычисления ---------- */
+// текущий день = первый незакрытый
+function dayNum(){
+  for(let i=1;i<=100;i++){
+    const l=logs[String(i)];
+    if(!l || !["done","swap","dayoff"].includes(l.outcome)) return i;
+  }
+  return 100;
+}
+function streak(){
+  let n=0;
+  const cur=dayNum();
+  for(let i=cur-1;i>=1;i--){
+    const l=logs[String(i)];
+    if(l && ["done","swap","dayoff"].includes(l.outcome)) n++; else break;
+  }
+  // если текущий уже закрыт (все 100) — учесть
+  const lc=logs[String(cur)];
+  if(lc && ["done","swap","dayoff"].includes(lc.outcome)) n++;
+  return n;
+}
+
+/* ---------- рендер ---------- */
+function render(){
+  const cur=dayNum();
+  if(viewDay===null) viewDay=cur;
+  const d=cur;
+  const big=document.getElementById("dbig");
+  if(big) big.innerHTML = d+' <small>/ 100</small>';
+  document.getElementById("mt").textContent =
+    "серия "+streak()+" · замены "+state.swaps_left+" · отгул "+state.dayoff_left;
+
+  // полоска
+  let t="";
+  for(let i=1;i<=100;i++){
+    const l=logs[String(i)];
+    const c = l ? l.outcome : (i===d ? "today" : "");
+    t += '<i class="'+c+'"></i>';
+  }
+  document.getElementById("tr").innerHTML=t;
+
+  if(tab==="today") renderToday(viewDay);
+  if(tab==="hist")  renderHist();
+  if(tab==="prog")  renderProg(d);
+}
+
+const fmt = t => String(t).replace(/(\d)\.(\d)/g,"$1,$2");
+
+function navBar(d,cur){
+  return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'+
+    '<button class="btn" id="navprev" style="padding:8px 14px;font-size:13px"'+(d<=1?' disabled':'')+'>← '+(d-1||'')+'</button>'+
+    '<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">день '+d+' из 100'+(d===cur?' · сейчас':'')+'</span>'+
+    '<button class="btn" id="navnext" style="padding:8px 14px;font-size:13px"'+(d>=cur?' disabled':'')+'>'+(d+1<=cur?(d+1):'')+' →</button>'+
+    '</div>';
+}
+function wireNav(cur){
+  const p=document.getElementById("navprev"), n=document.getElementById("navnext");
+  if(p)p.onclick=()=>{ if(viewDay>1){viewDay--;renderToday(viewDay);} };
+  if(n)n.onclick=()=>{ if(viewDay<cur){viewDay++;renderToday(viewDay);} };
+}
+
+function dayHtml(plan, use, done){
+  let h='<h2>'+plan.title+'</h2>'+
+    (use.subtitle?'<p class="sub">'+use.subtitle+'</p>':'')+
+    (use.minutes?'<div class="dur">~'+use.minutes+' минут</div>':'');
+  let idx=0;
+  (use.blocks||[]).forEach(b=>{
+    const cls = /Разминка|Заминка|Подвижность/.test(b.label) ? ' warm'
+              : (/EMOM|AMRAP|Финишер|Тест|Лесенка|круг/.test(b.label) ? ' cool' : '');
+    h+='<div class="blk'+cls+'"><h3>'+b.label+'</h3>'+(b.note?'<div class="n">'+b.note+'</div>':'');
+    (b.items||[]).forEach(it=>{
+      const i=idx++, ok=done.includes(i), m=moves[it.movement]||{};
+      h+='<div class="it'+(ok?' ok':'')+'">'+
+        '<button class="tick" aria-pressed="'+ok+'" data-i="'+i+'">'+(ok?'✓':'')+'</button>'+
+        '<div class="nm"><b>'+(m.name_ru||it.movement)+'</b>'+
+        '<span>'+fmt(it.text)+'</span>'+
+        (it.note?'<em>'+it.note+'</em>':'')+
+        (it.alt?'<em style="color:var(--brass2)">'+it.alt+'</em>':'')+
+        '</div>'+
+        (m.cue?'<button class="info" data-m="'+it.movement+'">техника</button>':'')+
+        '</div>';
+    });
+    h+='</div>';
+  });
+  if(use.rules) h+='<div class="rules">'+use.rules+'</div>';
+  return h;
+}
+
+function renderToday(d){
+  const el=document.getElementById("today");
+  const cur=dayNum();
+
+  if(state.status==="failed"){
+    el.innerHTML='<h2>Челлендж закрыт</h2><p class="mut">Пройдено дней: '+
+      Object.keys(logs).length+'. Мечта откладывается, не отменяется.</p>';
+    return;
+  }
+
+  const plan=days[String(d)];
+  if(!plan){
+    el.innerHTML=navBar(d,cur)+'<h2>День '+d+'</h2><p class="mut">Задание ещё не загружено.</p>';
+    wireNav(cur);
+    return;
+  }
+
+  const log=logs[String(d)];
+  const closed = log && ["done","swap","dayoff"].includes(log.outcome);
+  const future = d>cur;
+  const use=(log && log.outcome==="swap" && plan.variant) ? plan.variant : plan.payload;
+  const done=(log && log.items) ? log.items : [];
+
+  let h=navBar(d,cur);
+
+  if(log && log.outcome==="dayoff"){
+    h+='<h2>'+plan.title+'</h2><div class="rules" style="border-style:solid;border-color:var(--muted);text-align:center">Отгул · день засчитан</div>';
+    el.innerHTML=h; wireNav(cur); return;
+  }
+
+  h+=dayHtml(plan, use, done);
+
+  if(future){
+    h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Это следующий день. Откроется, когда закроешь текущий.</div>';
+    el.innerHTML=h; wireNav(cur);
+    document.querySelectorAll("#today .info").forEach(b=>b.onclick=()=>showMove(b.dataset.m));
+    document.querySelectorAll("#today .tick").forEach(b=>b.disabled=true);
+    return;
+  }
+  if(closed){
+    h+='<div class="rules" style="border-style:solid;border-color:#2e5a45;text-align:center;color:var(--green)">День закрыт ✓</div>';
+    h+='<div><label>Заметка</label><textarea id="note" rows="3">'+((log.note)||'')+'</textarea>'+
+       '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
+    el.innerHTML=h; wireNav(cur);
+    document.querySelectorAll("#today .info").forEach(b=>b.onclick=()=>showMove(b.dataset.m));
+    document.querySelectorAll("#today .tick").forEach(b=>{b.setAttribute("aria-pressed",done.includes(+b.dataset.i));});
+    const sn=document.getElementById("savenote");
+    if(sn)sn.onclick=async()=>{log.note=document.getElementById("note").value;logs[String(d)]=log;await put("logs/"+d,log);sn.textContent="Сохранено";setTimeout(()=>sn.textContent="Сохранить заметку",2000);};
+    return;
+  }
+
+  const total=(use.blocks||[]).reduce((n,b)=>n+(b.items||[]).length,0);
+  const curN=done.length;
+  const all=curN>=total && total>0;
+
+  h+='<div class="acts">';
+  h+='<button class="btn p" id="done"'+(all?'':' disabled')+'>'+
+     (all?'Закрыть день':'Отметь всё · '+curN+'/'+total)+'</button>';
+  h+='<button class="btn a" id="swap"'+(state.swaps_left<1?' disabled':'')+
+     '>Поменять · '+state.swaps_left+'</button>';
+  h+='<button class="btn m" id="off"'+(state.dayoff_left<1?' disabled':'')+
+     '>Отгул · '+state.dayoff_left+'</button>';
+  h+='</div>';
+
+  h+='<div><label>Заметка о дне</label>'+
+     '<textarea id="note" rows="3" placeholder="Веса, самочувствие, колено, спина">'+
+     ((log&&log.note)||'')+'</textarea>'+
+     '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
+
+  el.innerHTML=h;
+  wireToday(d, total);
+  wireNav(cur);
+}
+
+function wireToday(d, total){
+  const ticks=[...document.querySelectorAll("#today .tick")];
+
+  function currentDone(){
+    return ticks.map((x,i)=>x.getAttribute("aria-pressed")==="true"?i:-1).filter(x=>x>=0);
+  }
+  function saveMarks(){
+    const items=currentDone();
+    const l=logs[String(d)]||{outcome:"open"};
+    l.items=items; logs[String(d)]=l;
+    put("logs/"+d, l);
+    const dn=document.getElementById("done");
+    if(dn){
+      if(items.length>=total && total>0){ dn.disabled=false; dn.textContent="Закрыть день"; }
+      else { dn.disabled=true; dn.textContent="Отметь всё · "+items.length+"/"+total; }
+    }
+  }
+
+  ticks.forEach((b,i)=>{
+    b.dataset.i=i;
+    b.onclick=()=>{
+      const on=b.getAttribute("aria-pressed")==="true";
+      b.setAttribute("aria-pressed", String(!on));
+      b.textContent = !on ? "✓" : "";
+      const row=b.closest(".it"); if(row) row.classList.toggle("ok", !on);
+      saveMarks();
+    };
+  });
+
+  document.querySelectorAll("#today .info").forEach(b=>
+    b.onclick=()=>showMove(b.dataset.m));
+
+  const done=document.getElementById("done");
+  if(done) done.onclick=async()=>{
+    if(done.disabled) return;
+    const l=logs[String(d)]||{items:[]};
+    l.outcome=(l.outcome==="swap")?"swap":"done";
+    l.closed_at=new Date().toISOString();
+    l.items=currentDone();
+    logs[String(d)]=l;
+    await put("logs/"+d, l);
+    viewDay=dayNum();
+    render();
+  };
+
+  const sw=document.getElementById("swap");
+  if(sw) sw.onclick=()=>{
+    if(sw.disabled) return;
+    confirmBox("Поменять задание?","Останется замен: "+(state.swaps_left-1)+". Дам облегчённый вариант.",
+      async()=>{
+        const l={outcome:"swap", items:[]};
+        logs[String(d)]=l; state.swaps_left--;
+        await put("logs/"+d, l); await put("state/main", state);
+        viewDay=dayNum(); render();
+      });
+  };
+
+  const off=document.getElementById("off");
+  if(off) off.onclick=()=>{
+    if(off.disabled) return;
+    confirmBox("Взять отгул?","Останется: "+(state.dayoff_left-1)+". День засчитан, задания не будет.",
+      async()=>{
+        const l={outcome:"dayoff", closed_at:new Date().toISOString(), items:[]};
+        logs[String(d)]=l; state.dayoff_left--;
+        await put("logs/"+d, l); await put("state/main", state);
+        viewDay=dayNum(); render();
+      });
+  };
+
+  const sn=document.getElementById("savenote");
+  if(sn) sn.onclick=async()=>{
+    const l=logs[String(d)]||{outcome:"open", items:currentDone()};
+    l.note=document.getElementById("note").value;
+    logs[String(d)]=l;
+    await put("logs/"+d, l);
+    sn.textContent="Сохранено";
+    setTimeout(()=>sn.textContent="Сохранить заметку", 2000);
+  };
+}
+
+/* ---------- модалки ---------- */
+function showMove(code){
+  const m=moves[code]||{};
+  document.getElementById("ovl").innerHTML=
+   '<div class="ovl"><div class="in">'+
+   '<h4 style="font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:19px;margin:0 0 4px">'+
+   (m.name_ru||code)+'</h4>'+
+   '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:10px">'+(m.equipment||'')+'</div>'+
+   '<div class="cue">'+(m.cue||'Техника не заполнена')+'</div>'+
+   (m.media_url?'<a href="'+m.media_url+'" target="_blank" rel="noopener">▶ разбор техники</a>':'')+
+   '<button class="btn" id="cls" style="width:100%;margin-top:16px">Закрыть</button>'+
+   '</div></div>';
+  document.getElementById("cls").onclick=()=>document.getElementById("ovl").innerHTML="";
+}
+
+function confirmBox(t,s,fn){
+  document.getElementById("ovl").innerHTML=
+   '<div class="ovl"><div class="in">'+
+   '<h4 style="font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:19px;margin:0 0 6px">'+t+'</h4>'+
+   '<p class="mut">'+s+'</p>'+
+   '<button class="btn p" id="yes" style="width:100%;margin-top:14px">Да</button>'+
+   '<button class="btn" id="no" style="width:100%;margin-top:8px">Отмена</button>'+
+   '</div></div>';
+  document.getElementById("yes").onclick=async()=>{ document.getElementById("ovl").innerHTML=""; await fn(); };
+  document.getElementById("no").onclick=()=>document.getElementById("ovl").innerHTML="";
+}
+
+/* ---------- история и прогресс ---------- */
+function renderHist(){
+  let h='<h2>История</h2>';
+  const keys=Object.keys(logs).map(Number).filter(i=>logs[String(i)].outcome && logs[String(i)].outcome!=="open").sort((a,b)=>b-a);
+  if(!keys.length) h+='<p class="mut">Пока пусто.</p>';
+  keys.forEach(i=>{
+    const l=logs[String(i)], p=days[String(i)];
+    const lbl={done:"выполнено",swap:"замена",dayoff:"отгул",missed:"пропуск"}[l.outcome]||l.outcome;
+    h+='<div class="row"><span>День '+i+' · '+(p?p.title:'—')+
+       (l.note?'<br><span class="mut" style="font-size:13px">'+l.note+'</span>':'')+
+       '</span><span class="pill '+l.outcome+'">'+lbl+'</span></div>';
+  });
+  document.getElementById("hist").innerHTML=h;
+}
+
+function renderProg(d){
+  const c={done:0,swap:0,dayoff:0,missed:0};
+  Object.values(logs).forEach(l=>{ if(c[l.outcome]!==undefined) c[l.outcome]++; });
+  const closed=c.done+c.swap+c.dayoff;
+  let h='<h2>Прогресс</h2><div class="stat">'+
+    '<div><div class="lb">Текущий день</div><div class="big">'+d+'</div></div>'+
+    '<div><div class="lb">Серия</div><div class="big">'+streak()+'</div></div>'+
+    '<div><div class="lb">Закрыто</div><div class="big">'+closed+'</div></div>'+
+    '<div><div class="lb">Осталось</div><div class="big">'+Math.max(0,100-closed)+'</div></div></div>'+
+    '<div class="blk"><div class="kv"><span>Выполнено</span><span>'+c.done+'</span></div>'+
+    '<div class="kv"><span>Замен</span><span>'+c.swap+' из 3</span></div>'+
+    '<div class="kv"><span>Отгулов</span><span>'+c.dayoff+' из 1</span></div>'+
+    '<div class="kv"><span>Старт</span><span>'+state.started_on+'</span></div></div>'+
+    '<div class="blk"><h3>Цель</h3><div class="kv"><span>Жим лёжа на раз</span><span>110 кг</span></div>'+
+    '<div class="kv"><span>Контрольные дни</span><span>28 · 56 · 84 · 100</span></div></div>';
+  const notes=Object.keys(logs).map(Number).filter(i=>logs[String(i)].note).sort((a,b)=>b-a);
+  if(notes.length){
+    h+='<div class="blk"><h3>Заметки</h3>';
+    notes.forEach(i=>{ h+='<div class="kv"><span>День '+i+'</span></div>'+
+      '<div class="mut" style="padding-bottom:10px">'+logs[String(i)].note+'</div>'; });
+    h+='</div>';
+  }
+  document.getElementById("prog").innerHTML=h;
+}
+
+/* ---------- вкладки ---------- */
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", String(x===t)));
+  ["today","hist","prog","rules"].forEach(id=>document.getElementById(id).hidden=(id!==t.dataset.t));
+  tab=t.dataset.t; render(); window.scrollTo({top:0});
+});
+
+document.getElementById("reload").onclick=async()=>{
+  const b=document.getElementById("reload"); b.textContent="…";
+  await boot(); b.textContent="↻ обновить";
+};
+
+boot();
+</script>
+</body>
+</html>

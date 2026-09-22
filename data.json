@@ -10174,7 +10174,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%92%D0%BE%D0%B7%D0%B4%D1%83%D1%88%D0%BD%D1%8B%D0%B9%20%D0%BF%D1%80%D0%B8%D1%81%D0%B5%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Воздушный присед",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Bodyweight_Squat/0.jpg",
+        "media/ex/Bodyweight_Squat/1.jpg"
+      ],
+      "steps": [
+        "Стопы на ширине плеч, носки чуть наружу, руки перед собой.",
+        "Таз назад и вниз, как будто садишься на стул. Грудь вверх, спина ровная.",
+        "Колени идут по линии стоп, внутрь не заваливаются. Глубина — до скамьи или пока нет боли в колене.",
+        "Вставай, толкаясь всей стопой."
+      ]
     },
     "arnold_press": {
       "category": "press",
@@ -10201,7 +10211,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BE%D0%B4%D1%82%D1%8F%D0%B3%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%B2%20%D0%B3%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%80%D0%BE%D0%BD%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Подтягивания в гравитроне",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Pullups/0.jpg",
+        "media/ex/Pullups/1.jpg"
+      ],
+      "steps": [
+        "Выставь противовес, встань коленями на платформу гравитрона.",
+        "Хват чуть шире плеч, руки прямые, плечи опущены от ушей.",
+        "Тянись грудью к перекладине, сводя лопатки и опуская локти вниз. Выдох.",
+        "Медленно опустись до прямых рук, 2–3 секунды. Чем меньше противовес — тем тяжелее."
+      ]
     },
     "back_extension": {
       "category": "hinge",
@@ -10228,7 +10248,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F%20%D1%81%20%D1%80%D0%B5%D0%B7%D0%B8%D0%BD%D0%BE%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разведения с резиной",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Band_Pull_Apart/0.jpg",
+        "media/ex/Band_Pull_Apart/1.jpg"
+      ],
+      "steps": [
+        "Возьми резину перед собой на уровне плеч, руки прямые.",
+        "Разведи руки в стороны до касания резиной груди, сводя лопатки.",
+        "Плечи не поднимай к ушам. Секунду задержись.",
+        "Плавно вернись, не отпуская натяжение."
+      ]
     },
     "bar_dip": {
       "category": "push",
@@ -10255,7 +10285,18 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D1%88%D1%82%D0%B0%D0%BD%D0%B3%D0%B8%20%D0%BB%D1%91%D0%B6%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим штанги лёжа",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+        "media/ex/Barbell_Bench_Press_-_Medium_Grip/1.jpg"
+      ],
+      "steps": [
+        "Ляг под гриф: глаза под грифом, стопы плотно в пол, лопатки сведены и опущены.",
+        "Хват чуть шире плеч. Сними штангу и держи над плечами на прямых руках.",
+        "Вдох — опускай штангу к низу груди, локти под 45° к корпусу, 2 секунды.",
+        "Короткая пауза на груди, выдох — мощно выжми вверх. Таз не отрывай от скамьи.",
+        "Тяжёлые подходы — только со страхующим или в раме с упорами."
+      ]
     },
     "bb_curl": {
       "category": "bi",
@@ -10318,7 +10359,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%92%D0%B5%D0%BB%D0%BE%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D1%91%D1%80%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Велотренажёр",
       "unit": "мин",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Bicycling_Stationary/0.jpg",
+        "media/ex/Bicycling_Stationary/1.jpg"
+      ],
+      "steps": [
+        "Подними седло так, чтобы в нижней точке колено было почти прямым.",
+        "Выбери ручной режим, крути ровно 80–90 оборотов в минуту.",
+        "Разминка: пульс до 110–120, дыхание спокойное. Восстановление: можно разговаривать."
+      ]
     },
     "box_jump": {
       "category": "cardio",
@@ -10372,7 +10422,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%91%D0%B5%D1%80%D0%BF%D0%B8%20%D1%81%20%D1%88%D0%B0%D0%B3%D0%BE%D0%BC%20%D0%B1%D0%B5%D0%B7%20%D0%BF%D1%80%D1%8B%D0%B6%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Берпи с шагом без прыжка",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Из стойки присядь и поставь ладони на пол.",
+        "Шагом, по одной ноге, уйди в упор лёжа — без прыжка.",
+        "Шагом верни ноги к рукам и встань. Прыжка вверх нет — бережём колено и спину.",
+        "Темп ровный, дыхание не сбивай."
+      ]
     },
     "cable_curl": {
       "category": "bi",
@@ -10381,7 +10437,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%BD%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Сгибания на блоке",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Standing_Biceps_Cable_Curl/0.jpg",
+        "media/ex/Standing_Biceps_Cable_Curl/1.jpg"
+      ],
+      "steps": [
+        "Встань лицом к нижнему блоку, возьми рукоять хватом снизу на ширине плеч.",
+        "Локти прижаты к корпусу — двигаются только предплечья.",
+        "Выдох — согни руки до уровня плеч, секунду сожми бицепс.",
+        "Медленно опусти, не раскачиваясь корпусом."
+      ]
     },
     "cable_kickback_glute": {
       "category": "hinge",
@@ -10417,7 +10483,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BE%D0%B4%D1%8A%D1%91%D0%BC%D1%8B%20%D0%BD%D0%B0%20%D0%BD%D0%BE%D1%81%D0%BA%D0%B8%20%D1%81%D1%82%D0%BE%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Подъёмы на носки стоя",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Standing_Calf_Raises/0.jpg",
+        "media/ex/Standing_Calf_Raises/1.jpg"
+      ],
+      "steps": [
+        "Встань в тренажёр: плечи под упоры, носки на край платформы, пятки свисают.",
+        "Колени чуть согнуты, но неподвижны.",
+        "Выдох — поднимись на носки максимально высоко, секунду задержись.",
+        "Медленно опусти пятки ниже платформы до растяжения икр."
+      ]
     },
     "chest_supported_row": {
       "category": "row",
@@ -10426,7 +10502,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A2%D1%8F%D0%B3%D0%B0%20%D1%81%20%D1%83%D0%BF%D0%BE%D1%80%D0%BE%D0%BC%20%D0%B3%D1%80%D1%83%D0%B4%D1%8C%D1%8E%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Тяга с упором грудью",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Lying_T-Bar_Row/0.jpg",
+        "media/ex/Lying_T-Bar_Row/1.jpg"
+      ],
+      "steps": [
+        "Настрой тренажёр так, чтобы верх груди лёг на край подушки.",
+        "Ляг грудью на подушку, возьми рукояти, руки прямые.",
+        "Выдох — тяни рукояти к корпусу, локти вдоль тела, сведи лопатки. Грудь от подушки не отрывай.",
+        "Секунду задержись, медленно опусти. Спина полностью разгружена."
+      ]
     },
     "chin_up": {
       "category": "pull",
@@ -10453,7 +10539,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D1%81%D1%82%D1%8F%D0%B6%D0%BA%D0%B0%20%D0%BA%D0%B2%D0%B0%D0%B4%D1%80%D0%B8%D1%86%D0%B5%D0%BF%D1%81%D0%B0%20%D1%83%20%D1%81%D1%82%D0%B5%D0%BD%D1%8B%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Растяжка квадрицепса у стены",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Встань на колено спиной к стене или скамье, колено — на мягком.",
+        "Подъём задней стопы положи на стену или скамью, переднюю ногу поставь вперёд.",
+        "Подкрути таз под себя и выпрямись до растяжения передней поверхности бедра.",
+        "Держи 60 секунд. Никакой боли в колене — если есть, отодвинь колено от стены."
+      ]
     },
     "cuban_press": {
       "category": "shoulder",
@@ -10489,7 +10581,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D1%81%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Сгибания с гантелями",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Dumbbell_Bicep_Curl/0.jpg",
+        "media/ex/Dumbbell_Bicep_Curl/1.jpg"
+      ],
+      "steps": [
+        "Встань прямо, гантели в опущенных руках, ладони вперёд.",
+        "Локти прижаты к корпусу.",
+        "Выдох — согни руки до уровня плеч, секунду сожми бицепс.",
+        "Медленно опусти. Корпус не раскачивай."
+      ]
     },
     "db_floor_press": {
       "category": "push",
@@ -10525,7 +10627,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%D0%BD%D0%B0%20%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%BD%D0%BE%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим гантелей на наклонной",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Incline_Dumbbell_Press/0.jpg",
+        "media/ex/Incline_Dumbbell_Press/1.jpg"
+      ],
+      "steps": [
+        "Скамья под 30°. Сядь, гантели на бёдрах.",
+        "Подними гантели бёдрами к плечам, ляг, ладони вперёд, лопатки сведены.",
+        "Выдох — выжми гантели вверх над плечами.",
+        "Опускай медленно до уровня груди, локти под 45°. В конце положи гантели на бёдра, а не бросай в стороны."
+      ]
     },
     "db_kickback": {
       "category": "tri",
@@ -10543,7 +10655,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%D0%B2%20%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D1%8B%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разведения гантелей в стороны",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Side_Lateral_Raise/0.jpg",
+        "media/ex/Side_Lateral_Raise/1.jpg"
+      ],
+      "steps": [
+        "Встань прямо, гантели по бокам, локти чуть согнуты.",
+        "Поднимай руки в стороны до уровня плеч, не выше — кисть чуть ниже локтя.",
+        "Корпус неподвижен, без рывков.",
+        "Медленно опусти."
+      ]
     },
     "db_neutral_press": {
       "category": "push",
@@ -10552,7 +10674,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%D0%BD%D0%B5%D0%B9%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%20%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим гантелей нейтральным хватом",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Dumbbell_Bench_Press_with_Neutral_Grip/0.jpg",
+        "media/ex/Dumbbell_Bench_Press_with_Neutral_Grip/1.jpg"
+      ],
+      "steps": [
+        "Ляг на скамью с гантелями, стопы в пол, лопатки сведены.",
+        "Ладони смотрят друг на друга — нейтральный хват, самый бережный для плеча.",
+        "Опусти гантели к бокам груди, локти вдоль корпуса.",
+        "Выжми вверх, гантели идут параллельно."
+      ]
     },
     "db_neutral_shoulder_press": {
       "category": "press",
@@ -10579,7 +10711,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B2%20%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разведения в наклоне",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Seated_Bent-Over_Rear_Delt_Raise/0.jpg",
+        "media/ex/Seated_Bent-Over_Rear_Delt_Raise/1.jpg"
+      ],
+      "steps": [
+        "Сядь на край скамьи, наклонись вперёд с ровной спиной, гантели за икрами.",
+        "Ладони смотрят друг на друга, локти чуть согнуты.",
+        "Разведи руки в стороны до уровня плеч — именно в стороны, а не назад.",
+        "Секунду задержись, медленно опусти. Корпус не раскачивай."
+      ]
     },
     "db_row": {
       "category": "row",
@@ -10588,7 +10730,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A2%D1%8F%D0%B3%D0%B0%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%20%D1%81%20%D1%83%D0%BF%D0%BE%D1%80%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Тяга гантели в наклоне с упором",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/One-Arm_Dumbbell_Row/0.jpg",
+        "media/ex/One-Arm_Dumbbell_Row/1.jpg"
+      ],
+      "steps": [
+        "Колено и ладонь одной стороны на скамью, спина ровная, параллельно полу.",
+        "Гантель в свободной руке, рука прямая.",
+        "Выдох — тяни гантель к боку, локоть вдоль корпуса. Работает спина, а не рука.",
+        "Медленно опусти. Сделай все повторы и смени сторону."
+      ]
     },
     "db_shoulder_press": {
       "category": "press",
@@ -10606,7 +10758,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%92%D0%B8%D1%81%20%D0%BD%D0%B0%20%D0%BF%D0%B5%D1%80%D0%B5%D0%BA%D0%BB%D0%B0%D0%B4%D0%B8%D0%BD%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Вис на перекладине",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Возьмись за перекладину хватом сверху на ширине плеч.",
+        "Повисни на прямых руках, плечи чуть подтяни от ушей — не проваливайся в суставах.",
+        "Держись, ровно дыша, до заданного времени. Спрыгни мягко."
+      ]
     },
     "deadlift": {
       "category": "hinge",
@@ -10642,7 +10799,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A2%D1%8F%D0%B3%D0%B0%20%D0%BA%20%D0%BB%D0%B8%D1%86%D1%83%20%D0%BD%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Тяга к лицу на блоке",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Face_Pull/0.jpg",
+        "media/ex/Face_Pull/1.jpg"
+      ],
+      "steps": [
+        "Верхний блок, канат. Возьми концы хватом сверху, шаг назад.",
+        "Тяни канат к лицу, разводя концы в стороны, локти высоко — на уровне плеч.",
+        "В конце руки как у «двойного бицепса», лопатки сведены.",
+        "Медленно верни. Вес лёгкий, техника важнее."
+      ]
     },
     "farmer_hold_heavy": {
       "category": "grip",
@@ -10651,7 +10818,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A3%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D0%BD%D0%B8%D0%B5%20%D1%82%D1%8F%D0%B6%D1%91%D0%BB%D1%8B%D1%85%20%D0%B3%D0%B0%D0%BD%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Удержание тяжёлых гантелей",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Farmers_Walk/0.jpg",
+        "media/ex/Farmers_Walk/1.jpg"
+      ],
+      "steps": [
+        "Встань между гантелями, присядь с ровной спиной и возьми их.",
+        "Встань, толкаясь пятками. Плечи назад, грудь вперёд, пресс напряжён.",
+        "Держи заданное время, не сутулься. Опусти гантели так же — с ровной спиной."
+      ]
     },
     "front_rack_carry": {
       "category": "carry",
@@ -10660,7 +10836,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%B5%D1%80%D0%B5%D0%BD%D0%BE%D1%81%D0%BA%D0%B0%20%D0%BD%D0%B0%20%D0%B3%D1%80%D1%83%D0%B4%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Переноска на груди",
       "unit": "метры",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Возьми гири на грудь: локти вниз, гири лежат на предплечьях.",
+        "Спина прямая, пресс напряжён, не заваливайся назад.",
+        "Иди короткими шагами заданную дистанцию, ровно дыша."
+      ]
     },
     "front_squat": {
       "category": "legs",
@@ -10678,7 +10859,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%93%D0%BE%D0%B1%D0%BB%D0%B5%D1%82-%D0%BF%D1%80%D0%B8%D1%81%D0%B5%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Гоблет-присед",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Goblet_Squat/0.jpg",
+        "media/ex/Goblet_Squat/1.jpg"
+      ],
+      "steps": [
+        "Держи гантель вертикально у груди, локти вниз.",
+        "Стопы чуть шире плеч, носки немного наружу.",
+        "Присядь до скамьи: грудь вверх, спина ровная, колени по линии стоп.",
+        "Встань, толкаясь всей стопой. Глубина — без боли в колене."
+      ]
     },
     "good_morning": {
       "category": "hinge",
@@ -10696,7 +10887,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%93%D0%B0%D0%BA%D0%BA-%D0%BF%D1%80%D0%B8%D1%81%D0%B5%D0%B4%20%D0%B2%20%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D1%91%D1%80%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Гакк-присед в тренажёре",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Hack_Squat/0.jpg",
+        "media/ex/Hack_Squat/1.jpg"
+      ],
+      "steps": [
+        "Прижмись спиной к подушке, плечи под упоры.",
+        "Стопы на середине платформы на ширине плеч, носки чуть наружу.",
+        "Сними стопоры, опускайся до параллели бёдер с платформой, спина прижата.",
+        "Выжми вверх пятками, колени до конца не выпрямляй. После подхода — стопоры на место."
+      ]
     },
     "hammer_curl": {
       "category": "bi",
@@ -10705,7 +10906,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9C%D0%BE%D0%BB%D0%BE%D1%82%D0%BA%D0%BE%D0%B2%D1%8B%D0%B5%20%D1%81%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Молотковые сгибания",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Hammer_Curls/0.jpg",
+        "media/ex/Hammer_Curls/1.jpg"
+      ],
+      "steps": [
+        "Встань прямо, гантели в опущенных руках, ладони к корпусу.",
+        "Локти прижаты — двигается только предплечье.",
+        "Выдох — подними гантели к плечам, не поворачивая кисть.",
+        "Медленно опусти. Качает бицепс и предплечье."
+      ]
     },
     "hanging_knee_raise": {
       "category": "core",
@@ -10714,7 +10925,15 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BE%D0%B4%D1%8A%D1%91%D0%BC%20%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B5%D0%B9%20%D0%B2%20%D0%B2%D0%B8%D1%81%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Подъём коленей в висе",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/wger_knee_raise/0.jpg"
+      ],
+      "steps": [
+        "Повисни на перекладине, плечи чуть подтянуты.",
+        "Выдох — подтяни согнутые колени к груди, подкручивая таз.",
+        "Медленно опусти, без раскачки. Прямые ноги не поднимай — бережём поясницу."
+      ]
     },
     "hanging_leg_raise": {
       "category": "core",
@@ -10741,7 +10960,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BE%D0%B4%D0%B2%D0%B8%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C%20%D1%82%D0%B0%D0%B7%D0%B0%2090/90%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Подвижность таза 90/90",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Сядь на пол: передняя нога согнута под 90° перед собой, задняя — под 90° сбоку.",
+        "Спина прямая, можно опереться руками.",
+        "Мягко наклонись к передней ноге и держи. Затем смени стороны.",
+        "Без боли в колене; если заднее колено ноет — делай только переднюю ногу."
+      ]
     },
     "hip_flexor_stretch": {
       "category": "mob",
@@ -10750,7 +10975,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D1%81%D1%82%D1%8F%D0%B6%D0%BA%D0%B0%20%D1%81%D0%B3%D0%B8%D0%B1%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%20%D0%B1%D0%B5%D0%B4%D1%80%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Растяжка сгибателей бедра",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Kneeling_Hip_Flexor/0.jpg",
+        "media/ex/Kneeling_Hip_Flexor/1.jpg"
+      ],
+      "steps": [
+        "Встань в выпад на колено, заднее колено на мягком.",
+        "Подкрути таз под себя и напряги ягодицу задней ноги.",
+        "Слегка сместись вперёд до растяжения передней поверхности бедра.",
+        "Держи 60 секунд, затем другая сторона."
+      ]
     },
     "hip_thrust_machine": {
       "category": "hinge",
@@ -10759,7 +10994,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A5%D0%B8%D0%BF-%D1%82%D1%80%D0%B0%D1%81%D1%82%20%D0%B2%20%D1%82%D1%80%D0%B5%D0%BD%D0%B0%D0%B6%D1%91%D1%80%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Хип-траст в тренажёре",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Barbell_Hip_Thrust/0.jpg",
+        "media/ex/Barbell_Hip_Thrust/1.jpg"
+      ],
+      "steps": [
+        "Сядь в тренажёр, упор под лопатками, валик на тазу.",
+        "Стопы на ширине плеч, голени вертикальны в верхней точке.",
+        "Толкаясь пятками, подними таз до прямой линии корпуса, секунду сожми ягодицы.",
+        "Медленно опусти. Поясницу вверху не переразгибай."
+      ]
     },
     "incline_curl": {
       "category": "bi",
@@ -10768,7 +11013,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%BD%D0%B0%20%D0%BD%D0%B0%D0%BA%D0%BB%D0%BE%D0%BD%D0%BD%D0%BE%D0%B9%20%D1%81%D0%BA%D0%B0%D0%BC%D1%8C%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Сгибания на наклонной скамье",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Incline_Dumbbell_Curl/0.jpg",
+        "media/ex/Incline_Dumbbell_Curl/1.jpg"
+      ],
+      "steps": [
+        "Скамья под 45–60°. Сядь, гантели свисают на прямых руках, ладони вперёд.",
+        "Локти остаются на месте — двигаются только предплечья.",
+        "Выдох — согни руки до плеч, секунду задержись.",
+        "Медленно опусти до полного выпрямления."
+      ]
     },
     "inverted_row": {
       "category": "row",
@@ -10813,7 +11068,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B0%D1%8F%20%D1%81%20%D0%B3%D0%B8%D1%80%D0%B5%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Становая с гирей",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/wger_kb_deadlift/0.jpg"
+      ],
+      "steps": [
+        "Гиря между стопами, стопы на ширине таза.",
+        "Таз назад, колени чуть согнуты, спина ровная — возьми гирю обеими руками.",
+        "Встань, толкая пол ногами и выводя таз вперёд.",
+        "Опусти гирю тем же путём, спина ровная всё время."
+      ]
     },
     "kb_farmer_hold": {
       "category": "grip",
@@ -10822,7 +11086,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A3%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B3%D0%B8%D1%80%D1%8C%20%D0%BD%D0%B0%20%D0%B2%D1%80%D0%B5%D0%BC%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Удержание гирь на время",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Farmers_Walk/0.jpg",
+        "media/ex/Farmers_Walk/1.jpg"
+      ],
+      "steps": [
+        "Встань между гирями, присядь с ровной спиной и возьми их.",
+        "Встань, толкаясь пятками. Плечи назад, пресс напряжён.",
+        "Держи заданное время, не сутулься. Опусти гири с ровной спиной."
+      ]
     },
     "kb_figure_eight": {
       "category": "complex",
@@ -10912,7 +11185,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%B2%D0%B8%D0%BD%D0%B3%20%D0%B3%D0%B8%D1%80%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Свинг гири",
       "unit": "повт",
-      "unlock_day": 22
+      "unlock_day": 22,
+      "images": [
+        "media/ex/One-Arm_Kettlebell_Swings/0.jpg",
+        "media/ex/One-Arm_Kettlebell_Swings/1.jpg"
+      ],
+      "steps": [
+        "Гиря чуть впереди, стопы шире плеч. Таз назад, спина ровная, возьми гирю двумя руками.",
+        "Закинь гирю назад между ног и резко выведи таз вперёд — гиря летит вперёд до уровня груди.",
+        "Руки — просто верёвки, работает таз и ягодицы. Спиной не тянешь.",
+        "Гиря идёт вниз — снова таз назад. Поясница нейтральная всё время."
+      ]
     },
     "kipping_pull_up": {
       "category": "pull",
@@ -10939,7 +11222,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D0%B2%20%D0%BB%D0%B5%D0%BD%D0%B4%D0%BC%D0%B0%D0%B9%D0%BD%20%D1%81%D1%82%D0%BE%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим в лендмайн стоя",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Конец грифа в углу или лендмайне, блин на свободном конце.",
+        "Встань в полушаге, возьми конец грифа у плеча одной рукой.",
+        "Выжми гриф вперёд-вверх по дуге до прямой руки, пресс напряжён.",
+        "Медленно опусти к плечу. Угол безопаснее для плеча, чем жим над головой."
+      ]
     },
     "lat_pulldown": {
       "category": "pull",
@@ -10948,7 +11237,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A2%D1%8F%D0%B3%D0%B0%20%D0%B2%D0%B5%D1%80%D1%85%D0%BD%D0%B5%D0%B3%D0%BE%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B0%20%D0%BA%20%D0%B3%D1%80%D1%83%D0%B4%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Тяга верхнего блока к груди",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Wide-Grip_Lat_Pulldown/0.jpg",
+        "media/ex/Wide-Grip_Lat_Pulldown/1.jpg"
+      ],
+      "steps": [
+        "Сядь, закрепи бёдра под валиками, хват шире плеч.",
+        "Слегка откинься назад, грудь вперёд.",
+        "Выдох — тяни гриф к верху груди, опуская локти и сводя лопатки.",
+        "Медленно отпусти до прямых рук. За голову не тяни."
+      ]
     },
     "lat_pulldown_neutral": {
       "category": "pull",
@@ -10957,7 +11256,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A2%D1%8F%D0%B3%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B0%20%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%20%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Тяга блока параллельным хватом",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/V-Bar_Pulldown/0.jpg",
+        "media/ex/V-Bar_Pulldown/1.jpg"
+      ],
+      "steps": [
+        "Сядь, закрепи бёдра, возьми V-рукоять — ладони друг к другу.",
+        "Слегка откинься назад, грудь вперёд.",
+        "Выдох — тяни рукоять к груди, сводя лопатки.",
+        "Секунду задержись, медленно верни до прямых рук."
+      ]
     },
     "lat_pulldown_reverse": {
       "category": "pull",
@@ -10984,7 +11293,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D1%81%D1%82%D1%8F%D0%B6%D0%BA%D0%B0%20%D1%88%D0%B8%D1%80%D0%BE%D1%87%D0%B0%D0%B9%D1%88%D0%B8%D1%85%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Растяжка широчайших",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Возьмись рукой за стойку или раму на уровне пояса.",
+        "Отведи таз назад и в сторону, чтобы тянулся бок и подмышка.",
+        "Дыши спокойно, держи 60 секунд, затем другая сторона."
+      ]
     },
     "lateral_lunge": {
       "category": "uni",
@@ -11011,7 +11325,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%BE%D0%B3%20%D0%BB%D1%91%D0%B6%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Сгибание ног лёжа",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Lying_Leg_Curls/0.jpg",
+        "media/ex/Lying_Leg_Curls/1.jpg"
+      ],
+      "steps": [
+        "Ляг лицом вниз в тренажёр, валик чуть выше пяток.",
+        "Бёдра прижаты к скамье, возьмись за рукояти.",
+        "Выдох — согни ноги максимально, не отрывая таз, секунду задержись.",
+        "Медленно выпрями ноги."
+      ]
     },
     "leg_extension": {
       "category": "legiso",
@@ -11020,7 +11344,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%BE%D0%B3%20%D1%81%D0%B8%D0%B4%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разгибание ног сидя",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Leg_Extensions/0.jpg",
+        "media/ex/Leg_Extensions/1.jpg"
+      ],
+      "steps": [
+        "Сядь, валик на голенях чуть выше стоп, колени на краю сиденья.",
+        "Выдох — выпрями ноги, секунду задержись вверху.",
+        "Медленно опусти, не ниже 90° в колене.",
+        "Амплитуда — без боли в колене."
+      ]
     },
     "leg_press": {
       "category": "legs",
@@ -11029,7 +11363,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D0%BD%D0%BE%D0%B3%D0%B0%D0%BC%D0%B8%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим ногами",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Leg_Press/0.jpg",
+        "media/ex/Leg_Press/1.jpg"
+      ],
+      "steps": [
+        "Сядь, прижми поясницу к спинке. Стопы на середине платформы на ширине плеч.",
+        "Сними стопоры, выжми платформу, колени до конца не выпрямляй.",
+        "Вдох — опускай до 90° в коленях. Таз не подкручивается и не отрывается.",
+        "Выжми пятками. После подхода — стопоры на место."
+      ]
     },
     "machine_chest_press": {
       "category": "push",
@@ -11083,7 +11427,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BE%D0%B4%D1%82%D1%8F%D0%B3%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%BF%D0%B0%D1%80%D0%B0%D0%BB%D0%BB%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%20%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Подтягивания параллельным хватом",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/V-Bar_Pullup/0.jpg",
+        "media/ex/V-Bar_Pullup/1.jpg"
+      ],
+      "steps": [
+        "Повисни на параллельных рукоятях — ладони друг к другу.",
+        "Грудь вперёд, плечи опущены.",
+        "Выдох — подтянись грудью к рукоятям, сводя лопатки.",
+        "Медленно опустись до прямых рук. Если не выходит — гравитрон."
+      ]
     },
     "overhead_carry": {
       "category": "carry",
@@ -11101,7 +11455,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D0%9F%D0%B0%D0%BB%D0%BB%D0%BE%D1%84%D0%B0%20%D0%BD%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Жим Паллофа на блоке",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Pallof_Press/0.jpg",
+        "media/ex/Pallof_Press/1.jpg"
+      ],
+      "steps": [
+        "Блок на уровне груди, встань к нему боком на расстоянии руки.",
+        "Держи рукоять двумя руками у середины груди, стопы на ширине таза, колени мягкие.",
+        "Выжми рукоять вперёд, не давая корпусу повернуться к блоку.",
+        "Задержись 2 секунды, верни. Потом другая сторона."
+      ]
     },
     "pec_stretch_doorway": {
       "category": "mob",
@@ -11110,7 +11474,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D1%81%D1%82%D1%8F%D0%B6%D0%BA%D0%B0%20%D0%B3%D1%80%D1%83%D0%B4%D0%B8%20%D0%B2%20%D0%B4%D0%B2%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%20%D0%BF%D1%80%D0%BE%D1%91%D0%BC%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Растяжка груди в дверном проёме",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Встань в дверной проём, предплечье на косяке, локоть на уровне плеча.",
+        "Шагни вперёд, пока не почувствуешь растяжение груди.",
+        "Дыши спокойно, держи 60 секунд, затем другая сторона.",
+        "Без боли в плече — если тянет в суставе, опусти локоть ниже."
+      ]
     },
     "pendlay_row": {
       "category": "row",
@@ -11128,7 +11498,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BB%D0%B0%D0%BD%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Планка",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Plank/0.jpg",
+        "media/ex/Plank/1.jpg"
+      ],
+      "steps": [
+        "Упор на предплечья, локти под плечами, ноги прямые.",
+        "Тело — прямая линия от головы до пяток: таз не проваливается и не задирается.",
+        "Напряги пресс и ягодицы, ровно дыши."
+      ]
     },
     "plate_front_raise": {
       "category": "shoulder",
@@ -11146,7 +11525,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A3%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B1%D0%BB%D0%B8%D0%BD%D0%BE%D0%B2%20%D1%89%D0%B8%D0%BF%D0%BA%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Удержание блинов щипком",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Plate_Pinch/0.jpg",
+        "media/ex/Plate_Pinch/1.jpg"
+      ],
+      "steps": [
+        "Сложи два блина по 5 кг гладкими сторонами наружу.",
+        "Возьми их щипком: пальцы с одной стороны, большой палец с другой.",
+        "Держи заданное время, затем смени руку."
+      ]
     },
     "preacher_curl": {
       "category": "bi",
@@ -11191,7 +11579,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9E%D1%82%D0%B6%D0%B8%D0%BC%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%BE%D1%82%20%D0%BF%D0%BE%D0%BB%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Отжимания от пола",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Pushups/0.jpg",
+        "media/ex/Pushups/1.jpg"
+      ],
+      "steps": [
+        "Упор лёжа, ладони чуть шире плеч, тело прямое.",
+        "Вдох — опустись, пока грудь почти не коснётся пола, локти под 45°.",
+        "Выдох — выжмись вверх. Таз не проваливается."
+      ]
     },
     "push_up_close": {
       "category": "push",
@@ -11245,7 +11642,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D1%83%D0%BC%D1%8B%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%20%D1%82%D1%8F%D0%B3%D0%B0%20%D1%81%D0%BE%20%D1%88%D1%82%D0%B0%D0%BD%D0%B3%D0%BE%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Румынская тяга со штангой",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Romanian_Deadlift/0.jpg",
+        "media/ex/Romanian_Deadlift/1.jpg"
+      ],
+      "steps": [
+        "Штанга в руках у бёдер, хват чуть шире плеч, колени слегка согнуты.",
+        "Отводи таз назад, штанга скользит по бёдрам. Спина ровная всё время.",
+        "Опускайся до середины голени или пока спина остаётся ровной.",
+        "Встань, выводя таз вперёд. Медленно и подконтрольно."
+      ]
     },
     "rdl_db": {
       "category": "hinge",
@@ -11281,7 +11688,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9E%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D1%8B%D0%B5%20%D0%B2%D1%8B%D0%BF%D0%B0%D0%B4%D1%8B%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Обратные выпады",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Dumbbell_Rear_Lunge/0.jpg",
+        "media/ex/Dumbbell_Rear_Lunge/1.jpg"
+      ],
+      "steps": [
+        "Встань прямо, гантели по бокам.",
+        "Шагни одной ногой назад и опустись, пока заднее колено почти не коснётся пола.",
+        "Передняя голень вертикальна, колено по линии стопы.",
+        "Вернись, толкаясь пяткой передней ноги. Шаг назад мягче для колена, чем вперёд."
+      ]
     },
     "reverse_wrist_curl": {
       "category": "grip",
@@ -11290,7 +11707,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%B7%D0%B0%D0%BF%D1%8F%D1%81%D1%82%D0%B8%D0%B9%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разгибания запястий",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Seated_Dumbbell_Palms-Down_Wrist_Curl/0.jpg",
+        "media/ex/Seated_Dumbbell_Palms-Down_Wrist_Curl/1.jpg"
+      ],
+      "steps": [
+        "Сядь, предплечья на бёдрах, кисти с гантелями свисают, ладони вниз.",
+        "Поднимай кисти вверх, двигаются только запястья.",
+        "Медленно опусти."
+      ]
     },
     "ring_row": {
       "category": "row",
@@ -11308,7 +11734,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D1%8F%20%D1%81%20%D0%BA%D0%B0%D0%BD%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разгибания с канатом",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Triceps_Pushdown_-_Rope_Attachment/0.jpg",
+        "media/ex/Triceps_Pushdown_-_Rope_Attachment/1.jpg"
+      ],
+      "steps": [
+        "Верхний блок, канат. Возьми концы, ладони друг к другу.",
+        "Локти прижаты к корпусу, корпус чуть наклонён вперёд.",
+        "Выдох — разогни руки вниз, разводя концы каната к бёдрам.",
+        "Секунду задержись, медленно верни. Локти не уходят вперёд."
+      ]
     },
     "row_erg": {
       "category": "cardio",
@@ -11353,7 +11789,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%93%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%BD%D1%82%D0%B0%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%82%D1%8F%D0%B3%D0%B0%20%D1%81%D0%B8%D0%B4%D1%8F%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Горизонтальная тяга сидя",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Seated_Cable_Rows/0.jpg",
+        "media/ex/Seated_Cable_Rows/1.jpg"
+      ],
+      "steps": [
+        "Сядь, стопы на упоры, колени слегка согнуты. Возьми рукоять.",
+        "Выпрямись: спина ровная, грудь вперёд.",
+        "Выдох — тяни рукоять к животу, локти вдоль корпуса, сведи лопатки.",
+        "Медленно верни. Корпусом не раскачивай."
+      ]
     },
     "shrug": {
       "category": "shoulder",
@@ -11371,7 +11817,16 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%91%D0%BE%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BF%D0%BB%D0%B0%D0%BD%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Боковая планка",
       "unit": "сек",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Side_Bridge/0.jpg",
+        "media/ex/Side_Bridge/1.jpg"
+      ],
+      "steps": [
+        "Ляг на бок, упор на предплечье, локоть под плечом.",
+        "Подними таз — тело прямая линия от головы до стоп.",
+        "Держи заданное время, затем другая сторона. Если тяжело — колени согнуты."
+      ]
     },
     "single_arm_pulldown": {
       "category": "pull",
@@ -11407,7 +11862,13 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A1%D0%BF%D0%BB%D0%B8%D1%82-%D0%BF%D1%80%D0%B8%D1%81%D0%B5%D0%B4%20%D0%BD%D0%B0%20%D0%BC%D0%B5%D1%81%D1%82%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Сплит-присед на месте",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Встань в широкий шаг: одна нога впереди, другая сзади на носке. Гантели по бокам.",
+        "Опускайся вертикально вниз, пока заднее колено почти не коснётся пола.",
+        "Переднее колено по линии стопы, корпус прямой.",
+        "Поднимись, толкаясь пяткой передней ноги. Все повторы — затем другая нога."
+      ]
     },
     "step_up": {
       "category": "uni",
@@ -11416,7 +11877,17 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%97%D0%B0%D1%88%D0%B0%D0%B3%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%20%D0%BD%D0%B0%20%D1%8F%D1%89%D0%B8%D0%BA%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Зашагивания на ящик",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "images": [
+        "media/ex/Dumbbell_Step_Ups/0.jpg",
+        "media/ex/Dumbbell_Step_Ups/1.jpg"
+      ],
+      "steps": [
+        "Ящик не выше колена. Гантели по бокам.",
+        "Поставь стопу целиком на ящик.",
+        "Выдох — встань на ящик за счёт передней ноги, пяткой, не отталкиваясь задней.",
+        "Медленно спустись. Все повторы на одну ногу, затем на другую."
+      ]
     },
     "straight_arm_pulldown": {
       "category": "shoulder",
@@ -11434,7 +11905,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9E%D0%B4%D0%BD%D0%BE%D1%81%D1%82%D0%BE%D1%80%D0%BE%D0%BD%D0%BD%D1%8F%D1%8F%20%D0%BF%D0%B5%D1%80%D0%B5%D0%BD%D0%BE%D1%81%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Односторонняя переноска",
       "unit": "метры",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Возьми гантель в одну руку.",
+        "Встань ровно: не заваливайся в сторону груза, плечи на одном уровне.",
+        "Иди заданную дистанцию, пресс напряжён. На следующем отрезке смени руку."
+      ]
     },
     "swim_breast": {
       "category": "swim",
@@ -11452,7 +11928,11 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%92%D0%BE%D1%81%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D0%B5%20%D0%BF%D0%BB%D0%B0%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Восстановительное плавание",
       "unit": "метры",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Любой удобный стиль, медленный темп.",
+        "Дыхание ровное, без одышки — это заминка."
+      ]
     },
     "swim_free": {
       "category": "swim",
@@ -11461,7 +11941,11 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D0%BB%D0%B0%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B2%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%BC%20%D1%81%D1%82%D0%B8%D0%BB%D0%B5%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Плавание вольным стилем",
       "unit": "метры",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Вольный стиль или брасс, спокойный темп.",
+        "Цель — разогреть плечи и выровнять дыхание."
+      ]
     },
     "swim_intervals": {
       "category": "swim",
@@ -11470,7 +11954,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B2%D0%B0%D0%BB%D1%8B%20%D0%B2%20%D0%B1%D0%B0%D1%81%D1%81%D0%B5%D0%B9%D0%BD%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Интервалы в бассейне",
       "unit": "метры",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "50 метров в хорошем темпе — примерно 7 из 10 по усилию.",
+        "Отдых 45 секунд у бортика.",
+        "Держи одинаковое время на всех отрезках."
+      ]
     },
     "thoracic_extension_roll": {
       "category": "mob",
@@ -11479,7 +11968,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%B0%D0%B7%D0%B3%D0%B8%D0%B1%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Разгибание на ролле",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Ляг на ролл поперёк спины на уровне лопаток, руки за головой.",
+        "Мягко прогнись через ролл, таз на полу.",
+        "Сдвигай ролл выше-ниже в пределах грудного отдела. На поясницу не катай."
+      ]
     },
     "thoracic_rotation": {
       "category": "mob",
@@ -11488,7 +11982,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A0%D0%BE%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B3%D1%80%D1%83%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BE%D1%82%D0%B4%D0%B5%D0%BB%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Ротация грудного отдела",
       "unit": "повт",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Встань на четвереньки, одна рука за головой.",
+        "Поверни локоть вверх к потолку, провожая взглядом.",
+        "Вернись, опустив локоть к противоположной руке. Таз неподвижен."
+      ]
     },
     "thruster": {
       "category": "complex",
@@ -11515,7 +12014,12 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%92%D0%B8%D1%81%20%D0%BD%D0%B0%20%D0%BF%D0%BE%D0%BB%D0%BE%D1%82%D0%B5%D0%BD%D1%86%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Вис на полотенце",
       "unit": "сек",
-      "unlock_day": 22
+      "unlock_day": 22,
+      "steps": [
+        "Перекинь полотенце через перекладину и возьмись за оба конца.",
+        "Повисни на прямых руках, плечи чуть подтянуты.",
+        "Держи заданное время. Хват на полотенце качает предплечья сильнее, чем гриф."
+      ]
     },
     "tricep_pushdown": {
       "category": "tri",
@@ -11551,7 +12055,11 @@
       "media_url": "https://www.youtube.com/results?search_query=%D0%A5%D0%BE%D0%B4%D1%8C%D0%B1%D0%B0%20%D0%BD%D0%B0%20%D1%83%D0%BB%D0%B8%D1%86%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
       "name_ru": "Ходьба на улице",
       "unit": "мин",
-      "unlock_day": 1
+      "unlock_day": 1,
+      "steps": [
+        "Бодрый темп, но так, чтобы можно было говорить.",
+        "Идеально — на улице в обед: заодно свет и воздух."
+      ]
     },
     "walking_lunge": {
       "category": "uni",
@@ -11596,7 +12104,17 @@
       "category": "shoulder",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%9D%D0%B0%D1%80%D1%83%D0%B6%D0%BD%D0%B0%D1%8F%20%D1%80%D0%BE%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BD%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%9D%D0%B0%D1%80%D1%83%D0%B6%D0%BD%D0%B0%D1%8F%20%D1%80%D0%BE%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BD%D0%B0%20%D0%B1%D0%BB%D0%BE%D0%BA%D0%B5%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/External_Rotation_with_Cable/0.jpg",
+        "media/ex/External_Rotation_with_Cable/1.jpg"
+      ],
+      "steps": [
+        "Выставь блок на высоте локтя, встань к нему боком.",
+        "Возьми рукоять дальней от блока рукой, локоть согнут под 90° и прижат к боку — зажми под ним свёрнутое полотенце.",
+        "Поворачивай предплечье наружу, как дверь на петлях, локоть на месте.",
+        "2 секунды обратно. Вес лёгкий, никакой боли."
+      ]
     },
     "dead_bug": {
       "name_ru": "Мёртвый жук",
@@ -11605,7 +12123,17 @@
       "category": "core",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%9C%D1%91%D1%80%D1%82%D0%B2%D1%8B%D0%B9%20%D0%B6%D1%83%D0%BA%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%9C%D1%91%D1%80%D1%82%D0%B2%D1%8B%D0%B9%20%D0%B6%D1%83%D0%BA%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/Dead_Bug/0.jpg",
+        "media/ex/Dead_Bug/1.jpg"
+      ],
+      "steps": [
+        "Ляг на спину, руки вверх к потолку, ноги согнуты под 90° в тазу и коленях.",
+        "Сильный выдох — рёбра вниз, поясница прижата к полу. Так держишь весь подход.",
+        "Медленно вытяни одну ногу и противоположную руку, почти до пола.",
+        "Вернись и смени сторону. Если поясница отрывается — амплитуду меньше."
+      ]
     },
     "bird_dog": {
       "name_ru": "Птица-собака",
@@ -11614,7 +12142,16 @@
       "category": "core",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D1%82%D0%B8%D1%86%D0%B0-%D1%81%D0%BE%D0%B1%D0%B0%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%9F%D1%82%D0%B8%D1%86%D0%B0-%D1%81%D0%BE%D0%B1%D0%B0%D0%BA%D0%B0%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/wger_bird_dog/0.jpg"
+      ],
+      "steps": [
+        "Встань на четвереньки: ладони под плечами, колени под тазом, спина ровная.",
+        "Напряги пресс и медленно вытяни вперёд правую руку и назад левую ногу.",
+        "Задержи 2–10 секунд: таз не заваливается, поясница не прогибается.",
+        "Вернись и повтори на другую сторону."
+      ]
     },
     "close_grip_bench": {
       "name_ru": "Жим штанги узким хватом",
@@ -11623,7 +12160,17 @@
       "category": "push",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D1%88%D1%82%D0%B0%D0%BD%D0%B3%D0%B8%20%D1%83%D0%B7%D0%BA%D0%B8%D0%BC%20%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%96%D0%B8%D0%BC%20%D1%88%D1%82%D0%B0%D0%BD%D0%B3%D0%B8%20%D1%83%D0%B7%D0%BA%D0%B8%D0%BC%20%D1%85%D0%B2%D0%B0%D1%82%D0%BE%D0%BC%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/Close-Grip_Barbell_Bench_Press/0.jpg",
+        "media/ex/Close-Grip_Barbell_Bench_Press/1.jpg"
+      ],
+      "steps": [
+        "Ляг на скамью как для обычного жима, лопатки сведены.",
+        "Хват на ширине плеч или чуть уже — не уже, иначе страдают запястья.",
+        "Опускай штангу к низу груди, локти идут вдоль корпуса.",
+        "Выжми вверх за счёт трицепса. Спускай вдвое медленнее, чем поднимаешь."
+      ]
     },
     "cat_camel": {
       "name_ru": "Кошка-верблюд",
@@ -11632,7 +12179,17 @@
       "category": "mob",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%9A%D0%BE%D1%88%D0%BA%D0%B0-%D0%B2%D0%B5%D1%80%D0%B1%D0%BB%D1%8E%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%9A%D0%BE%D1%88%D0%BA%D0%B0-%D0%B2%D0%B5%D1%80%D0%B1%D0%BB%D1%8E%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/Cat_Stretch/0.jpg",
+        "media/ex/Cat_Stretch/1.jpg"
+      ],
+      "steps": [
+        "Встань на четвереньки: ладони под плечами, колени под тазом.",
+        "На выдохе медленно округли спину вверх, голову опусти.",
+        "На вдохе плавно прогнись, голову подними — без усилия и боли.",
+        "Двигайся медленно, это разминка позвоночника, не растяжка."
+      ]
     },
     "elliptical": {
       "name_ru": "Эллипсоид",
@@ -11641,7 +12198,16 @@
       "category": "cardio",
       "unit": "мин",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%BE%D0%B8%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%AD%D0%BB%D0%BB%D0%B8%D0%BF%D1%81%D0%BE%D0%B8%D0%B4%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/Elliptical_Trainer/0.jpg",
+        "media/ex/Elliptical_Trainer/1.jpg"
+      ],
+      "steps": [
+        "Встань на педали, возьмись за подвижные рукояти.",
+        "Спина прямая, давишь всей стопой, руки работают активно.",
+        "Интервалы: 20 секунд быстро, 40 легко. Без рывков."
+      ]
     },
     "glute_bridge": {
       "name_ru": "Ягодичный мостик",
@@ -11650,7 +12216,17 @@
       "category": "hinge",
       "unit": "повт",
       "unlock_day": 1,
-      "media_url": "https://www.youtube.com/results?search_query=%D0%AF%D0%B3%D0%BE%D0%B4%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%BE%D1%81%D1%82%D0%B8%D0%BA%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F"
+      "media_url": "https://www.youtube.com/results?search_query=%D0%AF%D0%B3%D0%BE%D0%B4%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%BC%D0%BE%D1%81%D1%82%D0%B8%D0%BA%20%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%20%D0%B2%D1%8B%D0%BF%D0%BE%D0%BB%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F",
+      "images": [
+        "media/ex/Butt_Lift_Bridge/0.jpg",
+        "media/ex/Butt_Lift_Bridge/1.jpg"
+      ],
+      "steps": [
+        "Ляг на спину, колени согнуты, стопы на ширине плеч.",
+        "Толкаясь пятками, подними таз до прямой линии от колен до плеч.",
+        "Вверху секунду сожми ягодицы. Поясницу не прогибай.",
+        "Медленно опусти."
+      ]
     }
   },
   "logs": {

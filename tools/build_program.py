@@ -23,7 +23,10 @@ import sys
 from pathlib import Path
 from urllib.parse import quote
 
-DEFAULT_PATH = Path(__file__).resolve().parent.parent / "data.json"
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_PATH = ROOT / "data.json"
+IMAGES_MAP = Path(__file__).resolve().parent / "exercise_images.json"
+STEPS_RU = Path(__file__).resolve().parent / "exercise_steps_ru.json"
 KEEP_DAYS = {1}
 DELOAD_WEEK = 3  # 4th week of blocks 2 and 3
 TAPER_FROM = 93  # last week before the final test
@@ -521,11 +524,26 @@ def add_moves(moves: dict) -> None:
         moves[code] = {**m, "unlock_day": 1, "media_url": url}
 
 
+def add_media(moves: dict) -> None:
+    """Attach photos (media/ex/<id>/N.jpg) and Russian step-by-step technique to moves."""
+    images = {k: v for k, v in json.loads(IMAGES_MAP.read_text(encoding="utf-8")).items() if not k.startswith("_")}
+    steps = json.loads(STEPS_RU.read_text(encoding="utf-8"))
+    for code, move in moves.items():
+        move.pop("images", None)
+        move.pop("steps", None)
+        if code in images:
+            files = [f"media/ex/{images[code]}/{n}.jpg" for n in (0, 1)]
+            move["images"] = [f for f in files if (ROOT / f).is_file()]
+        if code in steps:
+            move["steps"] = steps[code]
+
+
 def main() -> None:
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PATH
     data = json.loads(path.read_text(encoding="utf-8"))
     add_moves(data["moves"])
     build(data)
+    add_media(data["moves"])
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 

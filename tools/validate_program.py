@@ -83,6 +83,17 @@ def check_day(key: str, day: dict, moves: dict, errors: list[str]) -> None:
         errors.append(f"day {key}: empty payload")
 
 
+def check_media(days: dict, moves: dict, errors: list[str]) -> None:
+    used = {i["movement"] for d in days.values() for part in ("payload", "variant")
+            for b in d[part].get("blocks", []) for i in b["items"]}
+    for code in sorted(used & moves.keys()):
+        if not moves[code].get("steps"):
+            errors.append(f"move {code}: no Russian technique steps")
+        for img in moves[code].get("images", []):
+            if not (DEFAULT_PATH.parent / img).is_file():
+                errors.append(f"move {code}: missing image {img}")
+
+
 def validate(data: dict) -> list[str]:
     errors: list[str] = []
     days, moves = data["days"], data["moves"]
@@ -90,6 +101,7 @@ def validate(data: dict) -> list[str]:
         errors.append("days must be exactly 1..100")
     for key in sorted(days, key=int):
         check_day(key, days[key], moves, errors)
+    check_media(days, moves, errors)
     return errors
 
 

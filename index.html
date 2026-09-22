@@ -78,8 +78,21 @@ h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;
   background:var(--panel2);cursor:pointer;color:var(--green);font-size:15px;padding:0;margin-top:2px}
 .tick[aria-pressed=true]{border-color:var(--green);background:rgba(95,185,138,.14)}
 .it.ok .nm b,.it.ok .nm span{opacity:.4;text-decoration:line-through}
-.info{background:none;border:none;color:var(--muted);font-family:var(--mono);font-size:11px;
-  cursor:pointer;padding:3px 6px;border:1px solid var(--line);border-radius:4px;flex-shrink:0;margin-top:3px}
+.it{flex-wrap:wrap}
+button.nm{background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;
+  display:block;min-width:0}
+button.nm:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+.nm .chev{float:right;color:var(--muted);font-style:normal;font-size:13px;margin-left:8px;transition:transform .15s}
+.nm[aria-expanded=true] .chev{transform:rotate(180deg)}
+.det{flex-basis:100%;margin:10px 0 2px 38px}
+.det .ph{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.det .ph.one{grid-template-columns:1fr}
+.det img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:6px;background:#fff;display:block}
+.det .eq{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:8px}
+.det ol{margin:8px 0 0;padding-left:20px;font-size:14.5px;line-height:1.5}
+.det ol li{margin-bottom:4px}
+.det a{color:var(--brass);font-family:var(--mono);font-size:12.5px;display:inline-block;margin-top:6px}
+.det .cr{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
 .rules{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px dashed var(--line);
   border-radius:6px;padding:10px;margin:14px 0}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}
@@ -297,6 +310,29 @@ function wireNav(cur){
   if(n)n.onclick=()=>{ if(viewDay<cur){viewDay++;renderToday(viewDay);} };
 }
 
+// Accordion body: photos (lazy, load only when opened), equipment, steps, video link
+function detailsHtml(m, i){
+  const imgs=(m.images||[]).map(src=>'<img loading="lazy" src="'+esc(src)+'" alt="'+esc(m.name_ru||"")+'">').join("");
+  const credit=(m.images||[]).some(src=>src.includes("/wger_")) ? '<div class="cr">Фото: wger.de, CC BY-SA 4.0</div>' : "";
+  const steps=(m.steps&&m.steps.length) ? '<ol>'+m.steps.map(s=>'<li>'+esc(s)+'</li>').join("")+'</ol>'
+             : (m.cue ? '<ol><li>'+esc(m.cue)+'</li></ol>' : "");
+  return '<div class="det" id="det-'+i+'" hidden>'+
+    (imgs ? '<div class="ph'+((m.images||[]).length===1?' one':'')+'">'+imgs+'</div>'+credit : "")+
+    (m.equipment && m.equipment!=="—" ? '<div class="eq">'+esc(m.equipment)+'</div>' : "")+
+    steps+
+    (m.media_url ? '<a href="'+esc(m.media_url)+'" target="_blank" rel="noopener">▶ видео техники</a>' : "")+
+    '</div>';
+}
+
+function wireDetails(){
+  document.querySelectorAll("#today button.nm").forEach(b=>b.onclick=()=>{
+    const det=document.getElementById(b.getAttribute("aria-controls"));
+    const open=b.getAttribute("aria-expanded")==="true";
+    b.setAttribute("aria-expanded", String(!open));
+    if(det) det.hidden=open;
+  });
+}
+
 function dayHtml(plan, use, done){
   let h='<h2>'+plan.title+'</h2>'+
     (use.subtitle?'<p class="sub">'+use.subtitle+'</p>':'')+
@@ -309,13 +345,14 @@ function dayHtml(plan, use, done){
     (b.items||[]).forEach(it=>{
       const i=idx++, ok=done.includes(i), m=moves[it.movement]||{};
       h+='<div class="it'+(ok?' ok':'')+'">'+
-        '<button class="tick" aria-pressed="'+ok+'" data-i="'+i+'">'+(ok?'✓':'')+'</button>'+
-        '<div class="nm"><b>'+(m.name_ru||it.movement)+'</b>'+
+        '<button class="tick" aria-pressed="'+ok+'" aria-label="Отметить" data-i="'+i+'">'+(ok?'✓':'')+'</button>'+
+        '<button class="nm" type="button" aria-expanded="false" aria-controls="det-'+i+'">'+
+        '<i class="chev" aria-hidden="true">▾</i><b>'+esc(m.name_ru||it.movement)+'</b>'+
         '<span>'+fmt(it.text)+'</span>'+
         (it.note?'<em>'+it.note+'</em>':'')+
         (it.alt?'<em style="color:var(--brass2)">'+it.alt+'</em>':'')+
-        '</div>'+
-        (m.cue?'<button class="info" data-m="'+it.movement+'">техника</button>':'')+
+        '</button>'+
+        detailsHtml(m, i)+
         '</div>';
     });
     h+='</div>';
@@ -361,7 +398,7 @@ function renderToday(d){
   if(future){
     h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Это следующий день. Откроется, когда закроешь текущий.</div>';
     el.innerHTML=h; wireNav(cur);
-    document.querySelectorAll("#today .info").forEach(b=>b.onclick=()=>showMove(b.dataset.m));
+    wireDetails();
     document.querySelectorAll("#today .tick").forEach(b=>b.disabled=true);
     return;
   }
@@ -373,7 +410,7 @@ function renderToday(d){
     h+='<div><label>Заметка</label><textarea id="note" rows="3">'+esc(log.note)+'</textarea>'+
        '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
     el.innerHTML=h; wireNav(cur);
-    document.querySelectorAll("#today .info").forEach(b=>b.onclick=()=>showMove(b.dataset.m));
+    wireDetails();
     document.querySelectorAll("#today .tick").forEach(b=>{b.setAttribute("aria-pressed",done.includes(+b.dataset.i));});
     const sn=document.getElementById("savenote");
     if(sn)sn.onclick=async()=>{log.note=document.getElementById("note").value;logs[String(d)]=log;await put("logs/"+d,log);sn.textContent="Сохранено";setTimeout(()=>sn.textContent="Сохранить заметку",2000);};
@@ -434,8 +471,7 @@ function wireToday(d, total){
     };
   });
 
-  document.querySelectorAll("#today .info").forEach(b=>
-    b.onclick=()=>showMove(b.dataset.m));
+  wireDetails();
 
   const done=document.getElementById("done");
   if(done) done.onclick=async()=>{
@@ -487,20 +523,6 @@ function wireToday(d, total){
 }
 
 /* ---------- модалки ---------- */
-function showMove(code){
-  const m=moves[code]||{};
-  document.getElementById("ovl").innerHTML=
-   '<div class="ovl"><div class="in">'+
-   '<h4 style="font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:19px;margin:0 0 4px">'+
-   (m.name_ru||code)+'</h4>'+
-   '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:10px">'+(m.equipment||'')+'</div>'+
-   '<div class="cue">'+(m.cue||'Техника не заполнена')+'</div>'+
-   (m.media_url?'<a href="'+m.media_url+'" target="_blank" rel="noopener">▶ разбор техники</a>':'')+
-   '<button class="btn" id="cls" style="width:100%;margin-top:16px">Закрыть</button>'+
-   '</div></div>';
-  document.getElementById("cls").onclick=()=>document.getElementById("ovl").innerHTML="";
-}
-
 function confirmBox(t,s,fn){
   document.getElementById("ovl").innerHTML=
    '<div class="ovl"><div class="in">'+

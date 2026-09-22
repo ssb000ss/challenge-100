@@ -68,6 +68,13 @@ def check_day(key: str, day: dict, moves: dict, errors: list[str]) -> None:
             for item in b["items"]:
                 check_item(key, part, item, moves, errors)
     blocks = day["payload"]["blocks"]
+    seen: dict[str, str] = {}
+    for b in blocks:
+        for item in b["items"]:
+            code = item["movement"]
+            if code in seen:
+                errors.append(f"day {key}: {code} repeats in «{seen[code]}» and «{b['label']}»")
+            seen.setdefault(code, b["label"])
     presses = any(i["movement"] == "bb_bench_press" for b in blocks for i in b["items"])
     has_shoulder = any("плеч" in b["label"].lower() for b in blocks)
     if presses and not has_shoulder:

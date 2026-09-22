@@ -41,6 +41,13 @@ header{border-bottom:1px solid var(--line);
 .track i.off{background:var(--muted);height:45%}
 .track i.miss{background:var(--red);height:100%}
 .track i.today{background:var(--brass);height:100%}
+.track i.dayoff{background:var(--muted);height:45%}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
+  max-width:688px;margin:0 auto;background:var(--panel2);border:1px solid var(--red);color:var(--text);
+  border-radius:8px;padding:12px 14px;font-size:14px}
+.toast.ok{border-color:var(--green)}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.io .btn{padding:13px 8px;font-size:13px}
 .tabs{display:flex;gap:4px;overflow-x:auto;padding:10px 0 0;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:13.5px;
@@ -108,7 +115,7 @@ label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform
 .mut{color:var(--muted);font-size:14px}
 .big{font-family:var(--display);font-size:44px;font-weight:600;line-height:1;color:var(--brass)}
 .stat{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:14px 0}
-.stat div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.stat>div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
 .stat .lb{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
 .ovl{position:fixed;inset:0;background:rgba(14,19,25,.94);z-index:50;display:flex;
   align-items:center;justify-content:center;padding:20px}
@@ -173,10 +180,24 @@ label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform
 "use strict";
 let state=null, days={}, logs={}, moves={}, tab="today", viewDay=null;
 
+const CLOSED=["done","swap","dayoff"];
+const isClosed = l => !!l && CLOSED.includes(l.outcome);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function notify(msg, good){
+  let t=document.getElementById("toast");
+  if(!t){ t=document.createElement("div"); t.id="toast"; t.setAttribute("role","status"); document.body.appendChild(t); }
+  t.className="toast"+(good?" ok":""); t.textContent=msg;
+  clearTimeout(notify.timer); notify.timer=setTimeout(()=>t.remove(), good?2500:6000);
+}
+
 /* ---------- хранилище: localStorage ---------- */
 const LS_KEY="challenge100";
 function lsRead(){ try{ return JSON.parse(localStorage.getItem(LS_KEY))||{}; }catch(e){ return {}; } }
-function lsWrite(o){ try{ localStorage.setItem(LS_KEY, JSON.stringify(o)); }catch(e){} }
+function lsWrite(o){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(o)); return true; }
+  catch(e){ console.error("localStorage write failed", e); return false; }
+}
 
 /* ---------- загрузка ---------- */
 async function boot(){
@@ -214,28 +235,26 @@ async function put(path, data){
   else if(coll==="logs"){ logs[id]=data; }
   const cur=lsRead();
   cur.state=state; cur.logs=logs;
-  lsWrite(cur);
+  if(!lsWrite(cur)) notify("Не удалось сохранить прогресс в браузере. Сделай экспорт на вкладке «Прогресс», чтобы не потерять данные.");
 }
 
 /* ---------- вычисления ---------- */
 // текущий день = первый незакрытый
 function dayNum(){
   for(let i=1;i<=100;i++){
-    const l=logs[String(i)];
-    if(!l || !["done","swap","dayoff"].includes(l.outcome)) return i;
+    if(!isClosed(logs[String(i)])) return i;
   }
   return 100;
 }
+const allClosed = () => dayNum()===100 && isClosed(logs["100"]);
 function streak(){
   let n=0;
   const cur=dayNum();
   for(let i=cur-1;i>=1;i--){
-    const l=logs[String(i)];
-    if(l && ["done","swap","dayoff"].includes(l.outcome)) n++; else break;
+    if(isClosed(logs[String(i)])) n++; else break;
   }
   // если текущий уже закрыт (все 100) — учесть
-  const lc=logs[String(cur)];
-  if(lc && ["done","swap","dayoff"].includes(lc.outcome)) n++;
+  if(isClosed(logs[String(cur)])) n++;
   return n;
 }
 
@@ -253,7 +272,7 @@ function render(){
   let t="";
   for(let i=1;i<=100;i++){
     const l=logs[String(i)];
-    const c = l ? l.outcome : (i===d ? "today" : "");
+    const c = isClosed(l) ? l.outcome : (i===d ? "today" : "");
     t += '<i class="'+c+'"></i>';
   }
   document.getElementById("tr").innerHTML=t;
@@ -311,7 +330,7 @@ function renderToday(d){
 
   if(state.status==="failed"){
     el.innerHTML='<h2>Челлендж закрыт</h2><p class="mut">Пройдено дней: '+
-      Object.keys(logs).length+'. Мечта откладывается, не отменяется.</p>';
+      Object.values(logs).filter(isClosed).length+'. Мечта откладывается, не отменяется.</p>';
     return;
   }
 
@@ -323,9 +342,11 @@ function renderToday(d){
   }
 
   const log=logs[String(d)];
-  const closed = log && ["done","swap","dayoff"].includes(log.outcome);
+  const closed = isClosed(log);
   const future = d>cur;
-  const use=(log && log.outcome==="swap" && plan.variant) ? plan.variant : plan.payload;
+  // swapped = light variant taken; the day stays open until its items are ticked
+  const swapped = !!log && (log.swapped || log.outcome==="swap");
+  const use=(swapped && plan.variant) ? plan.variant : plan.payload;
   const done=(log && log.items) ? log.items : [];
 
   let h=navBar(d,cur);
@@ -346,7 +367,10 @@ function renderToday(d){
   }
   if(closed){
     h+='<div class="rules" style="border-style:solid;border-color:#2e5a45;text-align:center;color:var(--green)">День закрыт ✓</div>';
-    h+='<div><label>Заметка</label><textarea id="note" rows="3">'+((log.note)||'')+'</textarea>'+
+    if(d===100 && allClosed())
+      h+='<div class="blk"><h3>Челлендж пройден</h3><div class="big">100 / 100</div>'+
+         '<p class="mut">Сто дней без пропусков. Сравни замеры с днём 1 — мотоцикл заслужен.</p></div>';
+    h+='<div><label>Заметка</label><textarea id="note" rows="3">'+esc(log.note)+'</textarea>'+
        '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
     el.innerHTML=h; wireNav(cur);
     document.querySelectorAll("#today .info").forEach(b=>b.onclick=()=>showMove(b.dataset.m));
@@ -360,10 +384,12 @@ function renderToday(d){
   const curN=done.length;
   const all=curN>=total && total>0;
 
+  if(swapped)
+    h+='<div class="rules" style="border-style:solid;border-color:var(--amber);text-align:center;color:var(--amber)">Замена · облегчённый вариант. Отметь всё и закрой день</div>';
   h+='<div class="acts">';
   h+='<button class="btn p" id="done"'+(all?'':' disabled')+'>'+
      (all?'Закрыть день':'Отметь всё · '+curN+'/'+total)+'</button>';
-  h+='<button class="btn a" id="swap"'+(state.swaps_left<1?' disabled':'')+
+  h+='<button class="btn a" id="swap"'+(state.swaps_left<1||swapped?' disabled':'')+
      '>Поменять · '+state.swaps_left+'</button>';
   h+='<button class="btn m" id="off"'+(state.dayoff_left<1?' disabled':'')+
      '>Отгул · '+state.dayoff_left+'</button>';
@@ -371,7 +397,7 @@ function renderToday(d){
 
   h+='<div><label>Заметка о дне</label>'+
      '<textarea id="note" rows="3" placeholder="Веса, самочувствие, колено, спина">'+
-     ((log&&log.note)||'')+'</textarea>'+
+     esc(log&&log.note)+'</textarea>'+
      '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
 
   el.innerHTML=h;
@@ -415,7 +441,7 @@ function wireToday(d, total){
   if(done) done.onclick=async()=>{
     if(done.disabled) return;
     const l=logs[String(d)]||{items:[]};
-    l.outcome=(l.outcome==="swap")?"swap":"done";
+    l.outcome=l.swapped?"swap":"done";
     l.closed_at=new Date().toISOString();
     l.items=currentDone();
     logs[String(d)]=l;
@@ -427,12 +453,13 @@ function wireToday(d, total){
   const sw=document.getElementById("swap");
   if(sw) sw.onclick=()=>{
     if(sw.disabled) return;
-    confirmBox("Поменять задание?","Останется замен: "+(state.swaps_left-1)+". Дам облегчённый вариант.",
+    confirmBox("Поменять задание?","Останется замен: "+(state.swaps_left-1)+". Дам облегчённый вариант — его тоже нужно выполнить и закрыть.",
       async()=>{
-        const l={outcome:"swap", items:[]};
+        const prev=logs[String(d)]||{};
+        const l={outcome:"open", swapped:true, items:[], note:prev.note};
         logs[String(d)]=l; state.swaps_left--;
         await put("logs/"+d, l); await put("state/main", state);
-        viewDay=dayNum(); render();
+        render();
       });
   };
 
@@ -489,13 +516,13 @@ function confirmBox(t,s,fn){
 /* ---------- история и прогресс ---------- */
 function renderHist(){
   let h='<h2>История</h2>';
-  const keys=Object.keys(logs).map(Number).filter(i=>logs[String(i)].outcome && logs[String(i)].outcome!=="open").sort((a,b)=>b-a);
+  const keys=Object.keys(logs).map(Number).filter(i=>isClosed(logs[String(i)])).sort((a,b)=>b-a);
   if(!keys.length) h+='<p class="mut">Пока пусто.</p>';
   keys.forEach(i=>{
     const l=logs[String(i)], p=days[String(i)];
     const lbl={done:"выполнено",swap:"замена",dayoff:"отгул",missed:"пропуск"}[l.outcome]||l.outcome;
     h+='<div class="row"><span>День '+i+' · '+(p?p.title:'—')+
-       (l.note?'<br><span class="mut" style="font-size:13px">'+l.note+'</span>':'')+
+       (l.note?'<br><span class="mut" style="font-size:13px">'+esc(l.note)+'</span>':'')+
        '</span><span class="pill '+l.outcome+'">'+lbl+'</span></div>';
   });
   document.getElementById("hist").innerHTML=h;
@@ -511,8 +538,8 @@ function renderProg(d){
     '<div><div class="lb">Закрыто</div><div class="big">'+closed+'</div></div>'+
     '<div><div class="lb">Осталось</div><div class="big">'+Math.max(0,100-closed)+'</div></div></div>'+
     '<div class="blk"><div class="kv"><span>Выполнено</span><span>'+c.done+'</span></div>'+
-    '<div class="kv"><span>Замен</span><span>'+c.swap+' из 3</span></div>'+
-    '<div class="kv"><span>Отгулов</span><span>'+c.dayoff+' из 1</span></div>'+
+    '<div class="kv"><span>Замен</span><span>'+(3-state.swaps_left)+' из 3</span></div>'+
+    '<div class="kv"><span>Отгулов</span><span>'+(1-state.dayoff_left)+' из 1</span></div>'+
     '<div class="kv"><span>Старт</span><span>'+state.started_on+'</span></div></div>'+
     '<div class="blk"><h3>Цель</h3><div class="kv"><span>Жим лёжа на раз</span><span>110 кг</span></div>'+
     '<div class="kv"><span>Контрольные дни</span><span>28 · 56 · 84 · 100</span></div></div>';
@@ -520,10 +547,104 @@ function renderProg(d){
   if(notes.length){
     h+='<div class="blk"><h3>Заметки</h3>';
     notes.forEach(i=>{ h+='<div class="kv"><span>День '+i+'</span></div>'+
-      '<div class="mut" style="padding-bottom:10px">'+logs[String(i)].note+'</div>'; });
+      '<div class="mut" style="padding-bottom:10px">'+esc(logs[String(i)].note)+'</div>'; });
     h+='</div>';
   }
+  h+='<div class="blk"><h3>Данные</h3>'+
+     '<div class="n">Прогресс хранится только в этом браузере. Выгружай файл раз в неделю — им же переносишь прогресс на другое устройство.</div>'+
+     '<div class="io"><button class="btn" id="export">Выгрузить</button>'+
+     '<button class="btn" id="importbtn">Загрузить</button></div>'+
+     '<input type="file" id="importfile" accept="application/json,.json" hidden></div>';
   document.getElementById("prog").innerHTML=h;
+  wireData();
+}
+
+/* ---------- экспорт / импорт ---------- */
+const EXPORT_APP="challenge100", EXPORT_VERSION=1;
+const OUTCOMES=["done","swap","dayoff","open"];
+const isInt = (x,min,max) => Number.isInteger(x) && x>=min && x<=max;
+
+function localDate(){
+  const n=new Date(), p=x=>String(x).padStart(2,"0");
+  return n.getFullYear()+"-"+p(n.getMonth()+1)+"-"+p(n.getDate());
+}
+
+function downloadBlob(blob, name){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download=name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+
+async function exportProgress(){
+  const payload={app:EXPORT_APP, version:EXPORT_VERSION, exported_at:new Date().toISOString(), state, logs};
+  const name=EXPORT_APP+"-"+localDate()+".json";
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  // iOS home-screen apps ignore a[download]; the share sheet offers "Save to Files"
+  const file=typeof File==="function" ? new File([blob], name, {type:"application/json"}) : null;
+  const touch=matchMedia("(pointer:coarse)").matches;
+  if(touch && file && navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file], title:name}); return; }
+    catch(e){ if(e.name==="AbortError") return; console.warn("share failed, falling back to download", e); }
+  }
+  downloadBlob(blob, name);
+}
+
+// Returns a clean {state, logs} copy, or an error string. Never trusts the file.
+function parseImport(obj){
+  if(!obj || typeof obj!=="object") return "это не JSON-объект";
+  const s=obj.state, lg=obj.logs;
+  if(!s || typeof s!=="object") return "нет блока state";
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(s.started_on||"")) return "нет даты старта";
+  if(!isInt(s.swaps_left,0,3) || !isInt(s.dayoff_left,0,1)) return "неверные остатки замен или отгулов";
+  if(!lg || typeof lg!=="object" || Array.isArray(lg)) return "нет блока logs";
+  const cleanLogs={};
+  for(const [k,l] of Object.entries(lg)){
+    if(!/^\d+$/.test(k) || !isInt(+k,1,100)) return "день "+k+" вне диапазона 1–100";
+    if(!l || !OUTCOMES.includes(l.outcome)) return "день "+k+": неизвестный статус";
+    const items=l.items||[];
+    if(!Array.isArray(items) || !items.every(i=>isInt(i,0,99))) return "день "+k+": неверные отметки";
+    const c={outcome:l.outcome, items:[...items]};
+    if(typeof l.note==="string") c.note=l.note.slice(0,2000);
+    if(typeof l.closed_at==="string") c.closed_at=l.closed_at;
+    if(l.swapped===true) c.swapped=true;
+    cleanLogs[k]=c;
+  }
+  const cleanState={started_on:s.started_on, swaps_left:s.swaps_left, dayoff_left:s.dayoff_left,
+    status: s.status==="failed" ? "failed" : "active",
+    bench_max: typeof s.bench_max==="number" ? s.bench_max : 78, goal:"bench_110"};
+  return {state:cleanState, logs:cleanLogs};
+}
+
+function importProgress(file){
+  const reader=new FileReader();
+  reader.onerror=()=>notify("Не удалось прочитать файл.");
+  reader.onload=()=>{
+    let parsed;
+    try{ parsed=parseImport(JSON.parse(reader.result)); }
+    catch(e){ parsed="файл повреждён или это не JSON"; }
+    if(typeof parsed==="string"){ notify("Файл не подходит: "+parsed+"."); return; }
+    const before=Object.values(logs).filter(isClosed).length;
+    const after=Object.values(parsed.logs).filter(isClosed).length;
+    confirmBox("Загрузить прогресс?","Текущий прогресс в этом браузере будет заменён. Закрыто дней: было "+before+", станет "+after+".",
+      async()=>{
+        state=parsed.state; logs=parsed.logs; viewDay=null;
+        if(lsWrite({state, logs})) notify("Прогресс загружен.", true);
+        else notify("Прогресс загружен, но браузер не дал его сохранить. Не закрывай вкладку и попробуй ещё раз.");
+        render();
+      });
+  };
+  reader.readAsText(file);
+}
+
+function wireData(){
+  const ex=document.getElementById("export"), btn=document.getElementById("importbtn"), inp=document.getElementById("importfile");
+  if(ex) ex.onclick=exportProgress;
+  if(btn && inp){
+    btn.onclick=()=>inp.click();
+    inp.onchange=()=>{ const f=inp.files&&inp.files[0]; inp.value=""; if(f) importProgress(f); };
+  }
 }
 
 /* ---------- вкладки ---------- */

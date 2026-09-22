@@ -54,6 +54,11 @@ NEW_MOVES = {
         "cue": "Спина прямая, давишь педали всей стопой, руки работают активно. На интервалах — темп, но без рывков.",
         "equipment": "эллипсоид", "category": "cardio", "unit": "мин",
     },
+    "glute_bridge": {
+        "name_ru": "Ягодичный мостик",
+        "cue": "Лёжа на спине, стопы у таза. Подними таз за счёт ягодиц, вверху пауза 1 секунда. Поясницу не прогибать.",
+        "equipment": "—", "category": "hinge", "unit": "повт",
+    },
     "cat_camel": {
         "name_ru": "Кошка-верблюд",
         "cue": "На четвереньках медленно округляй и прогибай спину в комфортной амплитуде. Не растяжка, а разминка для позвоночника — без усилия.",
@@ -214,6 +219,8 @@ MINI_FINISHER = {  # 5 minutes after volume bench day
 MOBILITY = [("hip_90_90", "cat_camel", "thoracic_rotation"), ("couch_stretch", "lat_stretch", "cat_camel"),
             ("hip_flexor_stretch", "pec_stretch_doorway", "thoracic_extension_roll"),
             ("thoracic_rotation", "hip_90_90", "lat_stretch")]
+MOBILITY_NOTES = {"hip_90_90": "без боли в колене; если колено ноет — только переднюю ногу",
+                  "couch_stretch": "колено на мягком, без боли"}
 REPS_MOBILITY = {"cat_camel", "thoracic_rotation", "thoracic_extension_roll"}
 CORE = ["dead_bug", "pallof_press", "side_plank", "bird_dog"]
 CORE_STEP = {1: 0, 2: 0, 3: 1, 4: 1}  # side plank +10 s, pallof +2.5 kg per step
@@ -327,8 +334,8 @@ def legs_a(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int
     finisher = finisher_block(block) if w % 2 == 1 and not taper else None
     in_finisher = {x["movement"] for x in finisher["items"]} if finisher else set()
     blocks = [
-        blk("Разминка", [it("bike_erg", "6 минут"), it("hip_90_90", "2 × 30 секунд на сторону", "разогреть таз перед приседом")]),
-        blk("Основной блок", [it(m_move, pick(m_list, i), m_note),
+        blk("Разминка", [it("bike_erg", "6 минут"), it("glute_bridge", "2 × 12", "включить ягодицы перед приседом")]),
+        blk("Основной блок", [it(m_move, pick(m_list, i), f"разминка: 1 × 10 с половиной рабочего веса · {m_note}"),
                               it(h_move, f"{h_sets} · {pick(h_list, i)} кг", "спина нейтральная, движение из таза"),
                               it(u_move, f"{pick(u_list, i)} кг в руке")]),
         blk("Изоляция и корпус", [it("leg_extension", f"3 × 15 · {pick(LEG_EXT[block], i)} кг", "амплитуда без боли в колене"),
@@ -376,7 +383,7 @@ def pool_day(d: int, reps: int) -> dict:
 
 def light_day(d: int, block: int, n: int, walk: bool) -> dict:
     mob = MOBILITY[n % len(MOBILITY)]
-    mob_items = [it(m, "2 × 10" if m in REPS_MOBILITY else "2 подхода") for m in mob]
+    mob_items = [it(m, "2 × 10" if m in REPS_MOBILITY else "2 подхода", MOBILITY_NOTES.get(m)) for m in mob]
     if walk:
         minutes = {1: 30, 2: 35, 3: 40, 4: 40}[block]
         cardio, sub = it("walk", f"{minutes} минут", "бодрый темп, но можно говорить"), "Ходьба и подвижность."

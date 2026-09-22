@@ -44,6 +44,7 @@ header{border-bottom:1px solid var(--line);
 .track i.miss{background:var(--red);height:100%}
 .track i.today{background:var(--brass);height:100%}
 .track i.dayoff{background:var(--muted);height:45%}
+.track i.missed{background:var(--red);height:100%}
 .toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
   max-width:688px;margin:0 auto;background:var(--panel2);border:1px solid var(--red);color:var(--text);
   border-radius:8px;padding:12px 14px;font-size:14px}
@@ -177,8 +178,9 @@ label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform
       <div class="it"><div class="nm"><b>Сон</b><em>Не меньше 7 часов</em></div></div>
     </div>
     <div class="blk">
-      <h3>Провал</h3>
-      <div class="it"><div class="nm"><b>День не закрыт и статус не заявлен</b><em>Челлендж закрыт. Мечта откладывается, не отменяется</em></div></div>
+      <h3>Пропуск</h3>
+      <div class="it"><div class="nm"><b>День не закрыт до полуночи</b><em>Засчитывается пропуск, серия с нуля. Челлендж продолжается</em></div></div>
+      <div class="it"><div class="nm"><b>Никогда два дня подряд</b><em>Пропустил — завтра обязательно. Один пропуск — случайность, два — привычка</em></div></div>
     </div>
     <div class="blk">
       <h3>Цель</h3>
@@ -233,7 +235,10 @@ async function boot(){
   // прогресс пользователя — из localStorage (state + logs)
   const saved = lsRead();
   state = saved.state || base.state || null;
-  logs  = saved.logs  || base.logs  || {};
+  const seed = base.logs || {};
+  logs  = saved.logs ? {...saved.logs} : {...seed};
+  // days closed in the shipped data.json are facts (e.g. a backfilled day): they win over an open saved day
+  for(const [k,l] of Object.entries(seed)) if(isClosed(l) && !isClosed(logs[k])) logs[k]={...l};
 
   if(!state || !state.started_on)
     state = {started_on:"2026-09-21", swaps_left:3, dayoff_left:1, status:"active", bench_max:78};
@@ -255,28 +260,37 @@ async function put(path, data){
 
 /* ---------- вычисления ---------- */
 // текущий день = первый незакрытый
-function dayNum(){
-  for(let i=1;i<=100;i++){
-    if(!isClosed(logs[String(i)])) return i;
-  }
-  return 100;
+const DAY_MS=86400000;
+const localMidnight = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+function parseLocalDate(s){ const [y,m,d]=String(s).split("-").map(Number); return new Date(y, m-1, d); }
+const beforeStart = () => localMidnight(new Date()) < parseLocalDate(state.started_on);
+// текущий день = по календарю: день 1 — дата старта. Round() гасит сдвиг перехода на летнее время
+function todayNum(){
+  const diff=Math.round((localMidnight(new Date()) - parseLocalDate(state.started_on)) / DAY_MS);
+  return Math.min(100, Math.max(1, diff+1));
 }
-const allClosed = () => dayNum()===100 && isClosed(logs["100"]);
+// прошедший и не закрытый день — пропуск (вычисляется, в logs не пишется)
+function outcomeOf(i){
+  const l=logs[String(i)];
+  if(isClosed(l)) return l.outcome;
+  return i<todayNum() ? "missed" : null;
+}
+// смотреть можно сегодня, а завтра — только когда сегодня закрыт
+const maxView = () => Math.min(100, todayNum() + (isClosed(logs[String(todayNum())]) ? 1 : 0));
+const allClosed = () => todayNum()===100 && isClosed(logs["100"]);
 function streak(){
-  let n=0;
-  const cur=dayNum();
-  for(let i=cur-1;i>=1;i--){
+  const t=todayNum();
+  let n=isClosed(logs[String(t)]) ? 1 : 0;
+  for(let i=t-1;i>=1;i--){
     if(isClosed(logs[String(i)])) n++; else break;
   }
-  // если текущий уже закрыт (все 100) — учесть
-  if(isClosed(logs[String(cur)])) n++;
   return n;
 }
 
 /* ---------- рендер ---------- */
 function render(){
-  const cur=dayNum();
-  if(viewDay===null) viewDay=cur;
+  const cur=todayNum();
+  if(viewDay===null || viewDay<cur || viewDay>maxView()) viewDay=cur;
   const d=cur;
   const big=document.getElementById("dbig");
   if(big) big.innerHTML = d+' <small>/ 100</small>';
@@ -286,8 +300,7 @@ function render(){
   // полоска
   let t="";
   for(let i=1;i<=100;i++){
-    const l=logs[String(i)];
-    const c = isClosed(l) ? l.outcome : (i===d ? "today" : "");
+    const c = outcomeOf(i) || (i===d ? "today" : "");
     t += '<i class="'+c+'"></i>';
   }
   document.getElementById("tr").innerHTML=t;
@@ -300,16 +313,17 @@ function render(){
 const fmt = t => String(t).replace(/(\d)\.(\d)/g,"$1,$2");
 
 function navBar(d,cur){
+  const canBack=d>cur, canNext=d<maxView();
   return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">'+
-    '<button class="btn" id="navprev" style="padding:8px 14px;font-size:13px"'+(d<=1?' disabled':'')+'>← '+(d-1||'')+'</button>'+
-    '<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">день '+d+' из 100'+(d===cur?' · сейчас':'')+'</span>'+
-    '<button class="btn" id="navnext" style="padding:8px 14px;font-size:13px"'+(d>=cur?' disabled':'')+'>'+(d+1<=cur?(d+1):'')+' →</button>'+
+    '<button class="btn" id="navprev" style="padding:8px 14px;font-size:13px"'+(canBack?'':' disabled')+'>← '+(canBack?'сегодня':'')+'</button>'+
+    '<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">день '+d+' из 100'+(d===cur?' · сегодня':' · завтра')+'</span>'+
+    '<button class="btn" id="navnext" style="padding:8px 14px;font-size:13px"'+(canNext?'':' disabled')+'>'+(canNext?'завтра':'')+' →</button>'+
     '</div>';
 }
 function wireNav(cur){
   const p=document.getElementById("navprev"), n=document.getElementById("navnext");
-  if(p)p.onclick=()=>{ if(viewDay>1){viewDay--;renderToday(viewDay);} };
-  if(n)n.onclick=()=>{ if(viewDay<cur){viewDay++;renderToday(viewDay);} };
+  if(p)p.onclick=()=>{ if(viewDay>cur){viewDay--;renderToday(viewDay);} };
+  if(n)n.onclick=()=>{ if(viewDay<maxView()){viewDay++;renderToday(viewDay);} };
 }
 
 // Accordion body: photos (lazy, load only when opened), equipment, steps, video link
@@ -365,7 +379,7 @@ function dayHtml(plan, use, done){
 
 function renderToday(d){
   const el=document.getElementById("today");
-  const cur=dayNum();
+  const cur=todayNum();
 
   if(state.status==="failed"){
     el.innerHTML='<h2>Челлендж закрыт</h2><p class="mut">Пройдено дней: '+
@@ -382,7 +396,7 @@ function renderToday(d){
 
   const log=logs[String(d)];
   const closed = isClosed(log);
-  const future = d>cur;
+  const future = d>cur || beforeStart();
   // swapped = light variant taken; the day stays open until its items are ticked
   const swapped = !!log && (log.swapped || log.outcome==="swap");
   const use=(swapped && plan.variant) ? plan.variant : plan.payload;
@@ -398,7 +412,7 @@ function renderToday(d){
   h+=dayHtml(plan, use, done);
 
   if(future){
-    h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Это следующий день. Откроется, когда закроешь текущий.</div>';
+    h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Это завтрашний день. Галочки откроются завтра.</div>';
     el.innerHTML=h; wireNav(cur);
     wireDetails();
     document.querySelectorAll("#today .tick").forEach(b=>b.disabled=true);
@@ -484,7 +498,7 @@ function wireToday(d, total){
     l.items=currentDone();
     logs[String(d)]=l;
     await put("logs/"+d, l);
-    viewDay=dayNum();
+    viewDay=todayNum();
     render();
   };
 
@@ -509,7 +523,7 @@ function wireToday(d, total){
         const l={outcome:"dayoff", closed_at:new Date().toISOString(), items:[]};
         logs[String(d)]=l; state.dayoff_left--;
         await put("logs/"+d, l); await put("state/main", state);
-        viewDay=dayNum(); render();
+        viewDay=todayNum(); render();
       });
   };
 
@@ -540,28 +554,31 @@ function confirmBox(t,s,fn){
 /* ---------- история и прогресс ---------- */
 function renderHist(){
   let h='<h2>История</h2>';
-  const keys=Object.keys(logs).map(Number).filter(i=>isClosed(logs[String(i)])).sort((a,b)=>b-a);
+  const keys=[];
+  for(let i=100;i>=1;i--) if(outcomeOf(i)) keys.push(i);
   if(!keys.length) h+='<p class="mut">Пока пусто.</p>';
   keys.forEach(i=>{
-    const l=logs[String(i)], p=days[String(i)];
-    const lbl={done:"выполнено",swap:"замена",dayoff:"отгул",missed:"пропуск"}[l.outcome]||l.outcome;
+    const l=logs[String(i)]||{}, p=days[String(i)], out=outcomeOf(i);
+    const lbl={done:"выполнено",swap:"замена",dayoff:"отгул",missed:"пропуск"}[out]||out;
     h+='<div class="row"><span>День '+i+' · '+(p?p.title:'—')+
        (l.note?'<br><span class="mut" style="font-size:13px">'+esc(l.note)+'</span>':'')+
-       '</span><span class="pill '+l.outcome+'">'+lbl+'</span></div>';
+       '</span><span class="pill '+out+'">'+lbl+'</span></div>';
   });
   document.getElementById("hist").innerHTML=h;
 }
 
 function renderProg(d){
   const c={done:0,swap:0,dayoff:0,missed:0};
-  Object.values(logs).forEach(l=>{ if(c[l.outcome]!==undefined) c[l.outcome]++; });
+  for(let i=1;i<=100;i++){ const o=outcomeOf(i); if(o) c[o]++; }
   const closed=c.done+c.swap+c.dayoff;
+  const left=100-d+(isClosed(logs[String(d)])?0:1);
   let h='<h2>Прогресс</h2><div class="stat">'+
     '<div><div class="lb">Текущий день</div><div class="big">'+d+'</div></div>'+
     '<div><div class="lb">Серия</div><div class="big">'+streak()+'</div></div>'+
     '<div><div class="lb">Закрыто</div><div class="big">'+closed+'</div></div>'+
-    '<div><div class="lb">Осталось</div><div class="big">'+Math.max(0,100-closed)+'</div></div></div>'+
+    '<div><div class="lb">Осталось</div><div class="big">'+Math.max(0,left)+'</div></div></div>'+
     '<div class="blk"><div class="kv"><span>Выполнено</span><span>'+c.done+'</span></div>'+
+    '<div class="kv"><span>Пропусков</span><span>'+c.missed+'</span></div>'+
     '<div class="kv"><span>Замен</span><span>'+(3-state.swaps_left)+' из 3</span></div>'+
     '<div class="kv"><span>Отгулов</span><span>'+(1-state.dayoff_left)+' из 1</span></div>'+
     '<div class="kv"><span>Старт</span><span>'+state.started_on+'</span></div></div>'+

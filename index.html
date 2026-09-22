@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="100 дней">
 <meta name="theme-color" content="#0E1319">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>100 дней</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -680,6 +682,14 @@ document.getElementById("reload").onclick=async()=>{
   const b=document.getElementById("reload"); b.textContent="…";
   await boot(); b.textContent="↻ обновить";
 };
+
+/* ---------- офлайн (PWA) ---------- */
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.addEventListener("message", e=>{
+    if(e.data && e.data.type==="offline-ready") notify("Готово: приложение работает без сети.", true);
+  });
+  navigator.serviceWorker.register("sw.js").catch(e=>console.error("service worker registration failed", e));
+}
 
 boot();
 </script>

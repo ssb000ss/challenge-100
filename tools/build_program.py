@@ -128,8 +128,36 @@ def pick(seq: list, i: int):
     return seq[min(i, len(seq) - 1)]
 
 
+# Cardio is prescribed in distance, not minutes: a kilometre is a task you can
+# finish, a minute is a timer you can coast through.
+BIKE_KM = {3: 1, 5: 1.5, 6: 2}          # warm-up ride, by the minutes it replaces
+WALK_KM = {1: 3, 2: 3.5, 3: 4, 4: 4}    # brisk walk on the light day, by block
+RECOVERY_KM = {1: 5, 2: 7, 3: 7, 4: 7}  # easy spin on the recovery day, by block
+WALK_PACE = "бодрый темп, 9–10 минут на километр — дышишь, но можешь говорить"
+# Running opens up because the knee is healthy (owner confirmed on day 6). It
+# grows from walk/run intervals to a continuous 3 km, by light-day number.
+RUN_PLAN = [None,
+            ("6 × 200 метров бег / 200 метров шагом", "Бег интервалами: 6 × 200 метров."),
+            ("6 × 200 метров бег / 200 метров шагом", "Бег интервалами: 6 × 200 метров."),
+            ("5 × 400 метров бег / 200 метров шагом", "Бег интервалами: 5 × 400 метров."),
+            ("5 × 400 метров бег / 200 метров шагом", "Бег интервалами: 5 × 400 метров."),
+            ("4 × 600 метров бег / 200 метров шагом", "Бег интервалами: 4 × 600 метров."),
+            ("3 × 800 метров бег / 200 метров шагом", "Бег интервалами: 3 × 800 метров."),
+            ("3 × 800 метров бег / 200 метров шагом", "Бег интервалами: 3 × 800 метров."),
+            ("2 км непрерывно", "Бег 2 км непрерывно."),
+            ("2 км непрерывно", "Бег 2 км непрерывно."),
+            ("2.5 км непрерывно", "Бег 2.5 км непрерывно."),
+            ("2.5 км непрерывно", "Бег 2.5 км непрерывно."),
+            ("3 км непрерывно", "Бег 3 км непрерывно.")]
+RUN_PACE = "разговорный темп: если дыхание рвётся — переходи на шаг, это не проигрыш"
+
+
+def bike(minutes: int, note: str | None = None) -> dict:
+    return it("bike_erg", f"{kg(BIKE_KM[minutes])} км", note)
+
+
 def warmup(minutes: int = 6, note: str | None = None) -> list[dict]:
-    return [it("bike_erg", f"{minutes} минут", note), it("band_pull_apart", "2 × 15")]
+    return [bike(minutes, note), it("band_pull_apart", "2 × 15")]
 
 
 def shoulder_block(face: float, block: int, row: float | None, sets: int = 3) -> dict:
@@ -381,7 +409,7 @@ def legs_a(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int
     finisher = finisher_block(block) if w % 2 == 1 and not taper and not deload else None
     in_finisher = {x["movement"] for x in finisher["items"]} if finisher else set()
     blocks = [
-        blk("Разминка", [it("bike_erg", "6 минут"), it("glute_bridge", "2 × 12", "включить ягодицы перед приседом")]),
+        blk("Разминка", [bike(6), it("glute_bridge", "2 × 12", "включить ягодицы перед приседом")]),
         blk("Основной блок", [it(m_move, pick(m_list, i), f"разминка: 1 × 10 с половиной рабочего веса · {m_note} · {STEP_UP}"),
                               it(h_move, f"{h_sets} · {pick(h_list, i)} кг", "спина нейтральная, движение из таза"),
                               it(u_move, f"{pick(u_list, i)} кг в руке")]),
@@ -399,7 +427,7 @@ def legs_a(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int
 def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
     hip, rdl, lunge, curl, calf = LEGS_B[block][i]
     blocks = [
-        blk("Разминка", [it("bike_erg", "6 минут"), it("bird_dog", "2 × 8 на сторону")]),
+        blk("Разминка", [bike(6), it("bird_dog", "2 × 8 на сторону")]),
         blk("Основной блок", [it("hip_thrust_machine", f"3 × 10 · {hip} кг", "пауза 1 секунда вверху"),
                               it("rdl_bb", rdl, "штанга по бёдрам, спина нейтральная, до середины голени"),
                               it("reverse_lunge", f"3 × 8 на ногу · {kg(lunge)} кг в руке", "шаг назад — колену легче")]),
@@ -419,7 +447,7 @@ def short_day(d: int, block: int, i: int) -> dict:
              it("hanging_knee_raise", f"{knees} повторов", "без раскачки"),
              it("towel_hang" if d >= 22 else "dead_hang", f"{hang} секунд")]  # towel_hang unlocks on day 22
     return {"subtitle": "Короткий формат. EMOM 16 минут.", "minutes": 20, "rules": rules(d, False),
-            "blocks": [blk("Разминка", [it("bike_erg", "3 минуты")]),
+            "blocks": [blk("Разминка", [bike(3)]),
                        blk("EMOM 16 минут", items, "каждую минуту своё, четыре круга")]}
 
 
@@ -453,18 +481,29 @@ def pool_day(d: int, n: int) -> dict:
 def light_day(d: int, block: int, n: int, walk: bool) -> dict:
     mob = MOBILITY[n % len(MOBILITY)]
     mob_items = [it(m, "2 × 10" if m in REPS_MOBILITY else "2 подхода", MOBILITY_NOTES.get(m)) for m in mob]
-    if walk:
-        minutes = {1: 30, 2: 35, 3: 40, 4: 40}[block]
-        cardio, sub = it("walk", f"{minutes} минут", "бодрый темп, но можно говорить"), "Ходьба и подвижность."
+    run = pick(RUN_PLAN, n) if n < len(RUN_PLAN) else RUN_PLAN[-1]
+    cardio_note = None
+    if walk and run:
+        text, sub = run
+        minutes = 32
+        cardio = [it("walk", "1 км", "разминка перед бегом · " + WALK_PACE), it("run", text, RUN_PACE)]
+        cardio_note = "после бега 0.5 км шагом — остыть и восстановить дыхание"
+    elif walk:
+        km = WALK_KM[block]
+        minutes = int(km * 10)
+        cardio, sub = [it("walk", f"{kg(km)} км", WALK_PACE)], f"Ходьба {kg(km)} км и подвижность."
     else:
-        minutes = 15 if block == 1 else 20
-        cardio, sub = it("bike_erg", f"{minutes} минут", "пульс 110–125, лёгкий темп"), "Восстановление."
+        km = RECOVERY_KM[block]
+        minutes = int(km * 3)
+        cardio = [it("bike_erg", f"{kg(km)} км", "пульс 110–125, лёгкий темп")]
+        sub = f"Восстановление. Вело {kg(km)} км."
     plank_s = {1: 20, 2: 25, 3: 30, 4: 30}[block]
     core = blk("Корпус · 5 минут", [it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе"),
                                     it("side_plank", f"2 × {plank_s} секунд на сторону")],
                "стабилизация спины, каждый лёгкий день")
     return {"subtitle": sub, "minutes": minutes + 13, "rules": rules(d, False),
-            "blocks": [blk("Кардио", [cardio]), blk("Подвижность", mob_items, "по 60 секунд, где не указаны повторы"), core]}
+            "blocks": [blk("Кардио", cardio, cardio_note),
+                       blk("Подвижность", mob_items, "по 60 секунд, где не указаны повторы"), core]}
 
 
 def control_blocks() -> list[dict]:
@@ -473,7 +512,7 @@ def control_blocks() -> list[dict]:
                                it("dead_hang", "1 × максимум секунд")],
             "результаты — в заметку, сравни с прошлым контрольным днём"),
         shoulder_block(25, 1, None, sets=2),
-        blk("Заминка", [it("walk", "10 минут", "замеры: вес утром натощак, талия по пупку — в заметку"),
+        blk("Заминка", [it("walk", "1 км", "замеры: вес утром натощак, талия по пупку — в заметку"),
                         it("pec_stretch_doorway", "60 секунд × 2")]),
     ]
 
@@ -509,6 +548,9 @@ def snap_kept_days(days: dict) -> None:
     swaps = {"sit_up": ("dead_bug", "8 на сторону"),
              "elliptical": ("air_bike", None),
              "cable_external_rotation": ("band_external_rotation", "2 × 15 · резина лёгкая")}
+    # closed days keep their work but switch to the distance format
+    minutes_to_km = {"3 минуты": "1 км", "5 минут": "1.5 км", "6 минут": "2 км",
+                     "15 минут": "5 км", "20 минут": "7 км", "30 минут": "3 км", "10 минут": "1 км"}
     for d in KEEP_DAYS:
         for b in days[str(d)]["payload"]["blocks"]:
             for item in b["items"]:
@@ -520,6 +562,8 @@ def snap_kept_days(days: dict) -> None:
                     item["movement"] = code
                     if text:
                         item["text"] = text
+                if item["movement"] in ("walk", "bike_erg") and item["text"] in minutes_to_km:
+                    item["text"] = minutes_to_km[item["text"]]
                 # warm-up bench ramp would repeat the main lift: same slot, different movement
                 if b["label"] == "Разминка" and item["movement"] == "bb_bench_press":
                     item.update(movement="push_up", text="2 × 10", note="разогреть грудь и плечи, без усилия")
@@ -582,6 +626,14 @@ def add_moves(moves: dict) -> None:
         moves[code] = {**m, "unlock_day": 1, "media_url": url}
     # breaststroke is a cool-down, not a skill to unlock: it is easier than crawl
     moves["swim_breast"]["unlock_day"] = 1
+    # the knee is healthy, so running starts on the second light day instead of day 50
+    moves["run"].update(unlock_day=10, unit="км",
+                        cue="Короткий шаг, стопа под тазом, плечи расслаблены. "
+                            "Темп разговорный: рвётся дыхание — переходи на шаг. "
+                            "Дистанция растёт от интервалов к непрерывному бегу.")
+    # cardio is measured in kilometres now, so the library says so too
+    for code in ("walk", "bike_erg"):
+        moves[code]["unit"] = "км"
 
 
 def add_media(moves: dict) -> None:

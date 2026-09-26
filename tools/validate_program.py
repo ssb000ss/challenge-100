@@ -25,6 +25,9 @@ BANNED = {
     "sit_up", "deadlift", "good_morning", "pendlay_row", "bb_row", "back_squat",
     "hanging_leg_raise", "toes_to_bar", "kipping_pull_up",
     "row_erg",
+    # not in this gym: no elliptical (day 5 note), and the cable stack cannot be
+    # set low enough for external rotation — it runs on a band instead
+    "elliptical", "cable_external_rotation",
 }
 
 

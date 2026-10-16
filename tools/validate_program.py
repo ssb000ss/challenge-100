@@ -97,6 +97,16 @@ def check_media(days: dict, moves: dict, errors: list[str]) -> None:
                 errors.append(f"move {code}: missing image {img}")
 
 
+def check_grip_streak(days: dict, errors: list[str]) -> None:
+    """Fingers and forearms need a day off: no more than two grip days in a row."""
+    streak = 0
+    for i in range(1, 101):
+        has_grip = any("хват" in b["label"].lower() for b in days[str(i)]["payload"]["blocks"])
+        streak = streak + 1 if has_grip else 0
+        if streak > 2:
+            errors.append(f"day {i}: grip block on {streak} consecutive days")
+
+
 def validate(data: dict) -> list[str]:
     errors: list[str] = []
     days, moves = data["days"], data["moves"]
@@ -105,6 +115,7 @@ def validate(data: dict) -> list[str]:
     for key in sorted(days, key=int):
         check_day(key, days[key], moves, errors)
     check_media(days, moves, errors)
+    check_grip_streak(days, errors)
     return errors
 
 

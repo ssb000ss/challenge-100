@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "wger": {
+      "command": "uvx",
+      "args": ["wger-mcp", "--transport", "stdio"],
+      "env": {
+        "WGER_BASE_URL": "https://wger.de",
+        "WGER_API_KEY": "${WGER_API_KEY}"
+      }
+    },
+    "exerciseapi": {
+      "command": "npx",
+      "args": ["-y", "@exerciseapi/mcp-server"],
+      "env": {
+        "EXERCISEAPI_KEY": "${EXERCISEAPI_KEY}"
+      }
+    }
+  }
+}

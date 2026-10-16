@@ -239,6 +239,11 @@ async function boot(){
   logs  = saved.logs ? {...saved.logs} : {...seed};
   // days closed in the shipped data.json are facts (e.g. a backfilled day): they win over an open saved day
   for(const [k,l] of Object.entries(seed)) if(isClosed(l) && !isClosed(logs[k])) logs[k]={...l};
+  // pauses (illness, injury) are facts too: union of saved and shipped, keyed by dates
+  const pauses=[...(state.pauses||[])];
+  for(const p of (base.state && base.state.pauses) || [])
+    if(!pauses.some(x=>x.from===p.from && x.to===p.to)) pauses.push({...p});
+  state={...state, pauses: pauses.sort((a,b)=>a.from<b.from?-1:1)};
 
   if(!state || !state.started_on)
     state = {started_on:"2026-09-21", swaps_left:3, dayoff_left:1, status:"active", bench_max:78};
@@ -264,9 +269,19 @@ const DAY_MS=86400000;
 const localMidnight = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 function parseLocalDate(s){ const [y,m,d]=String(s).split("-").map(Number); return new Date(y, m-1, d); }
 const beforeStart = () => localMidnight(new Date()) < parseLocalDate(state.started_on);
+const dayCount = (from, to) => Math.round((parseLocalDate(to) - parseLocalDate(from)) / DAY_MS) + 1;
+// дни паузы (болезнь, травма) не сгорают: они вычитаются из календаря, но видны в истории
+function pausedDays(){
+  const today=localMidnight(new Date());
+  return (state.pauses||[]).reduce((n,p)=>{
+    const to = parseLocalDate(p.to) > today ? today : parseLocalDate(p.to);
+    const days = Math.round((to - parseLocalDate(p.from)) / DAY_MS) + 1;
+    return n + Math.max(0, days);
+  }, 0);
+}
 // текущий день = по календарю: день 1 — дата старта. Round() гасит сдвиг перехода на летнее время
 function todayNum(){
-  const diff=Math.round((localMidnight(new Date()) - parseLocalDate(state.started_on)) / DAY_MS);
+  const diff=Math.round((localMidnight(new Date()) - parseLocalDate(state.started_on)) / DAY_MS) - pausedDays();
   return Math.min(100, Math.max(1, diff+1));
 }
 // прошедший и не закрытый день — пропуск (вычисляется, в logs не пишется)
@@ -556,7 +571,13 @@ function renderHist(){
   let h='<h2>История</h2>';
   const keys=[];
   for(let i=100;i>=1;i--) if(outcomeOf(i)) keys.push(i);
-  if(!keys.length) h+='<p class="mut">Пока пусто.</p>';
+  const ddmm = iso => iso.slice(8,10)+'.'+iso.slice(5,7);
+  (state.pauses||[]).slice().reverse().forEach(p=>{
+    h+='<div class="row"><span>'+esc(p.reason||'Пауза')+' · '+ddmm(p.from)+'–'+ddmm(p.to)+
+       '<br><span class="mut" style="font-size:13px">дни не сгорели, программа сдвинута</span></span>'+
+       '<span class="pill dayoff">пауза '+dayCount(p.from,p.to)+' дн.</span></div>';
+  });
+  if(!keys.length && !(state.pauses||[]).length) h+='<p class="mut">Пока пусто.</p>';
   keys.forEach(i=>{
     const l=logs[String(i)]||{}, p=days[String(i)], out=outcomeOf(i);
     const lbl={done:"выполнено",swap:"замена",dayoff:"отгул",missed:"пропуск"}[out]||out;
@@ -579,6 +600,8 @@ function renderProg(d){
     '<div><div class="lb">Осталось</div><div class="big">'+Math.max(0,left)+'</div></div></div>'+
     '<div class="blk"><div class="kv"><span>Выполнено</span><span>'+c.done+'</span></div>'+
     '<div class="kv"><span>Пропусков</span><span>'+c.missed+'</span></div>'+
+    ((state.pauses||[]).length ? '<div class="kv"><span>Пауза</span><span>'+
+      state.pauses.reduce((n,p)=>n+dayCount(p.from,p.to),0)+' дн.</span></div>' : '')+
     '<div class="kv"><span>Замен</span><span>'+(3-state.swaps_left)+' из 3</span></div>'+
     '<div class="kv"><span>Отгулов</span><span>'+(1-state.dayoff_left)+' из 1</span></div>'+
     '<div class="kv"><span>Старт</span><span>'+state.started_on+'</span></div></div>'+
@@ -652,9 +675,11 @@ function parseImport(obj){
     if(l.swapped===true) c.swapped=true;
     cleanLogs[k]=c;
   }
+  const pauses=Array.isArray(s.pauses) ? s.pauses.filter(p=>/^\d{4}-\d{2}-\d{2}$/.test(p.from||"") && /^\d{4}-\d{2}-\d{2}$/.test(p.to||""))
+    .map(p=>({from:p.from, to:p.to, reason:String(p.reason||"Пауза").slice(0,60)})) : [];
   const cleanState={started_on:s.started_on, swaps_left:s.swaps_left, dayoff_left:s.dayoff_left,
     status: s.status==="failed" ? "failed" : "active",
-    bench_max: typeof s.bench_max==="number" ? s.bench_max : 78, goal:"bench_110"};
+    bench_max: typeof s.bench_max==="number" ? s.bench_max : 78, goal:"bench_110", pauses};
   return {state:cleanState, logs:cleanLogs};
 }
 

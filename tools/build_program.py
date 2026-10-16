@@ -35,6 +35,42 @@ KEEP_DAYS = {1, 2, 3, 4, 5, 6}  # closed days: logs store checked item indices
 DELOAD_WEEK = 3  # 4th week of blocks 2 and 3
 TAPER_FROM = 93  # last week before the final test
 
+# Возврат после перерыва (болезнь 05.10–15.10): первые четыре сессии идут ниже плана.
+# Ключ — номер дня, "subs" заменяет текст упражнения, не трогая структуру дня.
+RE_ENTRY = {
+    15: ("минус 30% после болезни · подходов на один меньше · финишер пропусти",
+         {"bb_bench_press": "4 × 8, 40 кг", "db_incline_press": "3 × 10 · 12.5 кг в руке",
+          "chest_supported_row": "3 × 12 · 30 кг", "rope_pushdown": "3 × 12 · 15 кг",
+          "farmer_hold_heavy": "3 × 30 секунд · 15 кг в руке"}),
+    16: ("минус 30% после болезни · без финишера",
+         {"goblet_squat": "3 × 10 · 15 кг", "kb_deadlift": "3 × 12 · 16 кг",
+          "split_squat": "3 × 8 на ногу · 5 кг в руке", "leg_extension": "3 × 15 · 20 кг",
+          "kb_farmer_hold": "3 × 30 секунд · 12 кг в руке"}),
+    18: ("минус 20% после болезни",
+         {"lat_pulldown_neutral": "4 × 10 · 70 кг", "db_row": "3 × 10 · 17.5 кг",
+          "db_curl": "3 × 12 · 7.5 кг в руке"}),
+    19: ("минус 20% после болезни · финишер в половину объёма",
+         {"bb_bench_press": "3 × 10, 40 кг", "landmine_shoulder_press": "3 × 10 на руку · блин 10 кг",
+          "chest_supported_row": "3 × 12 · 40 кг", "air_bike": "3 × 20 секунд быстро / 40 секунд легко"}),
+    22: ("возврат завершён, вес ниже плана на ступень",
+         {"bb_bench_press": "5 × 5, 50 кг"}),
+}
+
+
+def apply_re_entry(d: int, payload: dict) -> dict:
+    """Scale the first sessions after the illness pause down, keeping the day intact."""
+    if d not in RE_ENTRY:
+        return payload
+    note, subs = RE_ENTRY[d]
+    for block in payload["blocks"]:
+        for item in block["items"]:
+            if item["movement"] in subs:
+                item["text"] = subs.pop(item["movement"])
+    bench = next((i["text"] for bl in payload["blocks"] for i in bl["items"] if i["movement"] == "bb_bench_press"), None)
+    payload["subtitle"] = "Возврат после болезни." + (f" Жим {bench}." if bench else "")
+    payload["rules"] = f"Возврат: {note} · " + payload["rules"]
+    return payload
+
 NEW_MOVES = {
     "band_external_rotation": {
         "name_ru": "Наружная ротация с резиной",
@@ -615,7 +651,7 @@ def build(data: dict) -> dict:
         if deload and dtype in ("bench_heavy", "legs", "pull", "legs_b"):
             title += " · разгрузка"
         day["title"] = title
-        day["payload"] = build_payload(d, dtype, block, i, n)
+        day["payload"] = apply_re_entry(d, build_payload(d, dtype, block, i, n))
     snap_kept_days(days)
     return data
 

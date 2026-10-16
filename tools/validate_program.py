@@ -22,7 +22,8 @@ BANNED = {
     "kb_overhead_hold", "waiter_walk", "overhead_carry", "push_jerk", "push_press",
     "bb_strict_press", "bb_seated_press",
     "curtsy_lunge", "deep_squat_hold", "box_jump", "jump_squat", "broad_jump", "burpee",
-    "sit_up", "deadlift", "good_morning", "pendlay_row", "bb_row", "back_squat",
+    "sit_up", "deadlift", "good_morning", "pendlay_row", "bb_row",
+    # back_squat разрешён с дня 22 (осевая нагрузка): суставы в порядке, работа в раме с упорами
     "hanging_leg_raise", "toes_to_bar", "kipping_pull_up",
     "row_erg",
     # not in this gym: no elliptical (day 5 note), and the cable stack cannot be

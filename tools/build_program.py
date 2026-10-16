@@ -50,6 +50,9 @@ RE_ENTRY = {
     18: ("минус 20% после болезни",
          {"lat_pulldown_neutral": "4 × 10 · 70 кг", "db_row": "3 × 10 · 17.5 кг",
           "db_curl": "3 × 12 · 7.5 кг в руке"}),
+    20: ("минус 30% после болезни · первая задняя цепь",
+         {"hip_thrust_machine": "3 × 10 · 40 кг", "rdl_bb": "3 × 8, 30 кг",
+          "reverse_lunge": "3 × 8 на ногу · 7.5 кг в руке", "leg_curl": "3 × 12 · 25 кг"}),
     19: ("минус 20% после болезни · финишер в половину объёма",
          {"bb_bench_press": "3 × 10, 40 кг", "landmine_shoulder_press": "3 × 10 на руку · блин 10 кг",
           "chest_supported_row": "3 × 12 · 40 кг", "air_bike": "3 × 20 секунд быстро / 40 секунд легко"}),
@@ -230,11 +233,15 @@ BH = {
         {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 1", "top": "1 × 1, 100 кг", "top_note": "100 только если RPE ≤ 9, иначе 90 × 1", "main": "3 × 3, 80 кг", "sub": "Пик. Попытка 100 без героизма."},
         {"ramp": "20 кг × 10 · 40 кг × 5", "main": "3 × 3, 60 кг", "top": "1 × 1, 80 кг", "top_note": "одиночный быстрый и лёгкий", "sub": "Подводка. Завтра контрольный день."}],
 }
-BV = {
-    1: [("20 кг × 10", "3 × 12, 40 кг"), ("20 кг × 10 · 30 кг × 5", "3 × 10, 50 кг")],
-    2: [("20 кг × 10 · 40 кг × 5", "4 × 8, 60 кг"), ("20 кг × 10 · 40 кг × 5", "5 × 8, 60 кг")],
-    3: [("20 кг × 10 · 50 кг × 5", "4 × 6, 70 кг"), ("20 кг × 10 · 50 кг × 5", "5 × 6, 70 кг")],
-    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "4 × 4, 80 кг")],
+BV = {   # объёмный жим раз в неделю: 4 входа на блок
+    1: [("20 кг × 10", "3 × 12, 40 кг"), ("20 кг × 10 · 30 кг × 5", "3 × 10, 50 кг"),
+        ("20 кг × 10 · 30 кг × 5", "4 × 10, 50 кг"), ("20 кг × 10 · 40 кг × 5", "4 × 8, 50 кг")],
+    2: [("20 кг × 10 · 40 кг × 5", "4 × 8, 60 кг"), ("20 кг × 10 · 40 кг × 5", "5 × 8, 60 кг"),
+        ("20 кг × 10 · 40 кг × 5", "4 × 10, 60 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 8, 50 кг")],
+    3: [("20 кг × 10 · 50 кг × 5", "4 × 6, 70 кг"), ("20 кг × 10 · 50 кг × 5", "5 × 6, 70 кг"),
+        ("20 кг × 10 · 50 кг × 5", "4 × 8, 70 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 6, 60 кг")],
+    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "4 × 4, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 4, 80 кг"),
+        ("20 кг × 10 · 50 кг × 5", "3 × 5, 70 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 5, 60 кг")],
 }
 # secondary press on heavy days, per block and occurrence
 BH_SECOND = {
@@ -288,11 +295,15 @@ LEGS_UNI = {1: ("split_squat", ["3 × 8 на ногу · 5", "3 × 8 на ног
             4: ("split_squat", ["3 × 8 на ногу · 15", "3 × 8 на ногу · 12.5"])}
 LEG_EXT = {1: [20, 20, 25, 25], 2: [30, 30, 35, 25], 3: [35, 40, 40, 30], 4: [40, 35]}
 
-LEGS_B = {  # (hip thrust kg, rdl sets+kg, reverse lunge kg, leg curl kg, calf kg)
-    1: [(40, "3 × 8, 30 кг", 7.5, 25, 40), (50, "3 × 8, 40 кг", 10, 30, 50)],
-    2: [(60, "3 × 8, 50 кг", 12.5, 35, 60), (50, "3 × 8, 40 кг", 10, 30, 50)],
-    3: [(70, "4 × 8, 60 кг", 15, 40, 70), (60, "3 × 8, 50 кг", 10, 35, 60)],
-    4: [(60, "2 × 8, 40 кг", 10, 30, 50)],
+LEGS_B = {  # (hip thrust kg, rdl sets+kg, reverse lunge kg, leg curl kg, calf kg) — раз в неделю
+    1: [(40, "3 × 8, 30 кг", 7.5, 25, 40), (50, "3 × 8, 40 кг", 10, 30, 50),
+        (50, "3 × 8, 40 кг", 10, 30, 50), (60, "3 × 8, 50 кг", 12.5, 35, 50)],
+    2: [(60, "3 × 8, 50 кг", 12.5, 35, 60), (70, "3 × 8, 50 кг", 12.5, 35, 60),
+        (70, "4 × 8, 60 кг", 15, 40, 60), (50, "3 × 8, 40 кг", 10, 30, 50)],
+    3: [(70, "4 × 8, 60 кг", 15, 40, 70), (80, "4 × 8, 60 кг", 15, 40, 70),
+        (80, "4 × 8, 70 кг", 17.5, 45, 70), (60, "3 × 8, 50 кг", 10, 35, 60)],
+    4: [(80, "4 × 8, 70 кг", 17.5, 45, 70), (80, "4 × 8, 70 кг", 17.5, 45, 70),
+        (60, "3 × 8, 50 кг", 12.5, 35, 60), (60, "2 × 8, 40 кг", 10, 30, 50)],
 }
 SHORT = {1: [(10, 17.5, 10, 20), (12, 20, 12, 25)], 2: [(12, 22.5, 12, 30), (10, 20, 10, 25)],
          3: [(15, 25, 12, 35), (12, 22.5, 10, 30)], 4: [(8, 20, 8, 20)]}
@@ -399,10 +410,8 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
 def bench_volume(d: int, block: int, i: int, n: int) -> dict:
     ramp, main = BV[block][i]
     # day 5 log: landmine done with a 10 kg plate where 5 was prescribed
-    landmine = [10, 15, 15, 20, 20, 25, 25][n]
-    # Every volume day falls the day before the pool day, and swimming loads the
-    # lats. Vertical pulling moves out, a chest-supported row stays at half effort.
-    row = [40, 45, 45, 50, 50, 55, 55][n]
+    landmine = pick([10, 15, 15, 20, 20, 25, 25, 25, 30, 30, 30, 30], n)
+    row = pick([40, 45, 45, 50, 50, 55, 55, 60, 60, 65, 65, 70], n)
     face = {1: 25, 2: 27.5, 3: 30, 4: 30}[block]
     sets, weight = main.split(", ")
     blocks = [
@@ -411,8 +420,8 @@ def bench_volume(d: int, block: int, i: int, n: int) -> dict:
                               it("landmine_shoulder_press", f"3 × 10 на руку · блин {landmine} кг",
                                  "жим под углом — плечу безопаснее, чем над головой")],
             "отдых 90 секунд"),
-        blk("Спина и руки", [it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью, в полсилы — завтра бассейн"),
-                             it("cable_curl", f"3 × 12 · {kg([10, 10, 12.5, 12.5, 15, 15, 15][n])} кг")],
+        blk("Спина и руки", [it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена"),
+                             it("cable_curl", f"3 × 12 · {kg(pick([10, 10, 12.5, 12.5, 15, 15, 15, 17.5, 17.5, 20, 20, 20], n))} кг")],
             "суперсетом, отдых 60 секунд"),
         shoulder_block(face, block, None),
         blk("Финишер · 5 минут", [it("air_bike", MINI_FINISHER[block])], "интервалы"),
@@ -439,7 +448,19 @@ def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool) -> dict:
     return {"subtitle": "Спина, задняя дельта, бицепс.", "minutes": 42, "rules": rules(d, True), "blocks": blocks}
 
 
+# Присед со штангой: двойная прогрессия (5 × 5 → 5 × 6 → +10 кг). Осевая нагрузка с дня 22,
+# до этого — жим ногами. Веса от факта: гоблет 20, жим ногами 100, гакк 60.
+SQUAT = {
+    1: ["5 × 5, 40 кг"],   # первый заход: техника, не вес
+    2: ["5 × 5, 50 кг", "5 × 6, 50 кг", "5 × 5, 60 кг", "3 × 5, 40 кг"],
+    3: ["5 × 6, 60 кг", "5 × 5, 70 кг", "5 × 6, 70 кг", "3 × 5, 50 кг"],
+    4: ["5 × 5, 80 кг", "5 × 6, 80 кг", "5 × 3, 90 кг", "3 × 5, 60 кг"],
+}
+
+
 def legs_a(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int) -> dict:
+    if d >= 23 and block in SQUAT:
+        return legs_squat(d, block, i, deload, taper, n)
     m_move, m_list, m_note = LEGS_MAIN[block]
     h_move, h_sets, h_list = LEGS_HINGE[block]
     u_move, u_list = LEGS_UNI[block]
@@ -459,6 +480,27 @@ def legs_a(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int
         blocks.append(finisher)
     blocks.append(cooldown("hip_flexor_stretch"))
     return {"subtitle": "Квадрицепс, таз, корпус.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
+
+
+def legs_squat(d: int, block: int, i: int, deload: bool, taper: bool, n: int) -> dict:
+    """Приседание первым, потом задняя цепь и одностороннее — подсобка по
+    категориям 5/3/1 (ноги/кор), а не россыпь мелочи."""
+    h_move, h_sets, h_list = LEGS_HINGE[block]
+    u_move, u_list = LEGS_UNI[block]
+    main = pick(SQUAT[block], i)
+    blocks = [
+        blk("Разминка", [bike(6), it("glute_bridge", "2 × 12", "включить ягодицы перед приседом")]),
+        blk("Основной блок", [it("back_squat", main,
+                                 "разминка: гриф × 10 · половина рабочего × 5 · спина нейтральная, колени по линии стоп")],
+            "отдых 2–3 минуты · если подход тяжелее RPE 8 — следующий на повтор меньше"),
+        blk("Подсобка · ноги и кор", [it(h_move, f"{h_sets} · {pick(h_list, i)} кг", "движение из таза, спина нейтральная"),
+                                      it(u_move, f"{pick(u_list, i)} кг в руке"),
+                                      core_item(n, block)], "25–50 повторов на категорию, отдых 60 секунд"),
+    ]
+    if not taper and not deload:
+        blocks.append(leg_grip_block(block, deload))
+    blocks.append(cooldown("hip_flexor_stretch"))
+    return {"subtitle": f"Присед {main}.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
 def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
@@ -534,6 +576,9 @@ def light_day(d: int, block: int, n: int, walk: bool) -> dict:
         minutes = int(km * 3)
         cardio = [it("bike_erg", f"{kg(km)} км", "пульс 110–125, лёгкий темп")]
         sub = f"Восстановление. Вело {kg(km)} км."
+    if walk:   # беговой день: кардио и всё, подвижность уехала на воскресенье
+        return {"subtitle": sub, "minutes": minutes + 5, "rules": rules(d, False),
+                "blocks": [blk("Кардио", cardio, cardio_note)]}
     plank_s = {1: 20, 2: 25, 3: 30, 4: 30}[block]
     core = blk("Корпус · 5 минут", [it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе"),
                                     it("side_plank", f"2 × {plank_s} секунд на сторону")],
@@ -621,10 +666,7 @@ def build_payload(d: int, dtype: str, block: int, i: int, n: int) -> dict:
             return legs_a(d, block, i, w, deload, taper, n)
         case "legs_b":
             return legs_b(d, block, i, deload)
-        case "short":
-            return short_day(d, block, i)
-        case "pool":
-            return pool_day(d, n)
+
         case "light":
             return light_day(d, block, n, walk=True)
         case "light2":
@@ -644,8 +686,25 @@ def reschedule(data: dict) -> None:
         data["days"][str(d)]["scheduled_on"] = (planned + timedelta(days=shift)).isoformat()
 
 
+WEEK = ["bench_heavy", "legs", "light", "pull", "bench_volume", "legs_b", "light2"]
+TEST_DAYS = {28, 56, 84, 100}
+
+
+def retype_days(days: dict) -> None:
+    """Weekly frame from day 16 on: bench twice, legs twice, one run day, one
+    recovery day. Pool and the short EMOM day are gone — the pool preceded the
+    illness and the EMOM day was too light to earn its slot."""
+    for d in range(16, 101):
+        days[str(d)]["day_type"] = "test" if d in TEST_DAYS else WEEK[(d - 15) % 7]
+    # у прошедших дней тип остаётся историческим (там были бассейн и EMOM)
+
+
 def build(data: dict) -> dict:
     days = data["days"]
+    retype_days(days)
+    # закрытые дни — история: в logs лежат индексы отмеченных пунктов, перестраивать их нельзя
+    done = {int(k) for k, v in data.get("logs", {}).items()
+            if v.get("outcome") in ("done", "swap", "dayoff")}
     per_block: dict[tuple[int, str], int] = {}
     per_type: dict[str, int] = {}
     for d in range(1, 101):
@@ -654,7 +713,7 @@ def build(data: dict) -> dict:
         i = per_block.get((block, dtype), 0)
         n = per_type.get(dtype, 0)
         per_block[(block, dtype)], per_type[dtype] = i + 1, n + 1
-        if d in KEEP_DAYS:
+        if d in KEEP_DAYS or d in done:
             continue
         w = ((d - 1) % 28) // 7
         deload = block in (2, 3) and w == DELOAD_WEEK

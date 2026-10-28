@@ -69,6 +69,8 @@ h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;
 .blk.cool{border-left-color:#4a7fa8}
 .blk h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.07em;
   font-size:15px;color:var(--brass);margin:0 0 3px;font-weight:500}
+.blk h3 .bns{font-family:var(--mono);font-size:10px;text-transform:none;letter-spacing:0;
+  color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:7px;vertical-align:2px}
 .blk .n{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:10px}
 .it{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
 .it:last-child{border-bottom:none}
@@ -284,20 +286,41 @@ function todayNum(){
   const diff=Math.round((localMidnight(new Date()) - parseLocalDate(state.started_on)) / DAY_MS) - pausedDays();
   return Math.min(100, Math.max(1, diff+1));
 }
-// прошедший и не закрытый день — пропуск (вычисляется, в logs не пишется)
+// бонусные блоки (заминка, хват, финишер) видны и отмечаются, но день не держат:
+// сделанная работа не должна зависеть от пятиминутки растяжки
+function requiredIdx(use){
+  const req=[]; let i=0;
+  (use.blocks||[]).forEach(b=>(b.items||[]).forEach(()=>{ if(!b.optional) req.push(i); i++; }));
+  return req;
+}
+function planOf(i){
+  const p=days[String(i)]; if(!p) return null;
+  const l=logs[String(i)];
+  return ((l && (l.swapped || l.outcome==="swap")) && p.variant) ? p.variant : p.payload;
+}
+// основная работа отмечена целиком — день сделан, даже если кнопку не нажали
+function coreDone(i){
+  const use=planOf(i); if(!use) return false;
+  const req=requiredIdx(use); if(!req.length) return false;
+  const marked=(logs[String(i)]||{}).items||[];
+  return req.every(x=>marked.includes(x));
+}
+// прошедший день: основная работа отмечена — выполнено, иначе пропуск (в logs не пишется)
 function outcomeOf(i){
   const l=logs[String(i)];
   if(isClosed(l)) return l.outcome;
-  return i<todayNum() ? "missed" : null;
+  if(i>=todayNum()) return null;
+  return coreDone(i) ? "done" : "missed";
 }
 // смотреть можно сегодня, а завтра — только когда сегодня закрыт
 const maxView = () => Math.min(100, todayNum() + (isClosed(logs[String(todayNum())]) ? 1 : 0));
 const allClosed = () => todayNum()===100 && isClosed(logs["100"]);
 function streak(){
   const t=todayNum();
-  let n=isClosed(logs[String(t)]) ? 1 : 0;
+  const ok = i => CLOSED.includes(outcomeOf(i));
+  let n=ok(t) ? 1 : 0;
   for(let i=t-1;i>=1;i--){
-    if(isClosed(logs[String(i)])) n++; else break;
+    if(ok(i)) n++; else break;
   }
   return n;
 }
@@ -373,7 +396,8 @@ function dayHtml(plan, use, done){
   (use.blocks||[]).forEach(b=>{
     const cls = /Разминка|Заминка|Подвижность/.test(b.label) ? ' warm'
               : (/EMOM|AMRAP|Финишер|Тест|Лесенка|круг/.test(b.label) ? ' cool' : '');
-    h+='<div class="blk'+cls+'"><h3>'+b.label+'</h3>'+(b.note?'<div class="n">'+b.note+'</div>':'');
+    h+='<div class="blk'+cls+'"><h3>'+b.label+(b.optional?'<span class="bns">бонус</span>':'')+'</h3>'+
+      (b.note?'<div class="n">'+b.note+'</div>':'');
     (b.items||[]).forEach(it=>{
       const i=idx++, ok=done.includes(i), m=moves[it.movement]||{};
       h+='<div class="it'+(ok?' ok':'')+'">'+
@@ -450,19 +474,23 @@ function renderToday(d){
   }
 
   const total=(use.blocks||[]).reduce((n,b)=>n+(b.items||[]).length,0);
-  const curN=done.length;
-  const all=curN>=total && total>0;
+  const req=requiredIdx(use);
+  const curN=req.filter(i=>done.includes(i)).length;
+  const all=curN>=req.length && req.length>0;
 
   if(swapped)
     h+='<div class="rules" style="border-style:solid;border-color:var(--amber);text-align:center;color:var(--amber)">Замена · облегчённый вариант. Отметь всё и закрой день</div>';
   h+='<div class="acts">';
   h+='<button class="btn p" id="done"'+(all?'':' disabled')+'>'+
-     (all?'Закрыть день':'Отметь всё · '+curN+'/'+total)+'</button>';
+     (all?'Закрыть день':'Отметь основное · '+curN+'/'+req.length)+'</button>';
   h+='<button class="btn a" id="swap"'+(state.swaps_left<1||swapped?' disabled':'')+
      '>Поменять · '+state.swaps_left+'</button>';
   h+='<button class="btn m" id="off"'+(state.dayoff_left<1?' disabled':'')+
      '>Отгул · '+state.dayoff_left+'</button>';
   h+='</div>';
+  if(total>req.length)
+    h+='<p class="mut" id="bonus" style="font-size:12.5px;margin:-4px 0 14px">'+
+       bonusLine(done, req, total)+'</p>';
 
   h+='<div><label>Заметка о дне</label>'+
      '<textarea id="note" rows="3" placeholder="Веса, самочувствие, колено, спина">'+
@@ -470,11 +498,16 @@ function renderToday(d){
      '<button class="btn" id="savenote" style="width:100%;margin-top:8px">Сохранить заметку</button></div>';
 
   el.innerHTML=h;
-  wireToday(d, total);
+  wireToday(d, req, total);
   wireNav(cur);
 }
 
-function wireToday(d, total){
+function bonusLine(done, req, total){
+  const n=done.filter(i=>!req.includes(i)).length;
+  return 'Бонус: '+n+' из '+(total-req.length)+' — день закрывается и без них.';
+}
+
+function wireToday(d, req, total){
   const ticks=[...document.querySelectorAll("#today .tick")];
 
   function currentDone(){
@@ -487,9 +520,12 @@ function wireToday(d, total){
     put("logs/"+d, l);
     const dn=document.getElementById("done");
     if(dn){
-      if(items.length>=total && total>0){ dn.disabled=false; dn.textContent="Закрыть день"; }
-      else { dn.disabled=true; dn.textContent="Отметь всё · "+items.length+"/"+total; }
+      const n=items.filter(i=>req.includes(i)).length;
+      if(n>=req.length && req.length>0){ dn.disabled=false; dn.textContent="Закрыть день"; }
+      else { dn.disabled=true; dn.textContent="Отметь основное · "+n+"/"+req.length; }
     }
+    const bn=document.getElementById("bonus");
+    if(bn) bn.textContent=bonusLine(items, req, total);
   }
 
   ticks.forEach((b,i)=>{

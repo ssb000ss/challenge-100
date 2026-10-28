@@ -1,6 +1,6 @@
 // Offline support: app shell + program + exercise photos are cached on install.
 // Bump VERSION when shell files change so clients pick up the new cache.
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = `challenge100-${VERSION}`;
 const SHELL = ["./", "index.html", "data.json", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];

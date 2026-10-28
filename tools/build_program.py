@@ -104,6 +104,16 @@ NEW_MOVES = {
         "cue": "Лёжа на спине, стопы у таза. Подними таз за счёт ягодиц, вверху пауза 1 секунда. Поясницу не прогибать.",
         "equipment": "—", "category": "hinge", "unit": "повт",
     },
+    "db_overhead_extension": {
+        "name_ru": "Французский жим с гантелью из-за головы",
+        "cue": "Одна гантель в двух руках над головой, локти смотрят вперёд и стоят на месте. Опускай за голову до полного растяжения, разгибай без рывка. Длинная головка трицепса — самая крупная из трёх и растёт именно из этого положения.",
+        "equipment": "гантель, скамья", "category": "push", "unit": "повт",
+    },
+    "rope_overhead_extension": {
+        "name_ru": "Разгибания с канатом из-за головы",
+        "cue": "Канат из нижнего блока, стоишь спиной к стойке, корпус в наклоне. Локти у головы, разгибай вперёд-вверх. Натяжение в трицепсе есть и в растянутом положении — в этом вся разница с разгибаниями вниз.",
+        "equipment": "блок", "category": "push", "unit": "повт",
+    },
     "cat_camel": {
         "name_ru": "Кошка-верблюд",
         "cue": "На четвереньках медленно округляй и прогибай спину в комфортной амплитуде. Не растяжка, а разминка для позвоночника — без усилия.",
@@ -260,9 +270,55 @@ PULL = {
     4: [("neutral_pull_up", ["4 × максимум − 1 · если не выходит, гравитрон 10 кг", "3 × 5 · гравитрон по самочувствию"]),
         ("seated_row", ["4 × 8 · 75 кг", "3 × 8 · 65 кг"])],
 }
-CURL = {1: ("db_curl", "3 × 12", [7.5, 7.5, 10, 10]), 2: ("hammer_curl", "3 × 10", [10, 12.5, 12.5, 10]),
-        3: ("incline_curl", "3 × 10", [10, 10, 12.5, 7.5]), 4: ("hammer_curl", "3 × 10", [15, 12.5])}
 DELT = {1: 5, 2: 5, 3: 7.5, 4: 7.5}
+
+# ---------- руки ----------
+# Прямая работа на руки трижды в неделю плюс лёгкий заход в воскресенье.
+# Трицепс грузим из-за головы: длинная головка даёт основную массу мышцы и
+# отзывается именно на растянутое положение, а не на разгибания вниз. Бицепс —
+# на наклонной (та же логика растяжения) и молотковым хватом на брахиалис,
+# он добавляет руке толщину. Пара движений за днём закреплена, чтобы вес было
+# с чем сравнивать неделя к неделе.
+ARM_PAIR = {"pull": ("incline_curl", "db_overhead_extension"),
+            "bench_volume": ("cable_curl", "rope_overhead_extension"),
+            "legs_b": ("hammer_curl", "db_overhead_extension")}
+PER_HAND = {"incline_curl", "hammer_curl", "db_curl"}
+# Двойная прогрессия внутри блока: повторы вверх, потом вес, четвёртая неделя легче.
+ARM_SETS = ["3 × 10", "3 × 12", "3 × 10", "2 × 12"]
+ARM_START = {  # рабочий вес первой недели блока, +2.5 кг на третьей
+    "incline_curl": {1: 7.5, 2: 10, 3: 12.5, 4: 15},
+    "hammer_curl": {1: 10, 2: 12.5, 3: 15, 4: 17.5},
+    "cable_curl": {1: 12.5, 2: 17.5, 3: 20, 4: 22.5},
+    "db_overhead_extension": {1: 12.5, 2: 15, 3: 17.5, 4: 20},
+    "rope_overhead_extension": {1: 15, 2: 20, 3: 22.5, 4: 25},
+}
+# Воскресный пампинг: лёгкий объём и предплечья, восстановлению не мешает.
+ARM_PUMP = {"db_curl": {1: 7.5, 2: 10, 3: 10, 4: 12.5},
+            "rope_pushdown": {1: 12.5, 2: 15, 3: 17.5, 4: 17.5},
+            "wrist_curl": {1: 5, 2: 5, 3: 7.5, 4: 7.5}}
+
+
+def arm_text(move: str, block: int, i: int) -> str:
+    weight = ARM_START[move][block] + (2.5 if i == 2 else 0)
+    return f"{ARM_SETS[min(i, 3)]} · {kg(weight)} кг" + (" в руке" if move in PER_HAND else "")
+
+
+def arm_block(dtype: str, block: int, i: int) -> dict:
+    """Бицепс и трицепс — антагонисты: суперсетом прямая работа на руки
+    укладывается в шесть минут и не выносит день за обеденное окно."""
+    curl, tri = ARM_PAIR[dtype]
+    return blk("Суперсет · руки", [
+        it(curl, arm_text(curl, block, i), "вниз до полного выпрямления — бицепс отзывается на растянутое положение"),
+        it(tri, arm_text(tri, block, i), "локти у головы и на месте: уводишь вперёд — работу забирает плечо")],
+        "чередуй подходы, отдых 60 секунд · " + STEP_UP)
+
+
+def arm_pump_block(block: int) -> dict:
+    return blk("Руки и предплечья", [
+        it("db_curl", f"2 × 15 · {kg(ARM_PUMP['db_curl'][block])} кг в руке", "легко, на кровь — не в отказ"),
+        it("rope_pushdown", f"2 × 15 · {kg(ARM_PUMP['rope_pushdown'][block])} кг"),
+        it("wrist_curl", f"2 × 15 · {kg(ARM_PUMP['wrist_curl'][block])} кг в руке", "предплечье на бедре, двигаются только кисти"),
+    ], "объём без усталости: лёгкий день — лучшее место для рук и предплечий")
 
 LEGS_MAIN = {
     1: ("goblet_squat", ["3 × 10 · 17.5 кг", "3 × 10 · 20 кг", "3 × 12 · 20 кг", "4 × 10 · 20 кг"], "таз ниже колена, спина нейтральная"),
@@ -372,12 +428,15 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
         blk("Основной блок", items[:1], "отдых 2–3 минуты · если подход тяжелее RPE 9 — остальные на повтор меньше"),
     ]
     if len(items) > 1 and tri:
+        # Жим узким хватом сам по себе грузит трицепс как основное движение,
+        # поэтому разгибания в такой день лишние: три прямых дня на руки уже есть.
+        extra = [] if second[0] == "close_grip_bench" else \
+            [it("rope_pushdown", f"{2 if deload else 3} × 12 · {kg(tri)} кг")]
         # antagonist supersets keep the day inside the 45-minute lunch window
         blocks += [
             blk("Суперсет · жим + тяга", [items[1], it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")],
                 "чередуй подходы, отдых 60 секунд"),
-            blk("Суперсет · трицепс + защита плеча", [
-                it("rope_pushdown", f"{2 if deload else 3} × 12 · {kg(tri)} кг"),
+            blk("Суперсет · трицепс + защита плеча" if extra else "Суперсет · защита плеча", extra + [
                 it("face_pull", f"3 × 15 · {kg(face)} кг", "без рывка корпусом; тянешь рывком — сбрось вес"),
                 it("band_external_rotation", f"2 × 15 · резина {ER_BAND[block]}")],
                 "круг без пауз, отдых 45 секунд между кругами · блок обязательный"),
@@ -403,9 +462,8 @@ def bench_volume(d: int, block: int, i: int, n: int) -> dict:
                               it("landmine_shoulder_press", f"3 × 10 на руку · блин {landmine} кг",
                                  "жим под углом — плечу безопаснее, чем над головой")],
             "отдых 90 секунд"),
-        blk("Спина и руки", [it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена"),
-                             it("cable_curl", f"3 × 12 · {kg(pick([10, 10, 12.5, 12.5, 15, 15, 15, 17.5, 17.5, 20, 20, 20], n))} кг")],
-            "суперсетом, отдых 60 секунд"),
+        blk("Спина", [it("chest_supported_row", f"4 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")]),
+        arm_block("bench_volume", block, i),
         shoulder_block(face, block, None),
         blk("Финишер · 5 минут", [it("air_bike", MINI_FINISHER[block])], "интервалы"),
     ]
@@ -414,21 +472,20 @@ def bench_volume(d: int, block: int, i: int, n: int) -> dict:
 
 def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool) -> dict:
     (v_move, v_list), (h_move, h_list) = PULL[block]
-    c_move, c_sets, c_list = CURL[block]
     delt = "db_rear_delt_fly" if w % 2 == 0 else "db_lateral_raise"
     delt_kg = DELT[block] - (2.5 if deload else 0)
     blocks = [
         blk("Разминка", warmup(6) + [it("face_pull", "2 × 15", "лёгкий вес")]),
         blk("Основной блок", [it(v_move, pick(v_list, i), STEP_UP), it(h_move, pick(h_list, i))], "отдых 90 секунд"),
-        blk("Плечи и руки", [it(delt, f"3 × 15 · {kg(delt_kg)} кг в руке", "до уровня плеч, не выше"),
-                             it(c_move, f"{c_sets} · {kg(pick(c_list, i))} кг в руке")]),
+        blk("Плечи", [it(delt, f"3 × 15 · {kg(delt_kg)} кг в руке", "до уровня плеч, не выше")]),
+        arm_block("pull", block, i),
     ]
     if w % 2 == 0:
         blocks.append(grip_block(block, deload, pull_day=True))
     elif not taper and not deload:
         blocks.append(finisher_block(block))
     blocks.append(cooldown("lat_stretch"))
-    return {"subtitle": "Спина, задняя дельта, бицепс.", "minutes": 42, "rules": rules(d, True), "blocks": blocks}
+    return {"subtitle": "Спина, задняя дельта, руки.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
 # Присед со штангой: двойная прогрессия (5 × 5 → 5 × 6 → +10 кг). Осевая нагрузка с дня 22,
@@ -494,10 +551,11 @@ def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
                               it("rdl_bb", rdl, "штанга по бёдрам, спина нейтральная, до середины голени"),
                               it("reverse_lunge", f"3 × 8 на ногу · {kg(lunge)} кг в руке", "шаг назад — колену легче")]),
         blk("Изоляция", [it("leg_curl", f"3 × 12 · {curl} кг"), it("calf_raise_standing", f"3 × 15 · {calf} кг")]),
+        arm_block("legs_b", block, i),
         leg_grip_block(block, deload),
         cooldown("hip_flexor_stretch"),
     ]
-    return {"subtitle": "Задняя цепь и ягодичные.", "minutes": 40, "rules": rules(d, True), "blocks": blocks}
+    return {"subtitle": "Задняя цепь, ягодичные, руки.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
 def short_day(d: int, block: int, i: int) -> dict:
@@ -566,8 +624,8 @@ def light_day(d: int, block: int, n: int, walk: bool) -> dict:
     core = blk("Корпус · 5 минут", [it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе"),
                                     it("side_plank", f"2 × {plank_s} секунд на сторону")],
                "стабилизация спины, каждый лёгкий день")
-    return {"subtitle": sub, "minutes": minutes + 13, "rules": rules(d, False),
-            "blocks": [blk("Кардио", cardio, cardio_note),
+    return {"subtitle": sub + " Руки и предплечья.", "minutes": minutes + 20, "rules": rules(d, False),
+            "blocks": [blk("Кардио", cardio, cardio_note), arm_pump_block(block),
                        blk("Подвижность", mob_items, "по 60 секунд, где не указаны повторы"), core]}
 
 
@@ -671,23 +729,77 @@ def reschedule(data: dict) -> None:
 
 WEEK = ["bench_heavy", "legs", "light", "pull", "bench_volume", "legs_b", "light2"]
 TEST_DAYS = {28, 56, 84, 100}
+# Заголовок дня обязан следовать типу: иначе день с жимом остаётся подписан
+# «Бассейн» от прошлого каркаса, и в приложении видно одно, а делаешь другое.
+TITLES = {"bench_heavy": "Верх · толчок", "bench_volume": "Жим · объём", "pull": "Верх · тяга",
+          "legs": "Ноги · квадрицепс", "legs_b": "Ноги · задняя цепь",
+          "light": "Кардио · бег", "light2": "Восстановление", "test": "Контрольный день"}
 
 
-def retype_days(days: dict) -> None:
+def retitle_frozen(days: dict, frozen: set[int]) -> None:
+    """Заголовок прошедшего дня тоже приводим к его типу. Состав дня при этом не
+    меняется — меняется только подпись, и в «Истории» перестаёт стоять
+    «Бассейн» над тренировкой задней цепи."""
+    for d in sorted(frozen):
+        dtype = days[str(d)]["day_type"]
+        if d < 16 or dtype not in TITLES:
+            continue   # дни 1–15 подписаны по факту того, что тогда делалось
+        suffix = " · разгрузка" if "разгрузка" in days[str(d)]["title"] else ""
+        days[str(d)]["title"] = title_for(d, dtype) + suffix
+
+
+def title_for(d: int, dtype: str) -> str:
+    if d == 100:
+        return "Финал · максимум"
+    if dtype == "legs" and d >= 23:
+        return "Ноги · присед"
+    return TITLES[dtype]
+
+
+def retype_days(days: dict, keep: set[int]) -> None:
     """Weekly frame from day 16 on: bench twice, legs twice, one run day, one
     recovery day. Pool and the short EMOM day are gone — the pool preceded the
     illness and the EMOM day was too light to earn its slot."""
     for d in range(16, 101):
+        if d in keep:
+            continue
         days[str(d)]["day_type"] = "test" if d in TEST_DAYS else WEEK[(d - 15) % 7]
-    # у прошедших дней тип остаётся историческим (там были бассейн и EMOM)
+
+
+# Блоки, которые не держат день: их видно, их можно отметить, но заминка и
+# пятиминутка хвата не должны обнулять всю сделанную работу.
+BONUS_LABELS = ("Заминка", "Хват", "Финишер")
+
+
+def mark_bonus(days: dict) -> None:
+    """Пометка бонуса не меняет ни состав, ни порядок пунктов, поэтому её можно
+    ставить и на прошедшие дни, где logs ссылаются на индексы."""
+    for day in days.values():
+        for part in ("payload", "variant"):
+            for b in day[part].get("blocks", []):
+                if any(w in b["label"] for w in BONUS_LABELS):
+                    b["optional"] = True
+                else:
+                    b.pop("optional", None)
+
+
+def frozen_days(data: dict) -> set[int]:
+    """История неприкосновенна. logs хранят индексы отмеченных пунктов: если
+    перестроить прошедший день, галочки начнут указывать на другие упражнения.
+    Поэтому правки программы вступают в силу с сегодняшнего дня и дальше."""
+    start = date.fromisoformat(data["state"]["started_on"])
+    paused = sum((date.fromisoformat(p["to"]) - date.fromisoformat(p["from"])).days + 1
+                 for p in data["state"].get("pauses", []))
+    current = min(100, max(1, (date.today() - start).days - paused + 1))
+    return set(range(1, current))
 
 
 def build(data: dict) -> dict:
     days = data["days"]
-    retype_days(days)
-    # закрытые дни — история: в logs лежат индексы отмеченных пунктов, перестраивать их нельзя
-    done = {int(k) for k, v in data.get("logs", {}).items()
-            if v.get("outcome") in ("done", "swap", "dayoff")}
+    done = frozen_days(data) | {int(k) for k, v in data.get("logs", {}).items()
+                                if v.get("outcome") in ("done", "swap", "dayoff")}
+    retype_days(days, done)
+    retitle_frozen(days, done)
     per_block: dict[tuple[int, str], int] = {}
     per_type: dict[str, int] = {}
     for d in range(1, 101):
@@ -700,12 +812,13 @@ def build(data: dict) -> dict:
             continue
         w = ((d - 1) % 28) // 7
         deload = block in (2, 3) and w == DELOAD_WEEK
-        title = day["title"].replace(" · разгрузка", "")
+        title = title_for(d, dtype)
         if deload and dtype in ("bench_heavy", "legs", "pull", "legs_b"):
             title += " · разгрузка"
         day["title"] = title
         day["payload"] = apply_re_entry(d, build_payload(d, dtype, block, i, n))
     snap_kept_days(days)
+    mark_bonus(days)
     return data
 
 

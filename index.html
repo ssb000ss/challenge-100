@@ -187,7 +187,7 @@ label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform
     <div class="blk">
       <h3>Цель</h3>
       <div class="it"><div class="nm"><b>Вернуть былую форму и кондицию</b><em>Главное. Показатели ниже — мотиваторы</em></div></div>
-      <div class="it"><div class="nm"><b>Жим лёжа 110 кг на раз</b><em>Старт 78 (расчётный). Контрольные дни 28, 56, 84 — на повторы, день 100 — максимум</em></div></div>
+      <div class="it"><div class="nm"><b>Жим лёжа 110 кг на раз</b><em>Старт 78 (расчётный), день 28 — 100 кг на раз. Контрольные дни 56 и 84 — на повторы, день 100 — максимум</em></div></div>
       <div class="it"><div class="nm"><b>Награда</b><em>Мотоцикл</em></div></div>
     </div>
   </section>
@@ -246,6 +246,9 @@ async function boot(){
   for(const p of (base.state && base.state.pauses) || [])
     if(!pauses.some(x=>x.from===p.from && x.to===p.to)) pauses.push({...p});
   state={...state, pauses: pauses.sort((a,b)=>a.from<b.from?-1:1)};
+  // a bench record is a fact too: the shipped number wins when it is higher
+  const shippedMax=(base.state && base.state.bench_max) || 0;
+  if(shippedMax > (state.bench_max||0)) state={...state, bench_max: shippedMax};
 
   if(!state || !state.started_on)
     state = {started_on:"2026-09-21", swaps_left:3, dayoff_left:1, status:"active", bench_max:78};
@@ -643,6 +646,7 @@ function renderProg(d){
     '<div class="kv"><span>Отгулов</span><span>'+(1-state.dayoff_left)+' из 1</span></div>'+
     '<div class="kv"><span>Старт</span><span>'+state.started_on+'</span></div></div>'+
     '<div class="blk"><h3>Цель</h3><div class="kv"><span>Жим лёжа на раз</span><span>110 кг</span></div>'+
+    '<div class="kv"><span>Лучший жим</span><span>'+(state.bench_max||78)+' кг</span></div>'+
     '<div class="kv"><span>Контрольные дни</span><span>28 · 56 · 84 · 100</span></div></div>';
   const notes=Object.keys(logs).map(Number).filter(i=>logs[String(i)].note).sort((a,b)=>b-a);
   if(notes.length){

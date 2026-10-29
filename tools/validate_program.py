@@ -127,8 +127,12 @@ def check_titles(days: dict, errors: list[str]) -> None:
 
 BICEPS = {"incline_curl", "hammer_curl", "cable_curl", "db_curl", "bb_curl",
           "preacher_curl", "concentration_curl", "reverse_curl"}
-TRICEPS = {"db_overhead_extension", "rope_overhead_extension", "rope_pushdown",
-           "tricep_pushdown", "close_grip_bench"}
+TRICEPS = {"rope_pushdown", "tricep_pushdown", "push_up_close", "close_grip_bench",
+           "db_overhead_extension", "rope_overhead_extension"}
+# Движения, от которых владелец отказался. В прошедших днях они остаются —
+# это история, её не переписывают, — а в программе с указанного дня их быть
+# не должно: упражнение, которое он не делает, держало бы день незакрытым.
+REFUSED = {"db_overhead_extension": 29, "rope_overhead_extension": 29}
 SETS_RE = re.compile(r"^\s*(\d+)\s*×")
 MAIN_MOVES = {"bb_bench_press", "back_squat", "rdl_bb", "close_grip_bench",
               "leg_press", "hack_squat", "lat_pulldown_neutral", "seated_row"}
@@ -157,6 +161,16 @@ def check_arm_volume(days: dict, errors: list[str]) -> None:
                 errors.append(f"days {start}-{start + 6}: {n} {name} sets, outside the 10-18 corridor")
 
 
+def check_refused(days: dict, errors: list[str]) -> None:
+    for key in sorted(days, key=int):
+        for part in ("payload", "variant"):
+            for b in days[key][part].get("blocks", []):
+                for item in b["items"]:
+                    since = REFUSED.get(item["movement"])
+                    if since and int(key) >= since:
+                        errors.append(f"day {key} {part}: {item['movement']} — он это не делает")
+
+
 def check_bonus_blocks(days: dict, errors: list[str]) -> None:
     """Бонусный блок не держит день, поэтому главное движение в нём — потеря работы."""
     for key in sorted(days, key=int):
@@ -182,6 +196,7 @@ def validate(data: dict) -> list[str]:
     check_grip_streak(days, errors)
     check_titles(days, errors)
     check_arm_volume(days, errors)
+    check_refused(days, errors)
     check_bonus_blocks(days, errors)
     return errors
 

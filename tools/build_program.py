@@ -165,7 +165,8 @@ def pick(seq: list, i: int):
 # finish, a minute is a timer you can coast through.
 BIKE_KM = {3: 1, 5: 1.5, 6: 2}          # warm-up ride, by the minutes it replaces
 WALK_KM = {1: 3, 2: 3.5, 3: 4, 4: 4}    # brisk walk on the light day, by block
-RECOVERY_KM = {1: 5, 2: 7, 3: 7, 4: 7}  # easy spin on the recovery day, by block
+RECOVERY_WALK_KM = {1: 3, 2: 4, 3: 4, 4: 4}  # the rest day is a walk, nothing else
+RECOVERY_PACE = "спокойный темп — это восстановление, а не тренировка"
 WALK_PACE = "бодрый темп, 9–10 минут на километр — дышишь, но можешь говорить"
 # Running opens up because the knee is healthy (owner confirmed on day 6). It
 # grows from walk/run intervals to a continuous 3 km, by light-day number.
@@ -301,6 +302,7 @@ ARM_NOTES = {
     "rope_pushdown": "локти у корпуса и на месте, внизу разводи канат в стороны",
     "tricep_pushdown": "обратный хват, локти прижаты — акцент на внутренний пучок",
     "push_up_close": "кисти под грудью, локти вдоль корпуса — это трицепс, а не грудь",
+    "reverse_curl": "обратный хват: брахиорадиалис и предплечье, вес здесь не нужен",
 }
 # Двойная прогрессия внутри блока: повторы вверх, потом вес, четвёртая неделя легче.
 ARM_SETS = ["4 × 10", "4 × 12", "4 × 10", "3 × 12"]
@@ -311,11 +313,13 @@ ARM_START = {  # рабочий вес первой недели блока, +2.
     "rope_pushdown": {1: 15, 2: 20, 3: 22.5, 4: 25},
     "tricep_pushdown": {1: 15, 2: 20, 3: 22.5, 4: 25},
 }
-# Воскресный пампинг: лёгкий объём, брахиорадиалис и предплечья. Восстановлению
-# не мешает, а предплечье и обратный хват — это видимая толщина руки.
-ARM_PUMP = {"db_curl": {1: 7.5, 2: 10, 3: 10, 4: 12.5},
-            "rope_pushdown": {1: 12.5, 2: 15, 3: 17.5, 4: 17.5},
-            "wrist_curl": {1: 5, 2: 5, 3: 7.5, 4: 7.5}}
+# Обратные сгибания переехали сюда с воскресенья (29.10: день отдыха — только
+# прогулка, он не успевает восстанавливаться). Третьим движением стоят в день
+# объёмного жима, где не тянешь и хват свежий: это брахиорадиалис и предплечье,
+# то есть видимая толщина руки. Так недельный объём бицепса остаётся в коридоре
+# и без пампинг-дня.
+ARM_THIRD = {"bench_volume": "reverse_curl"}
+ARM_THIRD_SETS = ["3 × 12", "3 × 15", "3 × 12", "2 × 15"]
 
 
 def arm_text(move: str, block: int, i: int) -> str:
@@ -331,17 +335,12 @@ def arm_block(dtype: str, block: int, i: int) -> dict:
     pair = ARM_PAIR[dtype]
     step = "отжимания: добрал все повторы — в следующий раз подход длиннее" \
         if pair[1] in BODYWEIGHT_ARM else STEP_UP
-    return blk("Суперсет · руки", [it(m, arm_text(m, block, i), ARM_NOTES[m]) for m in pair],
-               "чередуй подходы, отдых 60 секунд · " + step)
+    moves = [it(m, arm_text(m, block, i), ARM_NOTES[m]) for m in pair]
+    third = ARM_THIRD.get(dtype)
+    if third:
+        moves.append(it(third, f"{ARM_THIRD_SETS[min(i, 3)]} · гриф 20 кг", ARM_NOTES[third]))
+    return blk("Суперсет · руки", moves, "чередуй подходы, отдых 60 секунд · " + step)
 
-
-def arm_pump_block(block: int) -> dict:
-    return blk("Руки и предплечья", [
-        it("db_curl", f"2 × 15 · {kg(ARM_PUMP['db_curl'][block])} кг в руке", "легко, на кровь — не в отказ"),
-        it("rope_pushdown", f"2 × 15 · {kg(ARM_PUMP['rope_pushdown'][block])} кг"),
-        it("reverse_curl", "2 × 15 · гриф 20 кг", "обратный хват: брахиорадиалис и предплечье, вес здесь не нужен"),
-        it("wrist_curl", f"2 × 15 · {kg(ARM_PUMP['wrist_curl'][block])} кг в руке", "предплечье на бедре, двигаются только кисти"),
-    ], "объём без усталости: лёгкий день — лучшее место для рук и предплечий")
 
 LEGS_MAIN = {
     1: ("goblet_squat", ["3 × 10 · 17.5 кг", "3 × 10 · 20 кг", "3 × 12 · 20 кг", "4 × 10 · 20 кг"], "таз ниже колена, спина нейтральная"),
@@ -635,20 +634,20 @@ def light_day(d: int, block: int, n: int, walk: bool) -> dict:
         minutes = int(km * 10)
         cardio, sub = [it("walk", f"{kg(km)} км", WALK_PACE)], f"Ходьба {kg(km)} км и подвижность."
     else:
-        km = RECOVERY_KM[block]
-        minutes = int(km * 3)
-        cardio = [it("bike_erg", f"{kg(km)} км", "пульс 110–125, лёгкий темп")]
-        sub = f"Восстановление. Вело {kg(km)} км."
+        km = RECOVERY_WALK_KM[block]
     if walk:   # беговой день: кардио и всё, подвижность уехала на воскресенье
         return {"subtitle": sub, "minutes": minutes + 5, "rules": rules(d, False),
                 "blocks": [blk("Кардио", cardio, cardio_note)]}
+    # День отдыха — только прогулка (29.10: не успевает восстанавливаться). Подвижность
+    # и корпус остались, но в бонусном блоке: спина с протрузией их любит, а день
+    # закрывается и без них.
     plank_s = {1: 20, 2: 25, 3: 30, 4: 30}[block]
-    core = blk("Корпус · 5 минут", [it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе"),
-                                    it("side_plank", f"2 × {plank_s} секунд на сторону")],
-               "стабилизация спины, каждый лёгкий день")
-    return {"subtitle": sub + " Руки и предплечья.", "minutes": minutes + 20, "rules": rules(d, False),
-            "blocks": [blk("Кардио", cardio, cardio_note), arm_pump_block(block),
-                       blk("Подвижность", mob_items, "по 60 секунд, где не указаны повторы"), core]}
+    core = it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе") if n % 2 == 0 \
+        else it("side_plank", f"2 × {plank_s} секунд на сторону", "таз не провисает")
+    return {"subtitle": f"Отдых. Прогулка {kg(km)} км.", "minutes": int(km * 11), "rules": rules(d, False),
+            "blocks": [blk("Прогулка", [it("walk", f"{kg(km)} км", RECOVERY_PACE)]),
+                       blk("Заминка · подвижность и корпус", mob_items[:2] + [core],
+                           "только если тело просит — день закрывается и без этого")]}
 
 
 def control_blocks() -> list[dict]:

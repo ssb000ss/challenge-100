@@ -164,6 +164,8 @@ def pick(seq: list, i: int):
 # Cardio is prescribed in distance, not minutes: a kilometre is a task you can
 # finish, a minute is a timer you can coast through.
 BIKE_KM = {3: 1, 5: 1.5, 6: 2}          # warm-up ride, by the minutes it replaces
+# day 5 log: landmine done with a 10 kg plate where 5 was prescribed
+LANDMINE = {1: 15, 2: 20, 3: 25, 4: 30}
 WALK_KM = {1: 3, 2: 3.5, 3: 4, 4: 4}    # brisk walk on the light day, by block
 RECOVERY_WALK_KM = {1: 3, 2: 4, 3: 4, 4: 4}  # the rest day is a walk, nothing else
 RECOVERY_PACE = "спокойный темп — это восстановление, а не тренировка"
@@ -432,7 +434,7 @@ def finisher_block(block: int) -> dict:
 
 # ---------- day builders ----------
 
-def bench_heavy(d: int, block: int, i: int) -> dict:
+def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
     p = BH[block][i]
     deload = "Разгрузка" in p["sub"]
     sets = " + ".join(x for x in (p.get("top"), p["main"], p.get("back")) if x)
@@ -457,6 +459,10 @@ def bench_heavy(d: int, block: int, i: int) -> dict:
         blocks += [
             blk("Суперсет · жим + тяга", [items[1], it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")],
                 "чередуй подходы, отдых 60 секунд"),
+            # Ландмайн переехал сюда с объёмного дня 30.10: там выходило 27 рабочих
+            # подходов за 45 минут, здесь — 17. Движение то же, день разгружен.
+            blk("Плечи", [it("landmine_shoulder_press", f"3 × 10 на руку · блин {LANDMINE[block]} кг",
+                             "жим под углом — плечу безопаснее, чем над головой")]),
             blk("Суперсет · защита плеча", [
                 it("face_pull", f"3 × 15 · {kg(face)} кг", "без рывка корпусом; тянешь рывком — сбрось вес"),
                 it("band_external_rotation", f"2 × 15 · резина {ER_BAND[block]}")],
@@ -472,18 +478,17 @@ def bench_heavy(d: int, block: int, i: int) -> dict:
 
 def bench_volume(d: int, block: int, i: int, n: int) -> dict:
     ramp, main = BV[block][i]
-    # day 5 log: landmine done with a 10 kg plate where 5 was prescribed
-    landmine = pick([10, 15, 15, 20, 20, 25, 25, 25, 30, 30, 30, 30], n)
     row = pick([40, 45, 45, 50, 50, 55, 55, 60, 60, 65, 65, 70], n)
     face = {1: 25, 2: 27.5, 3: 30, 4: 30}[block]
     sets, weight = main.split(", ")
+    # Подсобная тяга уступает место главному движению: в неделях, где жим идёт
+    # пятью-шестью подходами, день иначе вылезает за 24 рабочих подхода.
+    row_sets = 3 if int(sets.split("×")[0]) <= 4 else 2
     blocks = [
         blk("Разминка", warmup(5)),
-        blk("Основной блок", [it("bb_bench_press", main, f"разминка: {ramp} · темп: 2 секунды вниз, мощно вверх"),
-                              it("landmine_shoulder_press", f"3 × 10 на руку · блин {landmine} кг",
-                                 "жим под углом — плечу безопаснее, чем над головой")],
+        blk("Основной блок", [it("bb_bench_press", main, f"разминка: {ramp} · темп: 2 секунды вниз, мощно вверх")],
             "отдых 90 секунд"),
-        blk("Спина", [it("chest_supported_row", f"4 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")]),
+        blk("Спина", [it("chest_supported_row", f"{row_sets} × 12 · {kg(row)} кг", "упор грудью — спина разгружена")]),
         arm_block("bench_volume", block, i),
         shoulder_block(face, block, None),
         blk("Финишер · 5 минут", [it("air_bike", MINI_FINISHER[block])], "интервалы"),
@@ -719,7 +724,7 @@ def build_payload(d: int, dtype: str, block: int, i: int, n: int) -> dict:
     taper = d >= TAPER_FROM
     match dtype:
         case "bench_heavy":
-            return bench_heavy(d, block, i)
+            return bench_heavy(d, block, i, n)
         case "bench_volume":
             return bench_volume(d, block, i, n)
         case "pull":
@@ -779,12 +784,25 @@ def title_for(d: int, dtype: str) -> str:
 
 def retype_days(days: dict, keep: set[int]) -> None:
     """Weekly frame from day 16 on: bench twice, legs twice, one run day, one
-    recovery day. Pool and the short EMOM day are gone — the pool preceded the
-    illness and the EMOM day was too light to earn its slot."""
+    rest day. Pool and the short EMOM day are gone — the pool preceded the
+    illness and the EMOM day was too light to earn its slot.
+
+    A control day used to drop into the frame without moving it: it took the
+    rest day's slot and the next day went on as written. On 30.10 that put
+    heavy bench the morning after a one-rep max and left days 25-30 as six
+    hard days in a row. Now a control day gets a walk on both sides — fresh
+    for the test, nothing heavy after it — and the frame resumes where it
+    stopped instead of counting calendar days."""
+    cursor = 1  # day 16 has always been the squat day; keep history aligned
     for d in range(16, 101):
-        if d in keep:
-            continue
-        days[str(d)]["day_type"] = "test" if d in TEST_DAYS else WEEK[(d - 15) % 7]
+        if d in TEST_DAYS:
+            dtype = "test"
+        elif d - 1 in TEST_DAYS or d + 1 in TEST_DAYS:
+            dtype = "light2"
+        else:
+            dtype, cursor = WEEK[cursor % 7], cursor + 1
+        if d not in keep:
+            days[str(d)]["day_type"] = dtype
 
 
 # Блоки, которые не держат день: их видно, их можно отметить, но заминка и
@@ -804,6 +822,9 @@ def mark_bonus(days: dict) -> None:
                     b.pop("optional", None)
 
 
+REBUILT_TODAY = {29}
+
+
 def frozen_days(data: dict) -> set[int]:
     """История неприкосновенна. logs хранят индексы отмеченных пунктов: если
     перестроить прошедший день, галочки начнут указывать на другие упражнения.
@@ -813,7 +834,12 @@ def frozen_days(data: dict) -> set[int]:
     paused = sum((date.fromisoformat(p["to"]) - date.fromisoformat(p["from"])).days + 1
                  for p in data["state"].get("pauses", []))
     current = min(100, max(1, (date.today() - start).days - paused + 1))
-    return set(range(1, current + 1))
+    frozen = set(range(1, current + 1))
+    # Разовое исключение: день 29 перестроен в тот же день, 30.10, по его просьбе —
+    # тренировка ещё не начата, а в дне стоял второй жим подряд после теста.
+    # Снимается только пока этот день и есть сегодняшний, иначе правка завтра
+    # сдвинула бы его галочки.
+    return frozen - REBUILT_TODAY if current in REBUILT_TODAY else frozen
 
 
 def build(data: dict) -> dict:

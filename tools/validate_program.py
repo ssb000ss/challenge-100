@@ -134,6 +134,10 @@ TRICEPS = {"rope_pushdown", "tricep_pushdown", "push_up_close", "close_grip_benc
 # не должно: упражнение, которое он не делает, держало бы день незакрытым.
 REFUSED = {"db_overhead_extension": 29, "rope_overhead_extension": 29}
 SETS_RE = re.compile(r"^\s*(\d+)\s*×")
+TEST_DAYS = {28, 56, 84, 100}
+HARD_TYPES = {"bench_heavy", "bench_volume", "legs", "legs_b", "pull", "test"}
+PRESSES = {"bb_bench_press", "close_grip_bench"}
+MAX_WORK_SETS = 24  # рабочих подходов в дне: больше не влезает в обеденные 45 минут
 MAIN_MOVES = {"bb_bench_press", "back_squat", "rdl_bb", "close_grip_bench",
               "leg_press", "hack_squat", "lat_pulldown_neutral", "seated_row"}
 
@@ -141,11 +145,14 @@ MAIN_MOVES = {"bb_bench_press", "back_squat", "rdl_bb", "close_grip_bench",
 def check_arm_volume(days: dict, errors: list[str]) -> None:
     """Руки — заявленный приоритет: 10–18 рабочих подходов в неделю на бицепс и
     на трицепс. Ниже — не вырастут, выше — не восстановятся при двух днях жима.
-    Контрольные и разгрузочные недели считаются отдельно и не проверяются."""
+    Контрольные и разгрузочные недели считаются отдельно и не проверяются, как и
+    неделя рядом с контрольным днём: там по два дня отдыха, и это сделано нарочно."""
     for start in range(29, 95, 7):
-        week = [days[str(i)] for i in range(start, start + 7)]
-        if any(d["day_type"] == "test" or "разгрузка" in d["title"] for d in week):
+        week = list(range(start, start + 7))
+        if any(days[str(i)]["day_type"] == "test" or "разгрузка" in days[str(i)]["title"]
+               or i - 1 in TEST_DAYS or i + 1 in TEST_DAYS for i in week):
             continue
+        week = [days[str(i)] for i in week]
         counts = {"biceps": 0, "triceps": 0}
         for day in week:
             for b in day["payload"]["blocks"]:
@@ -159,6 +166,42 @@ def check_arm_volume(days: dict, errors: list[str]) -> None:
         for name, n in sorted(counts.items()):
             if not 10 <= n <= 18:
                 errors.append(f"days {start}-{start + 6}: {n} {name} sets, outside the 10-18 corridor")
+
+
+def work_sets(day: dict) -> int:
+    """Рабочие подходы: без разминки и без бонусных блоков."""
+    total = 0
+    for b in day["payload"]["blocks"]:
+        if b.get("optional") or b["label"] == "Разминка":
+            continue
+        for item in b["items"]:
+            m = SETS_RE.match(item["text"])
+            total += int(m.group(1)) if m else 0
+    return total
+
+
+def check_recovery(days: dict, errors: list[str]) -> None:
+    """Он сказал 30.10: не успевает восстанавливаться, и жим шёл два дня подряд.
+    Три правила, которые это держат: жим не повторяется назавтра, тяжёлых дней
+    подряд не больше трёх, и день не выходит за 45 минут по объёму."""
+    def presses(n: int) -> bool:
+        return any(not b.get("optional") and any(i["movement"] in PRESSES for i in b["items"])
+                   for b in days[str(n)]["payload"]["blocks"])
+
+    run = 0
+    for n in range(1, 101):
+        day = days[str(n)]
+        if n < 100 and presses(n) and presses(n + 1):
+            errors.append(f"days {n}-{n + 1}: bench two days running")
+        run = run + 1 if day["day_type"] in HARD_TYPES else 0
+        if run > 3 and n >= 29:   # дни до 29 — история, её не перестраивают
+            errors.append(f"day {n}: {run} hard days in a row")
+        if n >= 29 and (w := work_sets(day)) > MAX_WORK_SETS:
+            errors.append(f"day {n} ({day['day_type']}): {w} work sets, over {MAX_WORK_SETS}")
+    for t in sorted(TEST_DAYS):
+        for side in (t - 1, t + 1):
+            if 29 <= side <= 100 and days[str(side)]["day_type"] in HARD_TYPES:
+                errors.append(f"day {side}: hard day next to control day {t}")
 
 
 def check_refused(days: dict, errors: list[str]) -> None:
@@ -196,6 +239,7 @@ def validate(data: dict) -> list[str]:
     check_grip_streak(days, errors)
     check_titles(days, errors)
     check_arm_volume(days, errors)
+    check_recovery(days, errors)
     check_refused(days, errors)
     check_bonus_blocks(days, errors)
     return errors

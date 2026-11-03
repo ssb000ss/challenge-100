@@ -71,6 +71,9 @@ h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;
   font-size:15px;color:var(--brass);margin:0 0 3px;font-weight:500}
 .blk h3 .bns{font-family:var(--mono);font-size:10px;text-transform:none;letter-spacing:0;
   color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:7px;vertical-align:2px}
+pre.band{font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--text);
+  white-space:pre-wrap;word-break:break-word;margin:0 0 10px;padding:10px;
+  background:var(--bg);border:1px solid var(--line);border-radius:4px;overflow-x:auto}
 .blk .n{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:10px}
 .it{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
 .it:last-child{border-bottom:none}
@@ -249,6 +252,9 @@ async function boot(){
   // a bench record is a fact too: the shipped number wins when it is higher
   const shippedMax=(base.state && base.state.bench_max) || 0;
   if(shippedMax > (state.bench_max||0)) state={...state, bench_max: shippedMax};
+  // насколько он ушёл вперёд по программе — параметр плана, не рекорд: берём как есть
+  const shippedOffset=(base.state && base.state.day_offset) || 0;
+  if(shippedOffset !== (state.day_offset||0)) state={...state, day_offset: shippedOffset};
 
   if(!state || !state.started_on)
     state = {started_on:"2026-09-21", swaps_left:3, dayoff_left:1, status:"active", bench_max:78};
@@ -287,7 +293,8 @@ function pausedDays(){
 // текущий день = по календарю: день 1 — дата старта. Round() гасит сдвиг перехода на летнее время
 function todayNum(){
   const diff=Math.round((localMidnight(new Date()) - parseLocalDate(state.started_on)) / DAY_MS) - pausedDays();
-  return Math.min(100, Math.max(1, diff+1));
+  // day_offset: он ушёл вперёд по программе — 01.11 отработал день отдыха
+  return Math.min(100, Math.max(1, diff+1+(state.day_offset||0)));
 }
 // бонусные блоки (заминка, хват, финишер) видны и отмечаются, но день не держат:
 // сделанная работа не должна зависеть от пятиминутки растяжки
@@ -416,8 +423,32 @@ function dayHtml(plan, use, done){
     });
     h+='</div>';
   });
+  h+=bandHtml(use);
   if(use.rules) h+='<div class="rules">'+use.rules+'</div>';
   return h;
+}
+
+const mmss = s => Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+// Сценарий для фитнес-браслета: порядок, длительность подхода и отдых после него.
+// Он вбивает тренировку в Mi Band руками, а браслету нужны секунды, не «4 × 10».
+function bandHtml(use){
+  const rows=[]; let total=0;
+  (use.blocks||[]).forEach(b=>{
+    if(b.optional) return;
+    (b.items||[]).forEach(i=>{
+      if(i.movement==="rest_day" || !i.sets) return;
+      const m=moves[i.movement]||{};
+      const work = i.sec ? mmss(i.sec) : (i.reps+" повт");
+      rows.push(String(rows.length+1).padStart(2," ")+" · "+(m.name_ru||i.movement)+
+        " — "+i.sets+" × "+work+" · отдых "+mmss(i.rest||0));
+      total += i.dur||0;
+    });
+  });
+  if(!rows.length) return "";
+  return '<div class="blk"><h3>Для браслета</h3>'+
+    '<div class="n">Порядок, длительность подхода и отдых после него — как вбивать в Mi Band. Только обязательная работа.</div>'+
+    '<pre class="band">'+esc(rows.join("\n"))+'</pre>'+
+    '<div class="kv"><span>Итого работы</span><span>'+Math.round(total/60)+' минут</span></div></div>';
 }
 
 function renderToday(d){
@@ -720,7 +751,8 @@ function parseImport(obj){
     .map(p=>({from:p.from, to:p.to, reason:String(p.reason||"Пауза").slice(0,60)})) : [];
   const cleanState={started_on:s.started_on, swaps_left:s.swaps_left, dayoff_left:s.dayoff_left,
     status: s.status==="failed" ? "failed" : "active",
-    bench_max: typeof s.bench_max==="number" ? s.bench_max : 78, goal:"bench_110", pauses};
+    bench_max: typeof s.bench_max==="number" ? s.bench_max : 78, goal:"bench_110", pauses,
+    day_offset: typeof s.day_offset==="number" ? s.day_offset : 0};
   return {state:cleanState, logs:cleanLogs};
 }
 

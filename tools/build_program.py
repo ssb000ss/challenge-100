@@ -23,6 +23,7 @@ Usage: python3 tools/build_program.py [path/to/data.json]
 from __future__ import annotations
 
 import json
+import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -59,6 +60,11 @@ def apply_re_entry(d: int, payload: dict) -> dict:
     return payload
 
 NEW_MOVES = {
+    "rest_day": {
+        "name_ru": "Отдых",
+        "cue": "Сегодня ничего. Еда, вода, сон — это и есть работа дня: мышцы растут не на тренировке, а между ними. Отметь галочкой и живи.",
+        "equipment": "—", "category": "recovery", "unit": "—",
+    },
     "band_external_rotation": {
         "name_ru": "Наружная ротация с резиной",
         "cue": "Резина закреплена на уровне локтя, локоть прижат к корпусу. Поворачивай предплечье наружу, 2 секунды обратно. Натяжение такое, чтобы последние повторы были заметны, но лёгкими.",
@@ -189,11 +195,16 @@ RUN_PACE = "разговорный темп: если дыхание рвётс�
 
 
 def bike(minutes: int, note: str | None = None) -> dict:
-    return it("bike_erg", f"{kg(BIKE_KM[minutes])} км", note)
+    # 03.11: у велотренажёра нет экрана — километры он не видит, просто крутит
+    # по таймеру. Разминка задаётся минутами, кардио-работа остаётся в дистанции.
+    return it("bike_erg", f"{minutes} минут", note)
+
+
+WARMUP_BIKE_MIN = 4   # разминка, а не кардио: дольше четырёх минут день не влезает в обед
 
 
 def warmup(minutes: int = 6, note: str | None = None) -> list[dict]:
-    return [bike(minutes, note), it("band_pull_apart", "2 × 15")]
+    return [bike(min(minutes, WARMUP_BIKE_MIN), note), it("band_pull_apart", "2 × 15")]
 
 
 def shoulder_block(face: float, block: int, row: float | None, sets: int = 3) -> dict:
@@ -341,7 +352,7 @@ def arm_block(dtype: str, block: int, i: int) -> dict:
     third = ARM_THIRD.get(dtype)
     if third:
         moves.append(it(third, f"{ARM_THIRD_SETS[min(i, 3)]} · гриф 20 кг", ARM_NOTES[third]))
-    return blk("Суперсет · руки", moves, "чередуй подходы, отдых 60 секунд · " + step)
+    return blk("Суперсет · руки", moves, "чередуй подходы, отдых 45 секунд · " + step)
 
 
 LEGS_MAIN = {
@@ -459,10 +470,14 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
         blocks += [
             blk("Суперсет · жим + тяга", [items[1], it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")],
                 "чередуй подходы, отдых 60 секунд"),
-            # Ландмайн переехал сюда с объёмного дня 30.10: там выходило 27 рабочих
-            # подходов за 45 минут, здесь — 17. Движение то же, день разгружен.
-            blk("Плечи", [it("landmine_shoulder_press", f"3 × 10 на руку · блин {LANDMINE[block]} кг",
-                             "жим под углом — плечу безопаснее, чем над головой")]),
+        ]
+        # Ландмайн переехал сюда с объёмного дня 30.10: там выходило 27 рабочих
+        # подходов за 45 минут, здесь — 17. Но если главный жим занимает больше
+        # шести подходов, день уже полон — тогда ландмайн уступает ему место.
+        if sum(int(x) for x in re.findall(r"(\d+)\s*×", sets)) <= 6:
+            blocks.append(blk("Плечи", [it("landmine_shoulder_press", f"3 × 10 на руку · блин {LANDMINE[block]} кг",
+                                           "жим под углом — плечу безопаснее, чем над головой")]))
+        blocks += [
             blk("Суперсет · защита плеча", [
                 it("face_pull", f"3 × 15 · {kg(face)} кг", "без рывка корпусом; тянешь рывком — сбрось вес"),
                 it("band_external_rotation", f"2 × 15 · резина {ER_BAND[block]}")],
@@ -572,11 +587,14 @@ def legs_squat(d: int, block: int, i: int, deload: bool, taper: bool, n: int) ->
 def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
     hip, rdl, lunge, curl, calf = LEGS_B[block][i]
     blocks = [
-        blk("Разминка", [bike(6), it("bird_dog", "2 × 8 на сторону")]),
+        blk("Разминка", [bike(WARMUP_BIKE_MIN), it("bird_dog", "2 × 8 на сторону")]),
         blk("Основной блок", [it("hip_thrust_machine", f"3 × 10 · {hip} кг", "пауза 1 секунда вверху"),
                               it("rdl_bb", rdl, "штанга по бёдрам, спина нейтральная, до середины голени"),
-                              it("reverse_lunge", f"3 × 8 на ногу · {kg(lunge)} кг в руке", "шаг назад — колену легче")]),
-        blk("Изоляция", [it("leg_curl", f"3 × 12 · {curl} кг"), it("calf_raise_standing", f"3 × 15 · {calf} кг")]),
+                              it("reverse_lunge", f"2 × 8 на ногу · {kg(lunge)} кг в руке", "шаг назад — колену легче")],
+            "отдых 90 секунд"),
+        blk("Суперсет · изоляция", [it("leg_curl", f"3 × 12 · {curl} кг"),
+                                    it("calf_raise_standing", f"2 × 15 · {calf} кг")],
+            "чередуй подходы, отдых 60 секунд"),
         arm_block("legs_b", block, i),
         leg_grip_block(block, deload),
         cooldown("hip_flexor_stretch"),
@@ -649,10 +667,12 @@ def light_day(d: int, block: int, n: int, walk: bool) -> dict:
     plank_s = {1: 20, 2: 25, 3: 30, 4: 30}[block]
     core = it("bird_dog", "2 × 6 на сторону", "задержка 8–10 секунд в каждом повторе") if n % 2 == 0 \
         else it("side_plank", f"2 × {plank_s} секунд на сторону", "таз не провисает")
-    return {"subtitle": f"Отдых. Прогулка {kg(km)} км.", "minutes": int(km * 11), "rules": rules(d, False),
-            "blocks": [blk("Прогулка", [it("walk", f"{kg(km)} км", RECOVERY_PACE)]),
-                       blk("Заминка · подвижность и корпус", mob_items[:2] + [core],
-                           "только если тело просит — день закрывается и без этого")]}
+    return {"subtitle": "Отдых. Сегодня ничего.", "minutes": 0, "rules": rules(d, False),
+            "blocks": [blk("Отдых", [it("rest_day", "весь день",
+                                        "еда, вода, сон 7+ часов — это и есть работа дня")]),
+                       blk("Заминка · по желанию",
+                           [it("walk", f"{kg(km)} км", RECOVERY_PACE)] + mob_items[:2] + [core],
+                           "ничего из этого не обязательно — день закрывается одной галочкой выше")]}
 
 
 def control_blocks() -> list[dict]:
@@ -744,12 +764,20 @@ def build_payload(d: int, dtype: str, block: int, i: int, n: int) -> dict:
 
 
 def reschedule(data: dict) -> None:
-    """Shift scheduled_on by the pauses already recorded, so dates match reality."""
+    """Shift scheduled_on by the pauses already recorded, so dates match reality.
+
+    03.11: he got a day ahead of the calendar — on 01.11, a rest day, he did the
+    next day's session and kept going. state.day_offset says how many days ahead
+    he is; AHEAD_FROM says where it started, so the days he has already lived
+    keep their dates and only the rest move up."""
     start = date.fromisoformat(data["state"]["started_on"])
     pauses = [(date.fromisoformat(p["from"]), date.fromisoformat(p["to"])) for p in data["state"].get("pauses", [])]
+    ahead = int(data["state"].get("day_offset", 0))
     for d in range(1, 101):
         planned = start + timedelta(days=d - 1)
         shift = sum((to - frm).days + 1 for frm, to in pauses if planned >= frm)
+        if d >= AHEAD_FROM:
+            shift -= ahead
         data["days"][str(d)]["scheduled_on"] = (planned + timedelta(days=shift)).isoformat()
 
 
@@ -823,6 +851,7 @@ def mark_bonus(days: dict) -> None:
 
 
 REBUILT_TODAY = {29}
+AHEAD_FROM = 32   # с этого дня он идёт впереди календаря (см. reschedule)
 
 
 def frozen_days(data: dict) -> set[int]:
@@ -833,13 +862,140 @@ def frozen_days(data: dict) -> set[int]:
     start = date.fromisoformat(data["state"]["started_on"])
     paused = sum((date.fromisoformat(p["to"]) - date.fromisoformat(p["from"])).days + 1
                  for p in data["state"].get("pauses", []))
-    current = min(100, max(1, (date.today() - start).days - paused + 1))
+    ahead = int(data["state"].get("day_offset", 0))
+    current = min(100, max(1, (date.today() - start).days - paused + 1 + ahead))
     frozen = set(range(1, current + 1))
     # Разовое исключение: день 29 перестроен в тот же день, 30.10, по его просьбе —
     # тренировка ещё не начата, а в дне стоял второй жим подряд после теста.
     # Снимается только пока этот день и есть сегодняшний, иначе правка завтра
     # сдвинула бы его галочки.
     return frozen - REBUILT_TODAY if current in REBUILT_TODAY else frozen
+
+
+# ---------- тайминги для фитнес-браслета ----------
+# 03.11: он вбивает тренировку в Mi Band 10 руками — браслету нужны длительность
+# подхода и отдых после него, а не только «4 × 10». Поэтому каждый пункт несёт
+# sets, reps или sec, rest и dur (секунды на весь пункт), а minutes дня считается
+# от них. Раньше во всех днях стояло 45, и это была неправда: по факту выходило
+# и 30, и 50 минут.
+BLOCK_REST = {"Разминка": 20, "Основной блок": 120, "Подсобка": 60, "Спина": 60,
+              "Плечи": 60, "Изоляция": 60, "Корпус": 30, "Контроль формы": 90,
+              "Хват": 45, "Финишер": 45, "Заминка": 15, "Подвижность": 15,
+              "Прогулка": 0, "Отдых": 0, "Кардио": 0, "Тест жима": 240,
+              "Вода": 20, "Минимум": 45, "Лесенка": 45, "Круг": 45}
+PACE_SEC = {"walk": 600, "run": 330, "bike_erg": 180, "swim_crawl": 1800,
+            "swim_kick_board": 1500, "farmer_walk": 900}
+SET_UP = 10        # секунд сверх работы: подойти, лечь, снять штангу со стоек
+SEC_PER_REP = 3
+MAX_MINUTES = 45   # обеденное окно
+
+RE_REST_NOTE = re.compile(r"отдых\s+(\d+)(?:\s*[–-]\s*(\d+))?\s*(секунд|минут)")
+RE_FAST_SLOW = re.compile(r"(\d+)\s*×\s*(\d+)\s*секунд\s*быстро\s*/\s*(\d+)\s*секунд")
+RE_M_INTERVAL = re.compile(r"(\d+)\s*×\s*(\d+)\s*метров(?:\s*бег)?(?:\s*/\s*(\d+)\s*метров)?")
+RE_SETS_SEC = re.compile(r"(\d+)\s*×\s*(\d+)\s*секунд")
+RE_SEC_SETS = re.compile(r"(\d+)\s*секунд\s*×\s*(\d+)")
+RE_SETS_MAXSEC = re.compile(r"(\d+)\s*×\s*максимум\s*секунд")
+RE_SETS_REPS = re.compile(r"(\d+)\s*×\s*(\d+)")
+RE_MINUTES = re.compile(r"(\d+)\s*минут")
+RE_KM = re.compile(r"(\d+(?:[.,]\d+)?)\s*км")
+RE_METERS = re.compile(r"(\d+)\s*метров")
+RE_SETS_ONLY = re.compile(r"^\s*(\d+)\s*подход")
+RE_REPS_ONLY = re.compile(r"^\s*(\d+)\s*(?:повтор|на сторону)")
+RE_SIDE = re.compile(r"на (?:сторону|ногу|руку)")
+
+
+def block_rest(block: dict) -> int:
+    """Отдых берётся из примечания блока, если он там написан словами."""
+    m = RE_REST_NOTE.search(block.get("note") or "")
+    if m:
+        lo, hi, unit = int(m.group(1)), m.group(2), m.group(3)
+        value = (lo + int(hi)) / 2 if hi else lo
+        return int(value * (60 if unit == "минут" else 1))
+    head = block["label"].split(" · ")[0]
+    for key, rest in BLOCK_REST.items():
+        if head.startswith(key):
+            return rest
+    return 60
+
+
+def parse_work(text: str, movement: str) -> tuple[int, int, int, int | None, int]:
+    """(подходы, повторы, секунды работы, свой отдых, множитель сторон).
+
+    Повторы и секунды исключают друг друга: 0 означает «задано другим». Повторы
+    хранятся как в программе — «2 × 8 на ногу» это 8, а не 16; на сторону
+    умножается только время, иначе сценарий для браслета разойдётся с планом."""
+    if " + " in text:   # «1 × 1, 90 кг + 3 × 3, 90 кг» — одиночный и рабочие
+        parts = [parse_work(x, movement) for x in text.split(" + ")]
+        return (sum(p[0] for p in parts), max(p[1] for p in parts),
+                max(p[2] for p in parts), parts[0][3], max(p[4] for p in parts))
+    side = 2 if RE_SIDE.search(text) else 1
+    if m := RE_FAST_SLOW.search(text):
+        return int(m.group(1)), 0, int(m.group(2)), int(m.group(3)), 1
+    if m := RE_M_INTERVAL.search(text):
+        work = int(int(m.group(2)) / 1000 * PACE_SEC["run"])
+        rest = int(int(m.group(3)) / 1000 * PACE_SEC["walk"]) if m.group(3) else None
+        return int(m.group(1)), 0, work, rest, 1
+    if m := RE_SETS_SEC.search(text):
+        return int(m.group(1)), 0, int(m.group(2)), None, side
+    if m := RE_SEC_SETS.search(text):
+        return int(m.group(2)), 0, int(m.group(1)), None, side
+    if m := RE_SETS_MAXSEC.search(text):
+        return int(m.group(1)), 0, 45, None, 1
+    if "попытки" in text:
+        return 3, 1, 20, 300, 1
+    if m := RE_SETS_REPS.search(text):
+        return int(m.group(1)), int(m.group(2)), 0, None, side
+    if m := RE_MINUTES.search(text):
+        return 1, 0, int(m.group(1)) * 60, None, 1
+    if m := RE_KM.search(text):
+        km = float(m.group(1).replace(",", "."))
+        return 1, 0, int(km * PACE_SEC.get(movement, 600)), None, 1
+    if m := RE_METERS.search(text):
+        return 1, 0, int(int(m.group(1)) / 1000 * PACE_SEC.get(movement, 900)), None, 1
+    if m := RE_SETS_ONLY.match(text):
+        return int(m.group(1)), 0, 60, None, 1
+    if m := RE_REPS_ONLY.match(text):
+        return 1, int(m.group(1)), 0, None, side
+    if "максимум" in text:
+        return 1, 0, 60, None, 1
+    return 1, 0, 60, None, 1
+
+
+def add_timings(days: dict) -> None:
+    """Пишет тайминги в каждый пункт и считает минуты дня от них.
+
+    Суперсет считается чередованием, а не двумя блоками подряд: внутри него
+    отдых между движениями 10 секунд, полный отдых — после последнего. Иначе
+    день на бумаге выходит вдвое длиннее, чем в зале."""
+    for d in range(1, 101):
+        for part in ("payload", "variant"):
+            use = days[str(d)].get(part)
+            if not use:
+                continue
+            total = 0
+            for b in use.get("blocks", []):
+                rest = block_rest(b)
+                chain = b["label"].startswith("Суперсет") or \
+                    any(w in (b.get("note") or "") for w in ("чередуй", "круг"))
+                for pos, item in enumerate(b["items"]):
+                    if item["movement"] == "rest_day":
+                        continue
+                    sets, reps, sec, own, side = parse_work(item["text"], item["movement"])
+                    work = (sec if sec else max(5, reps * SEC_PER_REP)) * side + SET_UP
+                    last = pos == len(b["items"]) - 1
+                    pause = own if own is not None else (rest if last or not chain else 10)
+                    item["sets"] = sets
+                    item.pop("reps", None)
+                    item.pop("sec", None)
+                    if reps:
+                        item["reps"] = reps
+                    else:
+                        item["sec"] = sec
+                    item["rest"] = pause
+                    item["dur"] = sets * (work + pause)
+                    if not b.get("optional"):
+                        total += item["dur"]
+            use["minutes"] = -(-total // 60)   # вверх до минуты
 
 
 def build(data: dict) -> dict:
@@ -867,6 +1023,7 @@ def build(data: dict) -> dict:
         day["payload"] = apply_re_entry(d, build_payload(d, dtype, block, i, n))
     snap_kept_days(days)
     mark_bonus(days)
+    add_timings(days)
     return data
 
 

@@ -204,6 +204,34 @@ def check_recovery(days: dict, errors: list[str]) -> None:
                 errors.append(f"day {side}: hard day next to control day {t}")
 
 
+MAX_MINUTES = 45   # обеденное окно: день должен влезать в него по таймингам
+TIMED_FROM = 35    # дни до этого прожиты и заморожены, их тайминги не правим
+
+
+def check_timings(days: dict, errors: list[str]) -> None:
+    """Он вбивает день в фитнес-браслет руками, значит у каждого пункта должны
+    быть подходы, работа и отдых в секундах, а минуты дня — считаться от них,
+    а не стоять 45 у всех подряд."""
+    for n in range(TIMED_FROM, 101):
+        day = days[str(n)]
+        for b in day["payload"]["blocks"]:
+            for item in b["items"]:
+                if item["movement"] == "rest_day":
+                    continue
+                missing = [k for k in ("sets", "rest", "dur") if not isinstance(item.get(k), int)]
+                if missing:
+                    errors.append(f"day {n} {item['movement']}: no {', '.join(missing)}")
+                elif not (item.get("reps") or item.get("sec")):
+                    errors.append(f"day {n} {item['movement']}: neither reps nor seconds")
+        planned = sum(i["dur"] for b in day["payload"]["blocks"] if not b.get("optional")
+                      for i in b["items"] if isinstance(i.get("dur"), int))
+        minutes = day["payload"].get("minutes", 0)
+        if minutes != -(-planned // 60):
+            errors.append(f"day {n}: minutes {minutes} does not match {planned} s of timings")
+        if minutes > MAX_MINUTES:
+            errors.append(f"day {n} ({day['day_type']}): {minutes} min, over the {MAX_MINUTES} min window")
+
+
 def check_refused(days: dict, errors: list[str]) -> None:
     for key in sorted(days, key=int):
         for part in ("payload", "variant"):
@@ -240,6 +268,7 @@ def validate(data: dict) -> list[str]:
     check_titles(days, errors)
     check_arm_volume(days, errors)
     check_recovery(days, errors)
+    check_timings(days, errors)
     check_refused(days, errors)
     check_bonus_blocks(days, errors)
     return errors

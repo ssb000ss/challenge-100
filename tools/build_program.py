@@ -825,7 +825,7 @@ def retype_days(days: dict, keep: set[int]) -> None:
     for d in range(16, 101):
         if d in TEST_DAYS:
             dtype = "test"
-        elif d - 1 in TEST_DAYS or d + 1 in TEST_DAYS:
+        elif d - 1 in TEST_DAYS or d + 1 in TEST_DAYS or d in EXTRA_REST:
             dtype = "light2"
         else:
             dtype, cursor = WEEK[cursor % 7], cursor + 1
@@ -850,8 +850,13 @@ def mark_bonus(days: dict) -> None:
                     b.pop("optional", None)
 
 
-REBUILT_TODAY = {29}
+# Дни, пересобранные в тот же день по его просьбе, когда тренировка не начата.
+REBUILT_TODAY = {29, 34}
 AHEAD_FROM = 32   # с этого дня он идёт впереди календаря (см. reschedule)
+# Дни, которые он забрал на отдых вне плана (03.11: четвёртый день подряд в зале,
+# предыдущий день отдыха съел жим). Тип принудительно light2, курсор по WEEK не
+# двигается — тренировка не пропадает, а уезжает на следующий день.
+EXTRA_REST = {34}
 
 
 def frozen_days(data: dict) -> set[int]:
@@ -865,11 +870,10 @@ def frozen_days(data: dict) -> set[int]:
     ahead = int(data["state"].get("day_offset", 0))
     current = min(100, max(1, (date.today() - start).days - paused + 1 + ahead))
     frozen = set(range(1, current + 1))
-    # Разовое исключение: день 29 перестроен в тот же день, 30.10, по его просьбе —
-    # тренировка ещё не начата, а в дне стоял второй жим подряд после теста.
-    # Снимается только пока этот день и есть сегодняшний, иначе правка завтра
-    # сдвинула бы его галочки.
-    return frozen - REBUILT_TODAY if current in REBUILT_TODAY else frozen
+    # Разовые исключения (REBUILT_TODAY): день перестроен в тот же день, пока
+    # тренировка не начата. Снимается только сам сегодняшний день и только пока
+    # он сегодняшний, иначе завтрашняя правка сдвинула бы его галочки.
+    return frozen - {current} if current in REBUILT_TODAY else frozen
 
 
 # ---------- тайминги для фитнес-браслета ----------

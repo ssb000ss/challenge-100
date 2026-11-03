@@ -413,10 +413,10 @@ def core_item(n: int, block: int, exclude: set[str] = frozenset()) -> dict:
     options = [m for m in CORE if m not in exclude]
     move, step = options[n % len(options)], CORE_STEP[block]
     text = {
-        "dead_bug": "3 × 8 на сторону",
-        "bird_dog": "3 × 8 на сторону",
+        "dead_bug": "2 × 6 на сторону",
+        "bird_dog": "2 × 6 на сторону",
         "side_plank": f"3 × {30 + 10 * step} секунд на сторону",
-        "pallof_press": f"3 × 12 на сторону · {kg(10 + 2.5 * step)} кг",
+        "pallof_press": f"3 × 10 на сторону · {kg(10 + 2.5 * step)} кг",
     }[move]
     return it(move, text)
 
@@ -587,7 +587,7 @@ def legs_squat(d: int, block: int, i: int, deload: bool, taper: bool, n: int) ->
 def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
     hip, rdl, lunge, curl, calf = LEGS_B[block][i]
     blocks = [
-        blk("Разминка", [bike(WARMUP_BIKE_MIN), it("bird_dog", "2 × 8 на сторону")]),
+        blk("Разминка", [bike(WARMUP_BIKE_MIN), it("bird_dog", "1 × 8 на сторону")]),
         blk("Основной блок", [it("hip_thrust_machine", f"3 × 10 · {hip} кг", "пауза 1 секунда вверху"),
                               it("rdl_bb", rdl, "штанга по бёдрам, спина нейтральная, до середины голени"),
                               it("reverse_lunge", f"2 × 8 на ногу · {kg(lunge)} кг в руке", "шаг назад — колену легче")],
@@ -887,6 +887,10 @@ PACE_SEC = {"walk": 600, "run": 330, "bike_erg": 180, "swim_crawl": 1800,
             "swim_kick_board": 1500, "farmer_walk": 900}
 SET_UP = 10        # секунд сверх работы: подойти, лечь, снять штангу со стоек
 SEC_PER_REP = 3
+# 03.11, его слова: «жук» делается по секундомеру — каждые 10 секунд меняешь
+# положение, и так 8 раз. Для таких движений повтор это задержка, а не рывок,
+# поэтому работа считается секундами и в сценарий для браслета идёт таймером.
+HOLD_PER_REP = {"bird_dog": 10, "dead_bug": 10, "pallof_press": 5, "cat_camel": 4}
 MAX_MINUTES = 45   # обеденное окно
 
 RE_REST_NOTE = re.compile(r"отдых\s+(\d+)(?:\s*[–-]\s*(\d+))?\s*(секунд|минут)")
@@ -981,6 +985,8 @@ def add_timings(days: dict) -> None:
                     if item["movement"] == "rest_day":
                         continue
                     sets, reps, sec, own, side = parse_work(item["text"], item["movement"])
+                    if reps and (hold := HOLD_PER_REP.get(item["movement"])):
+                        sec, reps, side = reps * hold * side, 0, 1
                     work = (sec if sec else max(5, reps * SEC_PER_REP)) * side + SET_UP
                     last = pos == len(b["items"]) - 1
                     pause = own if own is not None else (rest if last or not chain else 10)

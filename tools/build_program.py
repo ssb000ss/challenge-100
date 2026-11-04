@@ -284,7 +284,7 @@ BV = {   # объёмный жим раз в неделю: 4 входа на б�
     # на 80 кг, интенсивность — на тяжёлом дне.
     3: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "4 × 6, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 6, 80 кг"),
         ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "6 × 5, 80 кг"), ("20 кг × 10 · 50 кг × 5", "3 × 6, 70 кг")],
-    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 4, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2 · 80 кг × 1", "5 × 4, 90 кг"),
+    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 4, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2 · 80 кг × 1", "4 × 3, 90 кг"),
         ("20 кг × 10 · 50 кг × 5", "3 × 5, 80 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 5, 70 кг")],
 }
 # Жим узким хватом — второе движение тяжёлого дня во всех силовых блоках: это
@@ -339,7 +339,8 @@ DELT = {1: 5, 2: 5, 3: 7.5, 4: 7.5}
 # было с чем сравнивать неделя к неделе.
 ARM_PAIR = {"pull": ("incline_curl", "rope_pushdown"),
             "bench_volume": ("cable_curl", "tricep_pushdown"),
-            "legs_b": ("hammer_curl", "push_up_close")}
+            "legs_b": ("hammer_curl", "push_up_close"),
+            "legs": ("hammer_curl", "push_up_close")}
 PER_HAND = {"incline_curl", "hammer_curl", "db_curl"}
 BODYWEIGHT_ARM = {"push_up_close": ["4 × 12", "4 × 15", "4 × 12", "3 × 15"]}
 ARM_NOTES = {
@@ -552,6 +553,7 @@ def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool) -> dict:
         blk("Основной блок", [it(v_move, pick(v_list, i), COUNTERWEIGHT_DOWN if "assisted" in v_move else STEP_UP),
                               it(h_move, pick(h_list, i))], "отдых 90 секунд"),
         blk("Плечи", [it(delt, f"3 × 15 · {kg(delt_kg)} кг в руке", "до уровня плеч, не выше")]),
+        knee_block(block, short=True),
         arm_block("pull", block, i),
     ]
     if w % 2 == 0:
@@ -559,7 +561,7 @@ def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool) -> dict:
     elif not taper and not deload:
         blocks.append(finisher_block(block))
     blocks.append(cooldown("lat_stretch"))
-    return {"subtitle": "Спина, задняя дельта, руки.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
+    return {"subtitle": "Спина, задняя дельта, колено, руки.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
 # Присед со штангой: двойная прогрессия (5 × 5 → 5 × 6 → +10 кг). Осевая нагрузка с дня 22,
@@ -610,11 +612,12 @@ def legs_squat(d: int, block: int, i: int, deload: bool, taper: bool, n: int) ->
         blk("Подсобка · ноги и кор", [it(h_move, f"{h_sets} · {pick(h_list, i)} кг", "движение из таза, спина нейтральная"),
                                       it(u_move, f"{pick(u_list, i)} кг в руке"),
                                       core_item(n, block)], "25–50 повторов на категорию, отдых 60 секунд"),
+        arm_block("legs", block, i),
     ]
     if not taper and not deload:
         blocks.append(leg_grip_block(block, deload))
     blocks.append(cooldown("hip_flexor_stretch"))
-    return {"subtitle": f"Присед {main}.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
+    return {"subtitle": f"Присед {main}. Колено, руки.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
 def legs_b(d: int, block: int, i: int, deload: bool) -> dict:
@@ -681,6 +684,18 @@ KNEE = {1: (40, 20, "3 × 10 на ногу", "резина лёгкая"),
         2: (45, 25, "3 × 10 на ногу", "резина лёгкая"),
         3: (50, 30, "3 × 12 на ногу", "резина средняя"),
         4: (60, 35, "3 × 12 на ногу · 5 кг в руке", "резина средняя")}
+
+
+def knee_block(block: int, short: bool) -> dict:
+    """Колено внутри дня, а не отдельным днём: изометрия и дожим в разгибание
+    стоят на дне тяги — там ноги свежие и есть запас по времени. На дне ног
+    колено грузится приседом, добавлять туда ещё блок значит выйти за час."""
+    hold, ext, step, band = KNEE[block]
+    items = [it("wall_sit", f"3 × {hold} секунд", "колено под прямым углом, спина прижата"),
+             it("tke_band", f"3 × 15 · {band}", "дожим в полное разгибание, секунда вверху")]
+    if not short:
+        items.append(it("lateral_step_up", step, "вниз опускаешься 3 секунды — это и укрепляет колено"))
+    return blk("Колено", items, "отдых 30 секунд · ничего не должно щёлкать; болит — снимай вес")
 
 
 def knee_day(d: int, block: int, n: int) -> dict:
@@ -842,11 +857,17 @@ def reschedule(data: dict) -> None:
         data["days"][str(d)]["scheduled_on"] = (planned + timedelta(days=shift)).isoformat()
 
 
-# 04.11: бег убран по его просьбе («беговой пока убери, нужно сделать акцент на
-# укрепление коленного сустава»). Слот занял день колена — изометрия, разгибание
-# с резиной, зашагивания и подвижность. RUN_PLAN оставлен: «пока» значит, что
-# бег можно вернуть, заменив "knee" обратно на "light".
-WEEK = ["bench_heavy", "legs", "knee", "pull", "bench_volume", "legs_b", "light2"]
+# 04.11, его слова: «вообще нужно сделать отдых между тренировками». Это третья
+# жалоба на восстановление за неделю, поэтому каркас перестроен жёстко: после
+# каждого тренировочного дня идёт день отдыха, без исключений. Цикл 16 дней —
+# две одинаковые половины, различаются только днём ног (присед / задняя цепь).
+# Цена названа ему прямо: тренировочных дней на остаток 32 вместо 42, ноги
+# теперь раз в восемь дней вместо двух раз в неделю, жим 1,75 раза в неделю
+# вместо двух. Бег убран раньше в тот же день; работа на колено не пропала,
+# а разошлась по дням ног (полный блок) и тяги (короткий) — так она случается
+# чаще, чем отдельным днём раз в неделю.
+WEEK = ["bench_heavy", "light2", "pull", "light2", "bench_volume", "light2", "legs", "light2",
+        "bench_heavy", "light2", "pull", "light2", "bench_volume", "light2", "legs_b", "light2"]
 TEST_DAYS = {28, 56, 84, 100}
 # Заголовок дня обязан следовать типу: иначе день с жимом остаётся подписан
 # «Бассейн» от прошлого каркаса, и в приложении видно одно, а делаешь другое.
@@ -887,14 +908,14 @@ def retype_days(days: dict, keep: set[int]) -> None:
     hard days in a row. Now a control day gets a walk on both sides — fresh
     for the test, nothing heavy after it — and the frame resumes where it
     stopped instead of counting calendar days."""
-    cursor = 1  # day 16 has always been the squat day; keep history aligned
+    cursor = 0
     for d in range(16, 101):
         if d in TEST_DAYS:
             dtype = "test"
         elif d - 1 in TEST_DAYS or d + 1 in TEST_DAYS or d in EXTRA_REST:
             dtype = "light2"
         else:
-            dtype, cursor = WEEK[cursor % 7], cursor + 1
+            dtype, cursor = WEEK[cursor % len(WEEK)], cursor + 1
         if d not in keep:
             days[str(d)]["day_type"] = dtype
 

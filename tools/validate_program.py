@@ -143,7 +143,9 @@ SETS_RE = re.compile(r"^\s*(\d+)\s*×")
 TEST_DAYS = {28, 56, 84, 100}
 HARD_TYPES = {"bench_heavy", "bench_volume", "legs", "legs_b", "pull", "test"}
 PRESSES = {"bb_bench_press", "close_grip_bench"}
-MAX_WORK_SETS = 24  # рабочих подходов в дне: больше не влезает в обеденные 45 минут
+# Рабочих подходов в дне. Было 24 под окно 45 минут; с 04.11 окно час, а после
+# каждого тренировочного дня идёт день отдыха, поэтому сессия может нести больше.
+MAX_WORK_SETS = 28
 MAIN_MOVES = {"bb_bench_press", "back_squat", "rdl_bb", "close_grip_bench",
               "leg_press", "hack_squat", "lat_pulldown_neutral", "seated_row"}
 

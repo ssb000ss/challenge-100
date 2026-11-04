@@ -74,6 +74,8 @@ def check_day(key: str, day: dict, moves: dict, errors: list[str]) -> None:
     blocks = day["payload"]["blocks"]
     seen: dict[str, str] = {}
     for b in blocks:
+        if b["label"] == "Разминка":
+            continue   # размяться тем движением, которым потом работаешь, — это норма
         for item in b["items"]:
             code = item["movement"]
             if code in seen:
@@ -172,6 +174,16 @@ def check_arm_volume(days: dict, errors: list[str]) -> None:
                 errors.append(f"days {start}-{start + 6}: {n} {name} sets, outside the 10-18 corridor")
 
 
+def planned_seconds(day: dict) -> int:
+    """Секунды дня: всё, кроме разминки. Бонусные блоки входят — он их делает,
+    и именно они раньше незаметно выводили день за окно. День отдыха — ноль:
+    прогулка и подвижность в нём добровольные."""
+    if day["day_type"] == "light2":
+        return 0
+    return sum(i["dur"] for b in day["payload"]["blocks"] if b["label"] != "Разминка"
+               for i in b["items"] if isinstance(i.get("dur"), int))
+
+
 def work_sets(day: dict) -> int:
     """Рабочие подходы: без разминки и без бонусных блоков."""
     total = 0
@@ -208,7 +220,11 @@ def check_recovery(days: dict, errors: list[str]) -> None:
                 errors.append(f"day {side}: hard day next to control day {t}")
 
 
-MAX_MINUTES = 45   # обеденное окно: день должен влезать в него по таймингам
+# 04.11, его слова: «потолок 1 час по идее, разминки не включай». До этого стояло
+# 45 минут и считалась только обязательная работа — поэтому с бонусными блоками
+# половина дней выходила за окно незаметно. Теперь в счёт идёт всё, кроме
+# разминки, включая хват и заминку, а потолок — час.
+MAX_MINUTES = 60
 TIMED_FROM = 35    # дни до этого прожиты и заморожены, их тайминги не правим
 
 
@@ -227,8 +243,7 @@ def check_timings(days: dict, errors: list[str]) -> None:
                     errors.append(f"day {n} {item['movement']}: no {', '.join(missing)}")
                 elif not (item.get("reps") or item.get("sec")):
                     errors.append(f"day {n} {item['movement']}: neither reps nor seconds")
-        planned = sum(i["dur"] for b in day["payload"]["blocks"] if not b.get("optional")
-                      for i in b["items"] if isinstance(i.get("dur"), int))
+        planned = planned_seconds(day)
         minutes = day["payload"].get("minutes", 0)
         if minutes != -(-planned // 60):
             errors.append(f"day {n}: minutes {minutes} does not match {planned} s of timings")

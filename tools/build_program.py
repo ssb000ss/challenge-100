@@ -221,6 +221,14 @@ def bike(minutes: int, note: str | None = None) -> dict:
 WARMUP_BIKE_MIN = 4   # разминка, а не кардио: дольше четырёх минут день не влезает в обед
 
 
+def ramp_item(ramp: str) -> dict:
+    """Разминочная лестница жима отдельным пунктом: раньше она жила только в
+    примечании, поэтому нигде не учитывалась и не попадала в сценарий для
+    браслета, хотя это 4–5 подходов. В счёт дня не идёт — она в разминке."""
+    return it("bb_bench_press", f"{ramp.count('·') + 1} подхода · лестница {ramp}",
+              "подводка к рабочему весу, без усилия")
+
+
 def warmup(minutes: int = 6, note: str | None = None) -> list[dict]:
     return [bike(min(minutes, WARMUP_BIKE_MIN), note), it("band_pull_apart", "2 × 15")]
 
@@ -486,7 +494,7 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
     face = 20 if deload else {1: 25, 2: 27.5, 3: 30, 4: 30}[block]
     row = 35 if deload else {1: 40, 2: 45, 3: 50, 4: 50}[block]
     blocks = [
-        blk("Разминка", warmup(6, "пульс до 110")),
+        blk("Разминка", warmup(6, "пульс до 110") + [ramp_item(p["ramp"])]),
         blk("Основной блок", items[:1], "отдых 2–3 минуты · если подход тяжелее RPE 9 — остальные на повтор меньше"),
     ]
     if len(items) > 1:
@@ -497,12 +505,10 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
             blk("Суперсет · жим + тяга", [items[1], it("chest_supported_row", f"3 × 12 · {kg(row)} кг", "упор грудью — спина разгружена")],
                 "чередуй подходы, отдых 60 секунд"),
         ]
-        # Ландмайн переехал сюда с объёмного дня 30.10: там выходило 27 рабочих
-        # подходов за 45 минут, здесь — 17. Но если главный жим занимает больше
-        # шести подходов, день уже полон — тогда ландмайн уступает ему место.
-        if sum(int(x) for x in re.findall(r"(\d+)\s*×", sets)) <= 6:
-            blocks.append(blk("Плечи", [it("landmine_shoulder_press", f"3 × 10 на руку · {plates(LANDMINE[block])}",
-                                           "жим под углом — плечу безопаснее, чем над головой")]))
+        # Ландмайн переехал сюда с объёмного дня 30.10. С 04.11 стоит во всех
+        # тяжёлых днях: потолок стал часом, и уступать место больше не нужно.
+        blocks.append(blk("Плечи", [it("landmine_shoulder_press", f"3 × 10 на руку · {plates(LANDMINE[block])}",
+                                       "жим под углом — плечу безопаснее, чем над головой")]))
         blocks += [
             blk("Суперсет · защита плеча", [
                 it("face_pull", f"3 × 15 · {kg(face)} кг", "без рывка корпусом; тянешь рывком — сбрось вес"),
@@ -526,8 +532,8 @@ def bench_volume(d: int, block: int, i: int, n: int) -> dict:
     # пятью-шестью подходами, день иначе вылезает за 24 рабочих подхода.
     row_sets = 3 if int(sets.split("×")[0]) <= 4 else 2
     blocks = [
-        blk("Разминка", warmup(5)),
-        blk("Основной блок", [it("bb_bench_press", main, f"разминка: {ramp} · темп: 2 секунды вниз, мощно вверх")],
+        blk("Разминка", warmup(5) + [ramp_item(ramp)]),
+        blk("Основной блок", [it("bb_bench_press", main, "темп: 2 секунды вниз, мощно вверх")],
             "отдых 90 секунд"),
         blk("Спина", [it("chest_supported_row", f"{row_sets} × 12 · {kg(row)} кг", "упор грудью — спина разгружена")]),
         arm_block("bench_volume", block, i),
@@ -955,7 +961,7 @@ SEC_PER_REP = 3
 # положение, и так 8 раз. Для таких движений повтор это задержка, а не рывок,
 # поэтому работа считается секундами и в сценарий для браслета идёт таймером.
 HOLD_PER_REP = {"bird_dog": 10, "dead_bug": 10, "pallof_press": 5, "cat_camel": 4}
-MAX_MINUTES = 45   # обеденное окно
+MAX_MINUTES = 60   # его окно: час, и разминка в него не считается
 
 RE_REST_NOTE = re.compile(r"отдых\s+(\d+)(?:\s*[–-]\s*(\d+))?\s*(секунд|минут)")
 RE_FAST_SLOW = re.compile(r"(\d+)\s*×\s*(\d+)\s*секунд\s*быстро\s*/\s*(\d+)\s*секунд")
@@ -1020,6 +1026,8 @@ def parse_work(text: str, movement: str) -> tuple[int, int, int, int | None, int
         return 1, 0, int(km * PACE_SEC.get(movement, 600)), None, 1
     if m := RE_METERS.search(text):
         return 1, 0, int(int(m.group(1)) / 1000 * PACE_SEC.get(movement, 900)), None, 1
+    if "лестница" in text:   # разминочная лестница: подход короткий, отдых короткий
+        return int(RE_SETS_ONLY.match(text).group(1)), 0, 25, 30, 1
     if m := RE_SETS_ONLY.match(text):
         return int(m.group(1)), 0, 60, None, 1
     if m := RE_REPS_ONLY.match(text):
@@ -1063,8 +1071,12 @@ def add_timings(days: dict) -> None:
                         item["sec"] = sec
                     item["rest"] = pause
                     item["dur"] = sets * (work + pause)
-                    if not b.get("optional"):
-                        total += item["dur"]
+                    if b["label"] != "Разминка":
+                        total += item["dur"]   # бонус входит, разминка нет
+            # День отдыха — ноль запланированной работы: прогулка и подвижность
+            # в нём добровольные, и показывать их как пятьдесят минут нельзя.
+            if days[str(d)]["day_type"] == "light2":
+                total = 0
             use["minutes"] = -(-total // 60)   # вверх до минуты
 
 

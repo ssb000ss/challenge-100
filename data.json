@@ -439,7 +439,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-31",
+      "scheduled_on": "2026-12-30",
       "title": "Финал · максимум",
       "variant": {
         "blocks": [
@@ -6706,7 +6706,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-14",
+      "scheduled_on": "2026-11-13",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -6894,7 +6894,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-15",
+      "scheduled_on": "2026-11-14",
       "title": "Жим · объём · разгрузка",
       "variant": {
         "blocks": [
@@ -7091,7 +7091,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-16",
+      "scheduled_on": "2026-11-15",
       "title": "Ноги · задняя цепь · разгрузка",
       "variant": {
         "blocks": [
@@ -7429,7 +7429,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-17",
+      "scheduled_on": "2026-11-16",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -7540,7 +7540,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-17",
+      "scheduled_on": "2026-11-16",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -7742,7 +7742,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-18",
+      "scheduled_on": "2026-11-17",
       "title": "Верх · толчок · разгрузка",
       "variant": {
         "blocks": [
@@ -7930,7 +7930,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-19",
+      "scheduled_on": "2026-11-18",
       "title": "Верх · тяга · разгрузка",
       "variant": {
         "blocks": [
@@ -8071,7 +8071,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-20",
+      "scheduled_on": "2026-11-19",
       "title": "Ноги · присед · разгрузка",
       "variant": {
         "blocks": [
@@ -8182,7 +8182,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-21",
+      "scheduled_on": "2026-11-20",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -8345,7 +8345,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-22",
+      "scheduled_on": "2026-11-21",
       "title": "Контрольный день",
       "variant": {
         "blocks": [
@@ -8455,7 +8455,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-23",
+      "scheduled_on": "2026-11-22",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -8566,7 +8566,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-24",
+      "scheduled_on": "2026-11-23",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -8754,7 +8754,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-25",
+      "scheduled_on": "2026-11-24",
       "title": "Жим · объём",
       "variant": {
         "blocks": [
@@ -9052,7 +9052,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-26",
+      "scheduled_on": "2026-11-25",
       "title": "Ноги · задняя цепь",
       "variant": {
         "blocks": [
@@ -9227,7 +9227,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-27",
+      "scheduled_on": "2026-11-26",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -9338,7 +9338,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-27",
+      "scheduled_on": "2026-11-26",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -9540,7 +9540,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-28",
+      "scheduled_on": "2026-11-27",
       "title": "Верх · толчок",
       "variant": {
         "blocks": [
@@ -9759,7 +9759,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-29",
+      "scheduled_on": "2026-11-28",
       "title": "Верх · тяга",
       "variant": {
         "blocks": [
@@ -9900,7 +9900,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-11-30",
+      "scheduled_on": "2026-11-29",
       "title": "Ноги · присед",
       "variant": {
         "blocks": [
@@ -10011,7 +10011,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-01",
+      "scheduled_on": "2026-11-30",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -10199,7 +10199,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-02",
+      "scheduled_on": "2026-12-01",
       "title": "Жим · объём",
       "variant": {
         "blocks": [
@@ -10396,7 +10396,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-03",
+      "scheduled_on": "2026-12-02",
       "title": "Ноги · задняя цепь",
       "variant": {
         "blocks": [
@@ -10571,7 +10571,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-04",
+      "scheduled_on": "2026-12-03",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -10807,7 +10807,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-04",
+      "scheduled_on": "2026-12-03",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -11009,7 +11009,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-05",
+      "scheduled_on": "2026-12-04",
       "title": "Верх · толчок",
       "variant": {
         "blocks": [
@@ -11221,7 +11221,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-06",
+      "scheduled_on": "2026-12-05",
       "title": "Верх · тяга",
       "variant": {
         "blocks": [
@@ -11362,7 +11362,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-07",
+      "scheduled_on": "2026-12-06",
       "title": "Ноги · присед",
       "variant": {
         "blocks": [
@@ -11473,7 +11473,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-08",
+      "scheduled_on": "2026-12-07",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -11661,7 +11661,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-09",
+      "scheduled_on": "2026-12-08",
       "title": "Жим · объём · разгрузка",
       "variant": {
         "blocks": [
@@ -11858,7 +11858,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-10",
+      "scheduled_on": "2026-12-09",
       "title": "Ноги · задняя цепь · разгрузка",
       "variant": {
         "blocks": [
@@ -12033,7 +12033,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-11",
+      "scheduled_on": "2026-12-10",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -12144,7 +12144,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-11",
+      "scheduled_on": "2026-12-10",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -12346,7 +12346,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-12",
+      "scheduled_on": "2026-12-11",
       "title": "Верх · толчок · разгрузка",
       "variant": {
         "blocks": [
@@ -12721,7 +12721,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-13",
+      "scheduled_on": "2026-12-12",
       "title": "Верх · тяга · разгрузка",
       "variant": {
         "blocks": [
@@ -12862,7 +12862,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-14",
+      "scheduled_on": "2026-12-13",
       "title": "Ноги · присед · разгрузка",
       "variant": {
         "blocks": [
@@ -12973,7 +12973,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-15",
+      "scheduled_on": "2026-12-14",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -13083,7 +13083,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-16",
+      "scheduled_on": "2026-12-15",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -13246,7 +13246,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-17",
+      "scheduled_on": "2026-12-16",
       "title": "Контрольный день",
       "variant": {
         "blocks": [
@@ -13357,7 +13357,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-18",
+      "scheduled_on": "2026-12-17",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -13545,7 +13545,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-19",
+      "scheduled_on": "2026-12-18",
       "title": "Жим · объём",
       "variant": {
         "blocks": [
@@ -13742,7 +13742,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-20",
+      "scheduled_on": "2026-12-19",
       "title": "Ноги · задняя цепь",
       "variant": {
         "blocks": [
@@ -13917,7 +13917,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-21",
+      "scheduled_on": "2026-12-20",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -14028,7 +14028,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-21",
+      "scheduled_on": "2026-12-20",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -14381,7 +14381,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-22",
+      "scheduled_on": "2026-12-21",
       "title": "Верх · толчок",
       "variant": {
         "blocks": [
@@ -14593,7 +14593,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-23",
+      "scheduled_on": "2026-12-22",
       "title": "Верх · тяга · разгрузка",
       "variant": {
         "blocks": [
@@ -14734,7 +14734,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-24",
+      "scheduled_on": "2026-12-23",
       "title": "Ноги · присед · разгрузка",
       "variant": {
         "blocks": [
@@ -14845,7 +14845,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-25",
+      "scheduled_on": "2026-12-24",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -15033,7 +15033,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-26",
+      "scheduled_on": "2026-12-25",
       "title": "Жим · объём · разгрузка",
       "variant": {
         "blocks": [
@@ -15230,7 +15230,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-27",
+      "scheduled_on": "2026-12-26",
       "title": "Ноги · задняя цепь · разгрузка",
       "variant": {
         "blocks": [
@@ -15405,7 +15405,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-28",
+      "scheduled_on": "2026-12-27",
       "title": "Колено · укрепление",
       "variant": {
         "blocks": [
@@ -15515,7 +15515,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-28",
+      "scheduled_on": "2026-12-27",
       "title": "Восстановление",
       "variant": {
         "blocks": [
@@ -15688,7 +15688,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-29",
+      "scheduled_on": "2026-12-28",
       "title": "Верх · толчок · разгрузка",
       "variant": {
         "blocks": [
@@ -15799,7 +15799,7 @@
           }
         ]
       },
-      "scheduled_on": "2026-12-30",
+      "scheduled_on": "2026-12-29",
       "title": "Восстановление",
       "variant": {
         "blocks": [

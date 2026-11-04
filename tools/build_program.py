@@ -179,6 +179,24 @@ def pick(seq: list, i: int):
     return seq[min(i, len(seq) - 1)]
 
 
+def block_index(k: int, n: int) -> int:
+    """Какую запись таблицы берёт k-я сессия типа из n в блоке.
+
+    04.11: раньше запись брали прямо по счётчику, а ярлык «· разгрузка» ставили
+    по календарной четвёртой неделе — и они разъехались. Дни 50, 51, 78 были
+    подписаны разгрузкой, а несли пиковую работу, тогда как разгрузочные и
+    подводочные записи (включая «Подводка. Завтра контрольный день») не
+    попадали в расписание никогда. Теперь последняя сессия типа в блоке всегда
+    берёт разгрузочную запись (3), а пиковая (2) гарантированно случается."""
+    if k == n - 1:
+        return 3
+    if n <= 2:
+        return 2
+    if n == 3:
+        return 0 if k == 0 else 2
+    return min(k, 2)
+
+
 # Cardio is prescribed in distance, not minutes: a kilometre is a task you can
 # finish, a minute is a timer you can coast through.
 BIKE_KM = {3: 1, 5: 1.5, 6: 2}          # warm-up ride, by the minutes it replaces
@@ -269,9 +287,14 @@ BH = {
         {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 1", "main": "6 × 2, 90 кг", "back": "2 × 5, 70 кг", "sub": "Сила. Жим 90 × 2, шесть подходов."},
         {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 1", "top": "1 × 1, 100 кг", "top_note": "сотня только со страхующим и только если разминка лёгкая (RPE ≤ 8)", "main": "4 × 3, 90 кг", "sub": "Сила. Сотня на раз и тройки на 90."},
         {"ramp": "20 кг × 10 · 40 кг × 5", "main": "3 × 3, 70 кг", "sub": "Разгрузка. Легко и быстро."}],
+    # 04.11: блок переписан под 110. Было три записи, и до подводки очередь не
+    # доходила никогда, а заход на 110 стоял за два дня до теста. Теперь пик —
+    # одиночный на 100 (единственный способ потрогать 95–105 % при шаге штанги
+    # 10 кг), потом подводка, потом тест. 110 пробуется один раз, на свежую.
     4: [{"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 1", "main": "4 × 3, 90 кг", "sub": "Пик. Тройки на 90, вход в последний блок."},
-        {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 2 · 90 кг × 1", "top": "1 × 1, 110 кг", "top_note": "110 только если 100 на разминке идёт легко (RPE ≤ 8), иначе 100 × 1", "main": "3 × 3, 90 кг", "sub": "Пик. Заход на 110 без героизма."},
-        {"ramp": "20 кг × 10 · 40 кг × 5", "main": "3 × 3, 70 кг", "top": "1 × 1, 90 кг", "top_note": "одиночный быстрый и лёгкий", "sub": "Подводка. Завтра контрольный день."}],
+        {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 2 · 90 кг × 1", "top": "1 × 1, 100 кг", "top_note": "сотня одиночным: это и есть работа на 100 % · страхующий рядом", "main": "3 × 2, 90 кг", "sub": "Пик. Сотня на раз и двойки на 90."},
+        {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3 · 80 кг × 2 · 90 кг × 1", "top": "1 × 1, 100 кг", "top_note": "сотня должна идти чисто и без помощи — это репетиция финала", "main": "2 × 3, 90 кг", "sub": "Пик. Репетиция сотни, объём снят."},
+        {"ramp": "20 кг × 10 · 40 кг × 5 · 60 кг × 3", "main": "3 × 3, 70 кг", "top": "1 × 1, 90 кг", "top_note": "быстро и легко, без натуги — это подводка, а не тренировка", "sub": "Подводка. Через два дня финал."}],
 }
 BV = {   # объёмный жим раз в неделю: 4 входа на блок
     1: [("20 кг × 10", "3 × 12, 40 кг"), ("20 кг × 10 · 30 кг × 5", "3 × 10, 50 кг"),
@@ -284,8 +307,8 @@ BV = {   # объёмный жим раз в неделю: 4 входа на б�
     # на 80 кг, интенсивность — на тяжёлом дне.
     3: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "4 × 6, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 6, 80 кг"),
         ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "6 × 5, 80 кг"), ("20 кг × 10 · 50 кг × 5", "3 × 6, 70 кг")],
-    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 4, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2 · 80 кг × 1", "4 × 3, 90 кг"),
-        ("20 кг × 10 · 50 кг × 5", "3 × 5, 80 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 5, 70 кг")],
+    4: [("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "4 × 5, 80 кг"), ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 4, 80 кг"),
+        ("20 кг × 10 · 50 кг × 5 · 70 кг × 2", "5 × 5, 80 кг"), ("20 кг × 10 · 40 кг × 5", "3 × 5, 70 кг")],
 }
 # Жим узким хватом — второе движение тяжёлого дня во всех силовых блоках: это
 # лучший тяжёлый жим на трицепс из того, что он делает, и он же дожим в жиме.
@@ -425,13 +448,15 @@ SHORT = {1: [(10, 17.5, 10, 20), (12, 20, 12, 25)], 2: [(12, 22.5, 12, 30), (10,
          3: [(15, 25, 12, 35), (12, 22.5, 10, 30)], 4: [(8, 20, 8, 20)]}
 FINISHER = {
     1: ("Финишер · 3 круга на время", "цель — быстрее, чем в прошлый раз · записать время",
-        [("air_bike", "60 секунд в темпе"), ("burpee_step", "8 повторов"), ("suitcase_carry", "30 метров · 17.5 кг")]),
+        [("air_bike", "60 секунд в темпе"), ("burpee_step", "8 повторов"), ("kb_farmer_hold", "30 секунд · 20 кг в руке")]),
     2: ("Финишер · AMRAP 8 минут", "сколько кругов успеешь · записать раунды",
-        [("front_rack_carry", "30 метров · 16 кг в руке"), ("push_up", "10 повторов"), ("dead_bug", "8 на сторону")]),
-    3: ("Финишер · 4 круга на время", "цель — быстрее, чем в прошлый раз · записать время",
-        [("air_bike", "90 секунд в темпе"), ("burpee_step", "10 повторов"), ("suitcase_carry", "30 метров · 22.5 кг")]),
+        [("kb_farmer_hold", "30 секунд · 20 кг в руке"), ("push_up", "10 повторов"), ("dead_bug", "8 на сторону")]),
+    # Три круга, не четыре: с честным счётом по кругам четыре выходили на 16 минут
+    # бонуса после 45-минутной тренировки — столько он делать не станет.
+    3: ("Финишер · 3 круга на время", "цель — быстрее, чем в прошлый раз · записать время",
+        [("air_bike", "60 секунд в темпе"), ("burpee_step", "10 повторов"), ("kb_farmer_hold", "30 секунд · 24 кг в руке")]),
     4: ("Финишер · AMRAP 8 минут", "сколько кругов успеешь · записать раунды",
-        [("front_rack_carry", "30 метров · 20 кг в руке"), ("push_up", "12 повторов"), ("bird_dog", "8 на сторону")]),
+        [("kb_farmer_hold", "30 секунд · 24 кг в руке"), ("push_up", "12 повторов"), ("bird_dog", "8 на сторону")]),
 }
 MINI_FINISHER = {  # 5 minutes after volume bench day
     1: "5 × 20 секунд быстро / 40 секунд легко",
@@ -498,7 +523,9 @@ def bench_heavy(d: int, block: int, i: int, n: int) -> dict:
         items.append(it(*second))
     # day 5 log: face pull done at 30 kg where 12.5 was prescribed
     face = 20 if deload else {1: 25, 2: 27.5, 3: 30, 4: 30}[block]
-    row = 35 if deload else {1: 40, 2: 45, 3: 50, 4: 50}[block]
+    # 04.11: было {40,45,50,50} и 35 на разгрузке — на объёмном дне то же
+    # движение доходило до 65 кг. Подтянуто, разгрузка считается от блока.
+    row = {1: 40, 2: 50, 3: 55, 4: 60}[block] - (10 if deload else 0)
     blocks = [
         blk("Разминка", warmup(6, "пульс до 110") + [ramp_item(p["ramp"])]),
         blk("Основной блок", items[:1], "отдых 2–3 минуты · если подход тяжелее RPE 9 — остальные на повтор меньше"),
@@ -549,10 +576,12 @@ def bench_volume(d: int, block: int, i: int, n: int) -> dict:
     return {"subtitle": f"Объём. Жим {weight}, {sets}.", "minutes": 45, "rules": rules(d, True), "blocks": blocks}
 
 
-def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool) -> dict:
+def pull(d: int, block: int, i: int, w: int, deload: bool, taper: bool, n: int) -> dict:
     (v_move, v_list), (h_move, h_list) = PULL[block]
-    delt = "db_rear_delt_fly" if w % 2 == 0 else "db_lateral_raise"
-    delt_kg = DELT[block] - (2.5 if deload else 0)
+    # Чередование по номеру сессии, а не по календарной неделе: при цикле в
+    # восемь дней неделя перестала совпадать с сессией, и махи выпадали.
+    delt = "db_rear_delt_fly" if n % 2 == 0 else "db_lateral_raise"
+    delt_kg = max(5, DELT[block] - (2.5 if deload else 0))
     blocks = [
         blk("Разминка", warmup(6) + [it("face_pull", "2 × 15", "лёгкий вес")]),
         blk("Основной блок", [it(v_move, pick(v_list, i), COUNTERWEIGHT_DOWN if "assisted" in v_move else STEP_UP),
@@ -762,7 +791,8 @@ def control_blocks() -> list[dict]:
                                it("dead_hang", "1 × максимум секунд")],
             "результаты — в заметку, сравни с прошлым контрольным днём"),
         shoulder_block(25, 1, None, sets=2),
-        blk("Заминка", [it("walk", "1 км", "замеры: вес утром натощак, талия по пупку — в заметку"),
+        blk("Заминка", [it("walk", "1 км", "замеры в заметку: вес утром натощак · талия по пупку · "
+                                          "обхват руки в напряжении · обхват предплечья · обхват груди"),
                         it("pec_stretch_doorway", "60 секунд × 2")]),
     ]
 
@@ -773,7 +803,8 @@ def rep_test(d: int) -> dict:
                "стоп, когда чувствуешь: остался 1 повтор. Отказ не нужен. Галочка = подход сделан")
     return {"subtitle": f"Контрольный день. Жим {weight} кг на повторы, отжимания, вис, замеры.",
             "minutes": 50,
-            "rules": f"Расчётный максимум = вес × (1 + повторы / 30). Ниже {threshold} кг — следующий блок жима на 10 кг легче. " + rules(d, False),
+            "rules": f"Расчётный максимум = вес × (1 + повторы / 30). Ниже {threshold} кг — следующий блок жима на 10 кг легче, "
+                     f"выше — на 10 кг тяжелее. Ровно {threshold} — оставляем как есть. " + rules(d, False),
             "blocks": [blk("Разминка", warmup(6)), test] + control_blocks()}
 
 
@@ -819,9 +850,8 @@ def snap_kept_days(days: dict) -> None:
                     item.update(movement="push_up", text="2 × 10", note="разогреть грудь и плечи, без усилия")
 
 
-def build_payload(d: int, dtype: str, block: int, i: int, n: int) -> dict:
+def build_payload(d: int, dtype: str, block: int, i: int, n: int, deload: bool = False) -> dict:
     w = ((d - 1) % 28) // 7
-    deload = block in (2, 3) and w == DELOAD_WEEK
     taper = d >= TAPER_FROM
     match dtype:
         case "bench_heavy":
@@ -829,7 +859,7 @@ def build_payload(d: int, dtype: str, block: int, i: int, n: int) -> dict:
         case "bench_volume":
             return bench_volume(d, block, i, n)
         case "pull":
-            return pull(d, block, i, w, deload, taper)
+            return pull(d, block, i, w, deload, taper, n)
         case "legs":
             return legs_a(d, block, i, w, deload, taper, n)
         case "legs_b":
@@ -1087,7 +1117,7 @@ def add_timings(days: dict) -> None:
             total = 0
             for b in use.get("blocks", []):
                 rest = block_rest(b)
-                chain = b["label"].startswith("Суперсет") or \
+                chain = b["label"].startswith("Суперсет") or "круг" in b["label"] or \
                     any(w in (b.get("note") or "") for w in ("чередуй", "круг"))
                 for pos, item in enumerate(b["items"]):
                     if item["movement"] == "rest_day":
@@ -1107,8 +1137,22 @@ def add_timings(days: dict) -> None:
                         item["sec"] = sec
                     item["rest"] = pause
                     item["dur"] = sets * (work + pause)
-                    if b["label"] != "Разминка":
-                        total += item["dur"]   # бонус входит, разминка нет
+            # Круговой блок идёт столько кругов, сколько написано в названии:
+            # «4 круга» считался за один, AMRAP — за сумму пунктов одного круга.
+            for b in use.get("blocks", []):
+                timed = [i for i in b["items"] if isinstance(i.get("dur"), int)]
+                if not timed:
+                    continue
+                if m := re.search(r"(\d+)\s*круг", b["label"]):
+                    for item in timed:
+                        item["dur"] *= int(m.group(1))
+                elif m := re.search(r"AMRAP (\d+)", b["label"]):
+                    have = sum(i["dur"] for i in timed)
+                    scale = int(m.group(1)) * 60 / have
+                    for item in timed:
+                        item["dur"] = int(item["dur"] * scale)
+            total = sum(i["dur"] for b in use.get("blocks", []) if b["label"] != "Разминка"
+                        for i in b["items"] if isinstance(i.get("dur"), int))
             # День отдыха — ноль запланированной работы: прогулка и подвижность
             # в нём добровольные, и показывать их как пятьдесят минут нельзя.
             if days[str(d)]["day_type"] == "light2":
@@ -1122,23 +1166,29 @@ def build(data: dict) -> dict:
                                 if v.get("outcome") in ("done", "swap", "dayoff")}
     retype_days(days, done)
     retitle_frozen(days, done)
+    # Сколько сессий каждого типа реально влезает в блок — считаем заранее,
+    # иначе последняя (разгрузочная) запись таблицы до дней не доезжает.
+    total: dict[tuple[int, str], int] = {}
+    for d in range(1, 101):
+        key = (days[str(d)]["block"], days[str(d)]["day_type"])
+        total[key] = total.get(key, 0) + 1
     per_block: dict[tuple[int, str], int] = {}
     per_type: dict[str, int] = {}
     for d in range(1, 101):
         day = days[str(d)]
         dtype, block = day["day_type"], day["block"]
-        i = per_block.get((block, dtype), 0)
+        k = per_block.get((block, dtype), 0)
         n = per_type.get(dtype, 0)
-        per_block[(block, dtype)], per_type[dtype] = i + 1, n + 1
+        per_block[(block, dtype)], per_type[dtype] = k + 1, n + 1
         if d in KEEP_DAYS or d in done:
             continue
-        w = ((d - 1) % 28) // 7
-        deload = block in (2, 3) and w == DELOAD_WEEK
+        i = block_index(k, total[(block, dtype)])
+        deload = i == 3
         title = title_for(d, dtype)
         if deload and dtype in ("bench_heavy", "bench_volume", "legs", "pull", "legs_b"):
             title += " · разгрузка"
         day["title"] = title
-        day["payload"] = apply_re_entry(d, build_payload(d, dtype, block, i, n))
+        day["payload"] = apply_re_entry(d, build_payload(d, dtype, block, i, n, deload))
     snap_kept_days(days)
     mark_bonus(days)
     add_timings(days)

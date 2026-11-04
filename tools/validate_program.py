@@ -153,10 +153,14 @@ MAIN_MOVES = {"bb_bench_press", "back_squat", "rdl_bb", "close_grip_bench",
 def check_arm_volume(days: dict, errors: list[str]) -> None:
     """Руки — заявленный приоритет: 10–18 рабочих подходов в неделю на бицепс и
     на трицепс. Ниже — не вырастут, выше — не восстановятся при двух днях жима.
+    Считаем окном в 8 дней (длина цикла с 04.11) и коридором 11–21 — то же
+    самое в пересчёте на неделю. По семидневному окну выходило ложное
+    срабатывание: в цикле из восьми дней четыре дня рук, и скользящее окно
+    иногда ловит все четыре.
     Контрольные и разгрузочные недели считаются отдельно и не проверяются, как и
     неделя рядом с контрольным днём: там по два дня отдыха, и это сделано нарочно."""
-    for start in range(29, 95, 7):
-        week = list(range(start, start + 7))
+    for start in range(29, 93, 8):
+        week = list(range(start, start + 8))
         if any(days[str(i)]["day_type"] == "test" or "разгрузка" in days[str(i)]["title"]
                or i - 1 in TEST_DAYS or i + 1 in TEST_DAYS for i in week):
             continue
@@ -172,8 +176,8 @@ def check_arm_volume(days: dict, errors: list[str]) -> None:
                     if item["movement"] in TRICEPS:
                         counts["triceps"] += n
         for name, n in sorted(counts.items()):
-            if not 10 <= n <= 18:
-                errors.append(f"days {start}-{start + 6}: {n} {name} sets, outside the 10-18 corridor")
+            if not 11 <= n <= 21:
+                errors.append(f"days {start}-{start + 7}: {n} {name} sets, outside the 11-21 corridor")
 
 
 def planned_seconds(day: dict) -> int:

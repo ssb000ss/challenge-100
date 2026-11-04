@@ -470,7 +470,12 @@ function renderToday(d){
 
   const log=logs[String(d)];
   const closed = isClosed(log);
-  const future = d>cur || beforeStart();
+  // Сдвоенный день: программа ставит два дня на одну дату, чтобы сто дней
+  // закрылись до 31 декабря. Второй можно отмечать сразу, как только закрыт первый.
+  const prevPlan = days[String(d-1)];
+  const paired = !!prevPlan && prevPlan.scheduled_on === plan.scheduled_on;
+  const canDouble = d === cur+1 && paired && isClosed(logs[String(cur)]);
+  const future = (d>cur && !canDouble) || beforeStart();
   // swapped = light variant taken; the day stays open until its items are ticked
   const swapped = !!log && (log.swapped || log.outcome==="swap");
   const use=(swapped && plan.variant) ? plan.variant : plan.payload;
@@ -485,6 +490,8 @@ function renderToday(d){
 
   h+=dayHtml(plan, use, done);
 
+  if(canDouble)
+    h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Сдвоенный день: он стоит на ту же дату. Закроешь — сто дней уложатся до 31 декабря.</div>';
   if(future){
     h+='<div class="rules" style="border-style:solid;border-color:var(--brass);text-align:center;color:var(--brass2)">Это завтрашний день. Галочки откроются завтра.</div>';
     el.innerHTML=h; wireNav(cur);
@@ -584,6 +591,11 @@ function wireToday(d, req, total){
     l.items=currentDone();
     logs[String(d)]=l;
     await put("logs/"+d, l);
+    // закрыл сдвоенный день — значит ушёл на день вперёд календаря
+    if(d > todayNum()){
+      state={...state, day_offset:(state.day_offset||0)+(d-todayNum())};
+      await put("state/main", state);
+    }
     viewDay=todayNum();
     render();
   };
